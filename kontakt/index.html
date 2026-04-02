@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt | Mapa Pomocy</title>
+  <meta name="description" content="Skontaktuj się z zespołem Mapy Pomocy. Masz pytania, chcesz zgłosić instytucję lub nawiązać współpracę? Napisz do nas.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mapapomocy.pl/kontakt/">
+  <meta property="og:title" content="Kontakt | Mapa Pomocy">
+  <meta property="og:description" content="Skontaktuj się z zespołem Mapy Pomocy – pytania, współpraca, zgłoszenia instytucji.">
+  <meta property="og:locale" content="pl_PL">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Przejdź do treści</a>
+
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo" aria-label="Mapa Pomocy – strona główna">
+        Mapa Pomocy
+        <span>MostPomocy.pl</span>
+      </a>
+      <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Otwórz menu nawigacji">☰</button>
+      <nav id="main-nav" class="site-nav" aria-label="Nawigacja główna">
+        <ul>
+          <li><a href="../index.html">Start</a></li>
+          <li><a href="../index.html#kompas">Kompas</a></li>
+          <li><a href="../mapa/index.html">Mapa</a></li>
+          <li><a href="../bezpiecznik/index.html">Bezpiecznik</a></li>
+          <li><a href="../kontakt/index.html" aria-current="page">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <nav aria-label="Ścieżka nawigacji" class="breadcrumb">
+      <a href="../index.html">Start</a>
+      <span aria-hidden="true"> › </span>
+      <span aria-current="page">Kontakt</span>
+    </nav>
+
+    <section class="section" aria-labelledby="kontakt-heading">
+      <div class="section-inner container">
+
+        <h1 id="kontakt-heading" class="section-title">Kontakt</h1>
+        <p>Masz pytanie, chcesz zgłosić instytucję do mapy lub nawiązać współpracę? Napisz do nas – odpowiemy najszybciej, jak możemy.</p>
+
+        <div class="info-box info-box--warning mt-md mb-lg">
+          <p><strong>Ten formularz NIE jest linią kryzysową.</strong> Jeśli potrzebujesz natychmiastowej pomocy, zadzwoń na <a href="tel:112" style="color: var(--color-accent); font-weight:700;">112</a> lub <a href="tel:116123" style="color: var(--color-accent); font-weight:700;">116 123</a> (Telefon Zaufania dla Dorosłych, bezpłatny, całą dobę).</p>
+        </div>
+
+        <!-- Formularz – Formspree
+             KONFIGURACJA: Zamień TWOJ_ENDPOINT na swój endpoint z formspree.io
+             Przykład: action="https://formspree.io/f/abcdefgh"
+             Instrukcja w README.md → sekcja "Formspree (formularz kontaktowy)" -->
+        <form
+          id="contact-form"
+          class="contact-form"
+          action="https://formspree.io/f/TWOJ_ENDPOINT"
+          method="POST"
+          novalidate
+          aria-label="Formularz kontaktowy"
+        >
+          <div class="form-group">
+            <label for="contact-topic">Temat <span aria-hidden="true">*</span></label>
+            <select id="contact-topic" name="topic" required aria-required="true">
+              <option value="" disabled selected>Wybierz temat...</option>
+              <option value="pytanie">Pytanie ogólne</option>
+              <option value="instytucja">Chcę zgłosić instytucję do mapy</option>
+              <option value="wspolpraca">Chcę nawiązać współpracę</option>
+              <option value="blad">Zgłoszenie błędu na stronie</option>
+              <option value="inne">Inne</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message">Wiadomość <span aria-hidden="true">*</span></label>
+            <textarea
+              id="contact-message"
+              name="message"
+              required
+              aria-required="true"
+              aria-describedby="message-hint"
+              placeholder="Opisz krótko, w czym możemy pomóc..."
+            ></textarea>
+            <p id="message-hint" style="font-size:0.85rem;color:var(--color-text-muted);">
+              Prosimy nie podawać wrażliwych danych osobowych ani szczegółów medycznych.
+            </p>
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email">Adres e-mail (opcjonalnie)</label>
+            <input
+              type="email"
+              id="contact-email"
+              name="email"
+              autocomplete="email"
+              aria-describedby="email-hint"
+              placeholder="np. jan.kowalski@example.com"
+            >
+            <p id="email-hint" style="font-size:0.85rem;color:var(--color-text-muted);">
+              Podaj adres, jeśli chcesz otrzymać odpowiedź. Adres nie będzie udostępniany osobom trzecim.
+            </p>
+          </div>
+
+          <!-- Honeypot anti-spam -->
+          <div class="visually-hidden" aria-hidden="true">
+            <label for="website">Zostaw puste (ochrona przed spamem)</label>
+            <input type="text" id="website" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
+
+          <button type="submit" class="btn btn--primary btn--lg">Wyślij wiadomość</button>
+        </form>
+
+        <div id="form-status" hidden role="status" aria-live="polite"></div>
+
+        <h2 class="section-title mt-lg">Zasady korzystania z formularza</h2>
+        <ul class="simple-list mt-md">
+          <li>Nie prosimy o podanie danych wrażliwych (PESEL, diagnoz, szczegółów medycznych).</li>
+          <li>Twoja wiadomość jest traktowana z pełną dyskrecją.</li>
+          <li>Nie sprzedajemy ani nie udostępniamy Twoich danych osobom trzecim.</li>
+          <li>Odpowiadamy na wiadomości w ciągu kilku dni roboczych (projekt wolontariacki).</li>
+        </ul>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h3>Mapa Pomocy</h3>
+        <a href="../index.html">Strona główna</a>
+        <a href="../mapa/index.html">Mapa instytucji</a>
+        <a href="../bezpiecznik/index.html">Bezpiecznik (PDF)</a>
+        <a href="../kontakt/index.html">Kontakt</a>
+      </div>
+      <div class="footer-col">
+        <h3>Pilna pomoc</h3>
+        <a href="tel:112">112 – Numer alarmowy</a>
+        <a href="tel:116111">116 111 – Telefon Zaufania dla Dzieci</a>
+        <a href="tel:116123">116 123 – Telefon Zaufania dla Dorosłych</a>
+      </div>
+      <div class="footer-col">
+        <h3>O projekcie</h3>
+        <p style="font-size:0.9rem;opacity:0.85;line-height:1.5;">Projekt społeczny MostPomocy – tworzymy go jako wolontariusze z myślą o osobach szukających wsparcia w Polsce.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 MostPomocy. Treści mają charakter informacyjny i nie zastępują porady specjalisty.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Mapa Pomocy – kompas">
+  <!-- Background circle -->
+  <circle cx="16" cy="16" r="16" fill="#1a5276"/>
+  <!-- Compass rose – simplified -->
+  <polygon points="16,4 18,14 16,12 14,14" fill="#ffffff"/>
+  <polygon points="16,28 14,18 16,20 18,18" fill="#c0392b"/>
+  <polygon points="4,16 14,14 12,16 14,18" fill="#ffffff" opacity="0.7"/>
+  <polygon points="28,16 18,18 20,16 18,14" fill="#ffffff" opacity="0.7"/>
+  <!-- Centre dot -->
+  <circle cx="16" cy="16" r="2" fill="#ffffff"/>
+</svg>
