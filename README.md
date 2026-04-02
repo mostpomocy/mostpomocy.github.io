@@ -80,3 +80,7 @@ Planowane rozszerzenie o:
 
 Projekt tworzony przez wolontariuszy. Treści mają charakter informacyjny
 i nie zastępują porady specjalisty.
+
+## Autor
+
+**Igor Pabiańczyk** – student pracy socjalnej na Uniwersytecie Śląskim.

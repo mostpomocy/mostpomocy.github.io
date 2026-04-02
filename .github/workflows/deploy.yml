@@ -1,0 +1,42 @@
+name: Wdróż na GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+  # Pozwala uruchomić workflow ręcznie z zakładki Actions
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Tylko jedno wdrożenie naraz; nie anuluj trwającego
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Pobierz kod
+        uses: actions/checkout@v4
+
+      - name: Skonfiguruj GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prześlij pliki strony
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+
+      - name: Wdróż na GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
