@@ -35,7 +35,12 @@
         Mapa Pomocy
         <span>MostPomocy.pl</span>
       </a>
-      <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Otwórz menu nawigacji">☰</button>
+      <div class="header-controls">
+        <button class="a11y-header-btn" id="a11y-trigger" aria-expanded="false" aria-controls="a11y-panel" aria-label="Otwórz panel ułatwień dostępu" title="Ułatwiony dostęp">
+          <span aria-hidden="true">♿</span><span class="a11y-header-btn__label">Dostępność</span>
+        </button>
+        <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Otwórz menu nawigacji">☰</button>
+      </div>
       <nav id="main-nav" class="site-nav" aria-label="Nawigacja główna">
         <ul>
           <li><a href="../index.html">Start</a></li>
@@ -172,7 +177,6 @@
       <button class="a11y-toggle" id="a11y-dyslexia" aria-pressed="false">Aa Czcionka dla dysleksji</button>
     </div>
   </div>
-  <button class="a11y-trigger" id="a11y-trigger" aria-expanded="false" aria-controls="a11y-panel" aria-label="Otwórz panel dostępności" title="Dostępność">♿</button>
 
   <script src="../assets/app.js"></script>
 </body>

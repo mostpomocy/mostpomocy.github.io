@@ -134,7 +134,7 @@
     });
 
     document.addEventListener('click', function (e) {
-      if (!a11yPanel.hasAttribute('hidden') && !a11yPanel.contains(e.target) && e.target !== a11yTrigger) {
+      if (!a11yPanel.hasAttribute('hidden') && !a11yPanel.contains(e.target) && !a11yTrigger.contains(e.target)) {
         a11yPanel.setAttribute('hidden', '');
         a11yTrigger.setAttribute('aria-expanded', 'false');
       }
