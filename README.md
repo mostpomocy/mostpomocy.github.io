@@ -2,95 +2,19 @@
 
 Statyczna strona projektu społecznego **Mapa Pomocy** ([MostPomocy](https://mostpomocy.pl)).
 
-Strona używa **Jekyll** – systemu szablonów wbudowanego w GitHub Pages. Dzięki temu header, footer i menu edytujesz w jednym miejscu, a każda nowa podstrona to tylko kilkanaście linii kodu.
-
 ## Struktura plików
 
 ```
-/_layouts/default.html    – Szablon strony (header + menu + footer)
-/_templates/              – Pliki szablonów – kopiuj stąd nowe podstrony
-/index.html               – Strona główna
-/mapa/index.html          – Mapa instytucji (w przygotowaniu)
-/bezpiecznik/index.html   – Poradnik Bezpiecznik
-/kontakt/index.html       – Formularz kontaktowy
-/assets/styles.css        – Style (mobile-first, WCAG 2.1 AA)
-/assets/app.js            – Minimalne JS (menu, formularz)
-/assets/favicon.svg       – Favicon
-/_config.yml              – Konfiguracja Jekyll (tytuł, URL strony)
+/index.html             – Strona główna
+/mapa/index.html        – Mapa instytucji (w przygotowaniu)
+/bezpiecznik/index.html – Poradnik Bezpiecznik
+/kontakt/index.html     – Formularz kontaktowy
+/assets/styles.css      – Style (mobile-first, WCAG 2.1 AA)
+/assets/app.js          – Minimalne JS (menu, formularz)
+/assets/favicon.svg     – Favicon
 /robots.txt
 /sitemap.xml
 ```
-
----
-
-## ➕ Jak dodać nową podstronę
-
-### Krok 1 – Utwórz folder i plik
-
-Skopiuj plik `_templates/nowa-podstrona.html` do nowego folderu.  
-Przykład: chcesz dodać stronę „Artykuły" → utwórz plik `artykuly/index.html`.
-
-### Krok 2 – Wypełnij nagłówek (frontmatter)
-
-Na początku pliku zmień wartości między `---`:
-
-```yaml
----
-layout: default
-title: "Artykuły | Mapa Pomocy"
-description: "Opis strony dla Google (do 160 znaków)."
-og_title: "Artykuły | Mapa Pomocy"
-og_description: "Opis do udostępniania w mediach społecznościowych."
-breadcrumb: "Artykuły"
----
-```
-
-| Pole | Co wpisać |
-|---|---|
-| `title` | Tytuł zakładki przeglądarki i wynik Google |
-| `description` | Opis widoczny w Google pod tytułem (do 160 znaków) |
-| `og_title` | Tytuł przy udostępnianiu w social media |
-| `og_description` | Opis przy udostępnianiu w social media |
-| `breadcrumb` | Tekst w ścieżce nawigacji (np. „Artykuły") – usuń tę linię, jeśli nie chcesz breadcrumbu |
-
-### Krok 3 – Napisz treść
-
-Pod `---` wpisz zawartość strony – tylko sekcje `<section>`, bez `<html>`, `<head>`, `<header>` ani `<footer>`. Te elementy wstawiają się automatycznie z `_layouts/default.html`.
-
-```html
-<section class="section" aria-labelledby="heading">
-  <div class="section-inner container">
-    <h1 id="heading" class="section-title">Tytuł</h1>
-    <p>Treść...</p>
-  </div>
-</section>
-```
-
-### Krok 4 – Dodaj do menu (opcjonalnie)
-
-Jeśli nowa strona ma się pojawić w górnym menu, edytuj `_layouts/default.html` i dodaj nową pozycję w `<nav>`:
-
-```html
-<li><a href="/artykuly/" {% if page.url contains '/artykuly' %}aria-current="page"{% endif %}>Artykuły</a></li>
-```
-
-### Krok 5 – Dodaj do sitemapy
-
-Otwórz `sitemap.xml` i dodaj nowy wpis:
-
-```xml
-<url>
-  <loc>https://mapapomocy.pl/artykuly/</loc>
-  <changefreq>monthly</changefreq>
-  <priority>0.8</priority>
-</url>
-```
-
-### Krok 6 – Commit i push
-
-Wgraj zmiany na GitHub (gałąź `main`) – GitHub Pages automatycznie zbuduje stronę w ciągu 1–2 minut.
-
----
 
 ## Jak włączyć GitHub Pages
 
