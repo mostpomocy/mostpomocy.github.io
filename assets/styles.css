@@ -122,6 +122,36 @@ main { flex: 1; }
   opacity: 0.85;
 }
 
+/* Header right-side controls (a11y button + hamburger) */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+/* Accessibility button in header */
+.a11y-header-btn {
+  background: rgba(255,255,255,0.15);
+  border: 2px solid rgba(255,255,255,0.7);
+  color: #fff;
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 0.9rem;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: background 0.15s;
+  line-height: 1;
+}
+
+.a11y-header-btn:hover,
+.a11y-header-btn[aria-expanded="true"] {
+  background: rgba(255,255,255,0.3);
+}
+
 /* Hamburger */
 .nav-toggle {
   display: none;
@@ -160,6 +190,9 @@ main { flex: 1; }
 /* Mobile nav */
 @media (max-width: 640px) {
   .nav-toggle { display: block; }
+
+  /* Show icon-only on very small screens to save space */
+  .a11y-header-btn__label { display: none; }
 
   .site-nav {
     width: 100%;
@@ -640,36 +673,15 @@ main { flex: 1; }
 
 /* === 22. Accessibility Widget ======================= */
 .a11y-trigger {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  z-index: 9000;
-  width: 3.2rem;
-  height: 3.2rem;
-  border-radius: 50%;
-  background: var(--color-primary);
-  color: #fff;
-  border: 3px solid #fff;
-  font-size: 1.3rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-  transition: background 0.15s;
-  line-height: 1;
-}
-
-.a11y-trigger:hover,
-.a11y-trigger[aria-expanded="true"] {
-  background: var(--color-primary-light);
+  display: none; /* replaced by header button */
 }
 
 .a11y-panel {
   position: fixed;
-  bottom: 5.8rem;
+  top: 4.5rem;
   right: 1.5rem;
-  z-index: 8999;
+  bottom: auto;
+  z-index: 2147483647;
   background: #fff;
   border: 2px solid var(--color-border);
   border-radius: var(--radius);
@@ -749,8 +761,7 @@ main { flex: 1; }
 }
 
 @media (max-width: 360px) {
-  .a11y-trigger { bottom: 1rem; right: 1rem; }
-  .a11y-panel { right: 0.5rem; bottom: 5rem; left: 0.5rem; min-width: unset; }
+  .a11y-panel { right: 0.5rem; top: 4rem; left: 0.5rem; min-width: unset; }
 }
 
 /* ── High Contrast ─────────────────────────────────── */
@@ -781,6 +792,7 @@ html.a11y-contrast .urgent-banner {
 
 html.a11y-contrast .site-logo span,
 html.a11y-contrast .site-nav a,
+html.a11y-contrast .a11y-header-btn,
 html.a11y-contrast .footer-col a,
 html.a11y-contrast .footer-bottom { opacity: 1; }
 
