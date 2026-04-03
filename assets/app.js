@@ -161,15 +161,6 @@
     if (bCT) bCT.addEventListener('click', function () { a11yPrefs.contrast = !a11yPrefs.contrast; a11yApplyClasses(); a11yUpdatePanel(); a11ySave(); });
     if (bLK) bLK.addEventListener('click', function () { a11yPrefs.links    = !a11yPrefs.links;    a11yApplyClasses(); a11yUpdatePanel(); a11ySave(); });
     if (bDY) bDY.addEventListener('click', function () { a11yPrefs.dyslexia = !a11yPrefs.dyslexia; a11yApplyClasses(); a11yUpdatePanel(); a11ySave(); });
-
-    var bRA = document.getElementById('a11y-reset-all');
-    if (bRA) bRA.addEventListener('click', function () {
-      a11yPrefs = { fontSize: 0, contrast: false, links: false, dyslexia: false };
-      a11yApplyFont();
-      a11yApplyClasses();
-      a11yUpdatePanel();
-      a11ySave();
-    });
   }
 
 })();
