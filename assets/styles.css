@@ -223,6 +223,16 @@ main { flex: 1; }
   text-align: center;
 }
 
+.page-hero .btn--outline {
+  color: #fff;
+  border-color: #fff;
+}
+
+.page-hero .btn--outline:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+
 .page-hero h1 {
   font-size: clamp(1.6rem, 4vw, 2.4rem);
   line-height: 1.25;
