@@ -1,11 +1,50 @@
----
-layout: default
-title: "Kontakt | Mapa Pomocy"
-description: "Skontaktuj się z zespołem Mapy Pomocy. Masz pytania, chcesz zgłosić instytucję lub nawiązać współpracę? Napisz do nas."
-og_title: "Kontakt | Mapa Pomocy"
-og_description: "Skontaktuj się z zespołem Mapy Pomocy – pytania, współpraca, zgłoszenia instytucji."
-breadcrumb: "Kontakt"
----
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt | Mapa Pomocy</title>
+  <meta name="description" content="Skontaktuj się z zespołem Mapy Pomocy. Masz pytania, chcesz zgłosić instytucję lub nawiązać współpracę? Napisz do nas.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://mapapomocy.pl/kontakt/">
+  <meta property="og:title" content="Kontakt | Mapa Pomocy">
+  <meta property="og:description" content="Skontaktuj się z zespołem Mapy Pomocy – pytania, współpraca, zgłoszenia instytucji.">
+  <meta property="og:locale" content="pl_PL">
+
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/styles.css">
+</head>
+<body>
+
+  <a class="skip-link" href="#main-content">Przejdź do treści</a>
+
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="../index.html" class="site-logo" aria-label="Mapa Pomocy – strona główna">
+        Mapa Pomocy
+        <span>MostPomocy.pl</span>
+      </a>
+      <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Otwórz menu nawigacji">☰</button>
+      <nav id="main-nav" class="site-nav" aria-label="Nawigacja główna">
+        <ul>
+          <li><a href="../index.html">Start</a></li>
+          <li><a href="../index.html#kompas">Kompas</a></li>
+          <li><a href="../mapa/index.html">Mapa</a></li>
+          <li><a href="../bezpiecznik/index.html">Bezpiecznik</a></li>
+          <li><a href="../kontakt/index.html" aria-current="page">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <nav aria-label="Ścieżka nawigacji" class="breadcrumb">
+      <a href="../index.html">Start</a>
+      <span aria-hidden="true"> › </span>
+      <span aria-current="page">Kontakt</span>
+    </nav>
 
     <section class="section" aria-labelledby="kontakt-heading">
       <div class="section-inner container">
@@ -93,3 +132,34 @@ breadcrumb: "Kontakt"
       </div>
     </section>
 
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h3>Mapa Pomocy</h3>
+        <a href="../index.html">Strona główna</a>
+        <a href="../mapa/index.html">Mapa instytucji</a>
+        <a href="../bezpiecznik/index.html">Bezpiecznik (PDF)</a>
+        <a href="../kontakt/index.html">Kontakt</a>
+      </div>
+      <div class="footer-col">
+        <h3>Pilna pomoc</h3>
+        <a href="tel:112">112 – Numer alarmowy</a>
+        <a href="tel:116111">116 111 – Telefon Zaufania dla Dzieci</a>
+        <a href="tel:116123">116 123 – Telefon Zaufania dla Dorosłych</a>
+      </div>
+      <div class="footer-col">
+        <h3>O projekcie</h3>
+        <p style="font-size:0.9rem;opacity:0.85;line-height:1.5;">Projekt społeczny MostPomocy – tworzymy go jako wolontariusze z myślą o osobach szukających wsparcia w Polsce.</p>
+        <p style="font-size:0.9rem;opacity:0.85;line-height:1.5;"><strong>Autor:</strong> Igor Pabiańczyk – student pracy socjalnej na Uniwersytecie Śląskim.</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 MostPomocy. Treści mają charakter informacyjny i nie zastępują porady specjalisty.</p>
+    </div>
+  </footer>
+
+  <script src="../assets/app.js"></script>
+</body>
+</html>
