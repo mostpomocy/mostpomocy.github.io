@@ -1,52 +1,10 @@
-<!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapa Pomocy – kompas szukania wsparcia | MostPomocy</title>
-  <meta name="description" content="Mapa Pomocy to bezpłatny przewodnik po systemie wsparcia społecznego w Polsce. Znajdź pomoc dla siebie lub bliskiej osoby – krok po kroku.">
-
-  <!-- OpenGraph -->
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://mapapomocy.pl/">
-  <meta property="og:title" content="Mapa Pomocy – kompas szukania wsparcia">
-  <meta property="og:description" content="Bezpłatny przewodnik po systemie wsparcia społecznego w Polsce. Pomoc dla Ciebie lub bliskiej osoby – krok po kroku.">
-  <meta property="og:locale" content="pl_PL">
-
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/styles.css">
-</head>
-<body>
-
-  <!-- Skip to content -->
-  <a class="skip-link" href="#main-content">Przejdź do treści</a>
-
-  <!-- ═══════════════ HEADER ═══════════════════════ -->
-  <header class="site-header" role="banner">
-    <div class="header-inner">
-      <a href="index.html" class="site-logo" aria-label="Mapa Pomocy – strona główna">
-        Mapa Pomocy
-        <span>MostPomocy.pl</span>
-      </a>
-
-      <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Otwórz menu nawigacji">
-        ☰
-      </button>
-
-      <nav id="main-nav" class="site-nav" aria-label="Nawigacja główna">
-        <ul>
-          <li><a href="index.html" aria-current="page">Start</a></li>
-          <li><a href="#kompas">Kompas</a></li>
-          <li><a href="mapa/index.html">Mapa</a></li>
-          <li><a href="bezpiecznik/index.html">Bezpiecznik</a></li>
-          <li><a href="kontakt/index.html">Kontakt</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- ═══════════════ MAIN ════════════════════════ -->
-  <main id="main-content">
+---
+layout: default
+title: "Mapa Pomocy – kompas szukania wsparcia | MostPomocy"
+description: "Mapa Pomocy to bezpłatny przewodnik po systemie wsparcia społecznego w Polsce. Znajdź pomoc dla siebie lub bliskiej osoby – krok po kroku."
+og_title: "Mapa Pomocy – kompas szukania wsparcia"
+og_description: "Bezpłatny przewodnik po systemie wsparcia społecznego w Polsce. Pomoc dla Ciebie lub bliskiej osoby – krok po kroku."
+---
 
     <!-- ─── HERO ─────────────────────────────────── -->
     <section class="page-hero" aria-labelledby="hero-heading">
@@ -175,7 +133,7 @@
         </ol>
 
         <div class="text-center mt-lg">
-          <a href="mapa/index.html" class="btn btn--primary btn--lg">Znajdź miejsce pomocy na mapie</a>
+          <a href="/mapa/" class="btn btn--primary btn--lg">Znajdź miejsce pomocy na mapie</a>
         </div>
       </div>
     </section>
@@ -211,46 +169,9 @@
           <div class="download-block__info">
             <h3>Bezpiecznik – poradnik pomocy (wkrótce)</h3>
             <p>Plik PDF do pobrania i wydrukowania. Wersja dostępna cyfrowo (czytniki ekranu) oraz do druku. Zawiera numery telefonów zaufania, adresy OPS w Twoim regionie i krok po kroku instrukcje.</p>
-            <a href="bezpiecznik/index.html" class="btn btn--outline">Dowiedz się więcej o Bezpieczniku</a>
+            <a href="/bezpiecznik/" class="btn btn--outline">Dowiedz się więcej o Bezpieczniku</a>
           </div>
         </div>
       </div>
     </section>
 
-  </main>
-
-  <!-- ═══════════════ FOOTER ══════════════════════ -->
-  <footer class="site-footer" role="contentinfo">
-    <div class="footer-inner">
-      <div class="footer-col">
-        <h3>Mapa Pomocy</h3>
-        <a href="index.html">Strona główna</a>
-        <a href="mapa/index.html">Mapa instytucji</a>
-        <a href="bezpiecznik/index.html">Bezpiecznik (PDF)</a>
-        <a href="kontakt/index.html">Kontakt</a>
-      </div>
-      <div class="footer-col">
-        <h3>Pilna pomoc</h3>
-        <a href="tel:112">112 – Numer alarmowy</a>
-        <a href="tel:116111">116 111 – Telefon Zaufania dla Dzieci</a>
-        <a href="tel:116123">116 123 – Telefon Zaufania dla Dorosłych</a>
-        <a href="tel:800120002">800 120 002 – Linia Pomocy dla Dorosłych w Kryzysie Emocjonalnym</a>
-      </div>
-      <div class="footer-col">
-        <h3>O projekcie</h3>
-        <p style="font-size:0.9rem;opacity:0.85;line-height:1.5;">
-          MostPomocy to projekt społeczny tworzony z myślą o osobach szukających wsparcia w Polsce. Tworzymy go jako wolontariusze – studenci pracy socjalnej i osoby zaangażowane społecznie.
-        </p>
-        <p style="font-size:0.9rem;opacity:0.85;line-height:1.5;">
-          <strong>Autor:</strong> Igor Pabiańczyk – student pracy socjalnej na Uniwersytecie Śląskim.
-        </p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>© 2025 MostPomocy. Treści mają charakter informacyjny i nie zastępują porady specjalisty.</p>
-    </div>
-  </footer>
-
-  <script src="assets/app.js"></script>
-</body>
-</html>
