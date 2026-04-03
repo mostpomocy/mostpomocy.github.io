@@ -130,6 +130,31 @@
     </div>
   </footer>
 
+  <!-- ═══════════════ PANEL DOSTĘPNOŚCI ══════════════ -->
+  <div id="a11y-panel" class="a11y-panel" role="region" aria-label="Panel dostępności" hidden>
+    <h2 class="a11y-panel__title">Dostępność</h2>
+
+    <div class="a11y-group">
+      <span class="a11y-group__label" id="a11y-font-label">Rozmiar tekstu</span>
+      <div class="a11y-row" role="group" aria-labelledby="a11y-font-label">
+        <button class="a11y-btn" id="a11y-font-dec"   aria-label="Zmniejsz czcionkę">A−</button>
+        <button class="a11y-btn" id="a11y-font-reset" aria-label="Domyślny rozmiar czcionki">A</button>
+        <button class="a11y-btn" id="a11y-font-inc"   aria-label="Powiększ czcionkę">A+</button>
+      </div>
+    </div>
+
+    <div class="a11y-group">
+      <button class="a11y-toggle" id="a11y-contrast" aria-pressed="false">⊙ Wysoki kontrast</button>
+    </div>
+    <div class="a11y-group">
+      <button class="a11y-toggle" id="a11y-links" aria-pressed="false">↗ Podkreśl linki</button>
+    </div>
+    <div class="a11y-group">
+      <button class="a11y-toggle" id="a11y-dyslexia" aria-pressed="false">Aa Czcionka dla dysleksji</button>
+    </div>
+  </div>
+  <button class="a11y-trigger" id="a11y-trigger" aria-expanded="false" aria-controls="a11y-panel" aria-label="Otwórz panel dostępności" title="Dostępność">♿</button>
+
   <script src="../assets/app.js"></script>
 </body>
 </html>

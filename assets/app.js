@@ -71,4 +71,96 @@
       });
     });
   }
+  /* ── Accessibility Widget ──────────────────────────── */
+  var A11Y_KEY      = 'mp-a11y';
+  var A11Y_FONT_MAX =  4;
+  var A11Y_FONT_MIN = -2;
+  var a11yPrefs = { fontSize: 0, contrast: false, links: false, dyslexia: false };
+
+  try {
+    var saved = localStorage.getItem(A11Y_KEY);
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      a11yPrefs.fontSize = parseInt(parsed.fontSize, 10) || 0;
+      a11yPrefs.contrast = !!parsed.contrast;
+      a11yPrefs.links    = !!parsed.links;
+      a11yPrefs.dyslexia = !!parsed.dyslexia;
+    }
+  } catch (e) { console.warn('Failed to load accessibility preferences:', e); }
+
+  function a11ySave() {
+    try { localStorage.setItem(A11Y_KEY, JSON.stringify(a11yPrefs)); } catch (e) { console.warn('Failed to save accessibility preferences:', e); }
+  }
+
+  function a11yApplyFont() {
+    document.documentElement.style.fontSize = (100 + a11yPrefs.fontSize * 10) + '%';
+  }
+
+  function a11yApplyClasses() {
+    var h = document.documentElement;
+    h.classList.toggle('a11y-contrast', a11yPrefs.contrast);
+    h.classList.toggle('a11y-links',    a11yPrefs.links);
+    h.classList.toggle('a11y-dyslexia', a11yPrefs.dyslexia);
+  }
+
+  a11yApplyFont();
+  a11yApplyClasses();
+
+  function a11yUpdatePanel() {
+    var bC = document.getElementById('a11y-contrast');
+    var bL = document.getElementById('a11y-links');
+    var bD = document.getElementById('a11y-dyslexia');
+    if (bC) bC.setAttribute('aria-pressed', a11yPrefs.contrast ? 'true' : 'false');
+    if (bL) bL.setAttribute('aria-pressed', a11yPrefs.links    ? 'true' : 'false');
+    if (bD) bD.setAttribute('aria-pressed', a11yPrefs.dyslexia ? 'true' : 'false');
+  }
+
+  var a11yTrigger = document.getElementById('a11y-trigger');
+  var a11yPanel   = document.getElementById('a11y-panel');
+
+  if (a11yTrigger && a11yPanel) {
+    a11yUpdatePanel();
+
+    a11yTrigger.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var opening = a11yPanel.hasAttribute('hidden');
+      if (opening) {
+        a11yPanel.removeAttribute('hidden');
+        a11yTrigger.setAttribute('aria-expanded', 'true');
+      } else {
+        a11yPanel.setAttribute('hidden', '');
+        a11yTrigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!a11yPanel.hasAttribute('hidden') && !a11yPanel.contains(e.target) && e.target !== a11yTrigger) {
+        a11yPanel.setAttribute('hidden', '');
+        a11yTrigger.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !a11yPanel.hasAttribute('hidden')) {
+        a11yPanel.setAttribute('hidden', '');
+        a11yTrigger.setAttribute('aria-expanded', 'false');
+        a11yTrigger.focus();
+      }
+    });
+
+    var bFI = document.getElementById('a11y-font-inc');
+    var bFD = document.getElementById('a11y-font-dec');
+    var bFR = document.getElementById('a11y-font-reset');
+    var bCT = document.getElementById('a11y-contrast');
+    var bLK = document.getElementById('a11y-links');
+    var bDY = document.getElementById('a11y-dyslexia');
+
+    if (bFI) bFI.addEventListener('click', function () { if (a11yPrefs.fontSize < A11Y_FONT_MAX)  { a11yPrefs.fontSize++; a11yApplyFont(); a11ySave(); } });
+    if (bFD) bFD.addEventListener('click', function () { if (a11yPrefs.fontSize > A11Y_FONT_MIN) { a11yPrefs.fontSize--; a11yApplyFont(); a11ySave(); } });
+    if (bFR) bFR.addEventListener('click', function () { a11yPrefs.fontSize = 0; a11yApplyFont(); a11ySave(); });
+    if (bCT) bCT.addEventListener('click', function () { a11yPrefs.contrast = !a11yPrefs.contrast; a11yApplyClasses(); a11yUpdatePanel(); a11ySave(); });
+    if (bLK) bLK.addEventListener('click', function () { a11yPrefs.links    = !a11yPrefs.links;    a11yApplyClasses(); a11yUpdatePanel(); a11ySave(); });
+    if (bDY) bDY.addEventListener('click', function () { a11yPrefs.dyslexia = !a11yPrefs.dyslexia; a11yApplyClasses(); a11yUpdatePanel(); a11ySave(); });
+  }
+
 })();
