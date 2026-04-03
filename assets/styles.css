@@ -791,10 +791,6 @@ html.a11y-contrast {
 
 html.a11y-contrast body { background: #000; color: #fff; }
 
-/* Header and footer: keep black so white/yellow text stays readable */
-html.a11y-contrast .site-header,
-html.a11y-contrast .site-footer { background: #000; }
-
 html.a11y-contrast .page-hero { background: #0a0a0a; }
 
 html.a11y-contrast .section--alt { background: #111; }
@@ -810,57 +806,12 @@ html.a11y-contrast .a11y-header-btn,
 html.a11y-contrast .footer-col a,
 html.a11y-contrast .footer-bottom { opacity: 1; }
 
-/* Skip link: black bg, yellow text */
-html.a11y-contrast .skip-link {
-  background: #000;
-  color: #ffff00;
-  border: 2px solid #ffff00;
-}
-
-/* Primary buttons: invert to black bg + yellow text/border */
-html.a11y-contrast .btn--primary {
-  background: #000;
-  color: #ffff00;
-  border: 2px solid #ffff00;
-}
-
-html.a11y-contrast .btn--primary:hover {
-  background: #222;
-}
-
-/* Step numbers: black bg, yellow text, yellow border */
-html.a11y-contrast .compass-step__number {
-  background: #000;
-  color: #ffff00;
-  border: 2px solid #ffff00;
-}
-
-/* Children box has hardcoded light bg – override */
-html.a11y-contrast .children-box {
-  background: #000;
-  border: 2px solid #ffff00;
-}
-
 html.a11y-contrast .a11y-panel {
   background: #000;
   border-color: #fff;
 }
 
 html.a11y-contrast .a11y-panel__title { color: #ffff00; }
-
-/* Active toggle: yellow bg needs black text for readability */
-html.a11y-contrast .a11y-toggle[aria-pressed="true"] {
-  background: #ffff00;
-  color: #000;
-  border-color: #ffff00;
-}
-
-/* Hovered a11y buttons: same yellow-on-black treatment */
-html.a11y-contrast .a11y-btn:hover {
-  background: #ffff00;
-  color: #000;
-  border-color: #ffff00;
-}
 
 /* ── Underline all links ────────────────────────────── */
 html.a11y-links a { text-decoration: underline !important; }
