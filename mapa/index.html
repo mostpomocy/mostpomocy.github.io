@@ -13,17 +13,138 @@
   <script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/9290d5ab02578.js" data-cmp-host="b.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mapa instytucji – w przygotowaniu | Mapa Pomocy</title>
-  <meta name="description" content="Interaktywna mapa instytucji pomocowych w Polsce. Funkcja jest w przygotowaniu – wkrótce znajdziesz tutaj miejsca pomocy w swoim mieście.">
+  <title>Mapa instytucji pomocowych w Polsce | Mapa Pomocy</title>
+  <meta name="description" content="Interaktywna mapa instytucji pomocowych w Polsce – ośrodki pomocy społecznej, centra zdrowia psychicznego, NGO, bezpłatna pomoc prawna i schroniska.">
 
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://mapapomocy.pl/mapa/">
-  <meta property="og:title" content="Mapa instytucji – w przygotowaniu | Mapa Pomocy">
-  <meta property="og:description" content="Interaktywna mapa instytucji pomocowych w Polsce. Wkrótce dostępna.">
+  <meta property="og:title" content="Mapa instytucji pomocowych | Mapa Pomocy">
+  <meta property="og:description" content="Interaktywna mapa instytucji pomocowych w całej Polsce.">
   <meta property="og:locale" content="pl_PL">
 
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
+  <style>
+    #map-container {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-top: 1rem;
+    }
+    #map {
+      flex: 1 1 auto;
+      height: 520px;
+      border-radius: 6px;
+      border: 2px solid var(--color-border);
+      min-width: 0;
+    }
+    #map-sidebar {
+      flex: 0 0 300px;
+      max-width: 300px;
+    }
+    #map-controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    #map-controls select,
+    #map-controls input {
+      flex: 1 1 130px;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+      padding: 0.45rem 0.6rem;
+      font-family: var(--font-family);
+      font-size: 0.9rem;
+      color: var(--color-text);
+      background: var(--color-bg);
+    }
+    #map-controls input:focus,
+    #map-controls select:focus {
+      outline: 3px solid var(--color-focus);
+      outline-offset: 2px;
+      border-color: var(--color-primary);
+    }
+    #map-results-label {
+      font-size: 0.85rem;
+      color: var(--color-text-muted);
+      margin-bottom: 0.4rem;
+    }
+    #map-list {
+      list-style: none;
+      max-height: 480px;
+      overflow-y: auto;
+      border: 2px solid var(--color-border);
+      border-radius: var(--radius);
+    }
+    .map-list-item {
+      padding: 0.6rem 0.75rem;
+      border-bottom: 1px solid var(--color-border);
+      cursor: pointer;
+      transition: background 0.12s;
+    }
+    .map-list-item:last-child { border-bottom: none; }
+    .map-list-item:hover,
+    .map-list-item:focus {
+      background: var(--color-surface);
+      outline: none;
+    }
+    .map-list-item__name {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--color-primary);
+    }
+    .map-list-item__sub {
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+    .map-badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 0.1rem 0.4rem;
+      border-radius: 3px;
+      margin-bottom: 0.15rem;
+    }
+    .map-badge--OPS      { background: #d6eaf8; color: #1a5276; }
+    .map-badge--CZP      { background: #d5f5e3; color: #1e7e34; }
+    .map-badge--NGO      { background: #fef9e7; color: #7d6608; }
+    .map-badge--Prawna   { background: #f2f3f4; color: #2c3e50; }
+    .map-badge--Schronisko { background: #fce4e4; color: #a93226; }
+    #map-note {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+      margin-top: 0.5rem;
+      line-height: 1.5;
+    }
+    @media (max-width: 700px) {
+      #map-container { flex-direction: column; }
+      #map-sidebar { flex: none; max-width: 100%; width: 100%; }
+      #map { height: 340px; }
+      #map-list { max-height: 280px; }
+    }
+    /* High contrast overrides for map elements */
+    html.a11y-contrast #map { border-color: #fff; }
+    html.a11y-contrast #map-controls input,
+    html.a11y-contrast #map-controls select {
+      background: #000;
+      color: #fff;
+      border-color: #fff;
+    }
+    html.a11y-contrast #map-list { border-color: #fff; }
+    html.a11y-contrast .map-list-item { border-bottom-color: #555; }
+    html.a11y-contrast .map-list-item:hover,
+    html.a11y-contrast .map-list-item:focus { background: #111; }
+    html.a11y-contrast .map-list-item__name { color: #ffff00; }
+    html.a11y-contrast .map-list-item__sub  { color: #ddd; }
+    html.a11y-contrast .map-badge--OPS      { background: #002244; color: #ffff00; }
+    html.a11y-contrast .map-badge--CZP      { background: #003300; color: #00dd00; }
+    html.a11y-contrast .map-badge--NGO      { background: #332200; color: #ffcc00; }
+    html.a11y-contrast .map-badge--Prawna   { background: #111;    color: #fff; }
+    html.a11y-contrast .map-badge--Schronisko { background: #1a0000; color: #ff6600; }
+  </style>
 </head>
 <body>
 
@@ -64,40 +185,35 @@
     <section class="section" aria-labelledby="mapa-heading">
       <div class="section-inner container">
 
-        <div class="coming-soon">
-          <div class="coming-soon__icon" aria-hidden="true">🗺️</div>
-          <h1 id="mapa-heading">Mapa instytucji – w przygotowaniu</h1>
-          <p>Pracujemy nad interaktywną mapą instytucji pomocowych w całej Polsce. Wkrótce będziesz mógł/mogła wyszukać miejsca pomocy w swoim mieście lub regionie.</p>
+        <h1 id="mapa-heading" class="section-title">Mapa instytucji pomocowych w Polsce</h1>
+        <p>Znajdź instytucje pomocy społecznej, centra zdrowia psychicznego, organizacje pozarządowe, punkty bezpłatnej pomocy prawnej i schroniska w całej Polsce. Kliknij marker lub wybierz z listy, aby zobaczyć szczegóły.</p>
+
+        <div id="map-controls" role="search" aria-label="Filtruj instytucje">
+          <input type="text" id="map-search" placeholder="Szukaj po nazwie lub miejscowości…" aria-label="Szukaj po nazwie lub miejscowości">
+          <select id="map-type-filter" aria-label="Filtruj według typu instytucji">
+            <option value="">Wszystkie typy</option>
+            <option value="OPS">OPS – Ośrodek Pomocy Społecznej</option>
+            <option value="CZP">CZP – Centrum Zdrowia Psychicznego</option>
+            <option value="NGO">NGO – Organizacja pozarządowa</option>
+            <option value="Prawna">Bezpłatna pomoc prawna</option>
+            <option value="Schronisko">Schronisko / Dom Pomocy</option>
+          </select>
         </div>
 
-        <h2 class="section-title mt-lg">Jak będzie działać mapa?</h2>
-        <p>Planowana mapa to interaktywne narzędzie, które pozwoli Ci szybko znaleźć odpowiednie instytucje w pobliżu.</p>
-
-        <ul class="simple-list mt-md" aria-label="Planowane funkcje mapy">
-          <li>Wyszukiwanie po miejscowości lub kodzie pocztowym</li>
-          <li>Filtrowanie po typie pomocy: OPS, NGO, zdrowie psychiczne, pomoc prawna, schroniska, telefony zaufania</li>
-          <li>Lista wyników dostępna z klawiatury – mapa jako uzupełnienie, nie jedyny sposób</li>
-          <li>Dane kontaktowe: telefon, adres, godziny otwarcia</li>
-          <li>Oznaczenie, czy instytucja oferuje pomoc anonimową lub bezpłatną</li>
-        </ul>
-
-        <h2 class="section-title mt-lg">Co możesz zrobić teraz?</h2>
-        <p>Zanim mapa będzie gotowa, możesz skorzystać z tych zasobów:</p>
-
-        <div class="info-box mt-md">
-          <p><strong>Ośrodek Pomocy Społecznej (OPS)</strong> – znajdziesz go w każdej gminie. Szukaj na stronie swojego urzędu gminy lub wpisz w wyszukiwarce „OPS [nazwa Twojego miasta]".</p>
+        <div id="map-container">
+          <div id="map" role="application" aria-label="Interaktywna mapa instytucji pomocowych w Polsce"></div>
+          <div id="map-sidebar" aria-live="polite" aria-label="Lista instytucji">
+            <p id="map-results-label">Wyniki: <strong id="map-count">0</strong></p>
+            <ul id="map-list" aria-label="Lista instytucji na mapie" tabindex="0"></ul>
+          </div>
         </div>
 
-        <div class="info-box mt-md">
-          <p><strong>Centrum Integracji Społecznej (CIS)</strong> – oferują wsparcie dla osób wykluczonych społecznie. Lista na stronie Ministerstwa Rodziny i Polityki Społecznej.</p>
-        </div>
-
-        <div class="info-box mt-md">
-          <p><strong>Bezpłatna pomoc prawna</strong> – od 2016 roku każdy obywatel ma prawo do bezpłatnej porady prawnej w wyznaczonych punktach. Szukaj „nieodpłatna pomoc prawna [Twój powiat]".</p>
-        </div>
+        <p id="map-note">
+          ⚠️ Dane mają charakter informacyjny i poglądowy. Przed wizytą zawsze sprawdź aktualne godziny otwarcia i dane kontaktowe na stronie danej instytucji lub w swoim urzędzie gminy. Informacje były aktualne w chwili tworzenia serwisu.
+        </p>
 
         <div class="info-box info-box--warning mt-md">
-          <p><strong>Potrzebujesz pomocy teraz?</strong> Zadzwoń na <a href="tel:116123" style="color: var(--color-accent); font-weight: 700;">116 123</a> – Telefon Zaufania dla Dorosłych w Kryzysie Emocjonalnym. Bezpłatny, całą dobę.</p>
+          <p><strong>Potrzebujesz pomocy teraz?</strong> Zadzwoń na <a href="tel:116123" style="font-weight:700;">116 123</a> – Telefon Zaufania dla Dorosłych. Bezpłatny, całą dobę.</p>
         </div>
 
         <div class="text-center mt-lg">
@@ -157,8 +273,217 @@
     <div class="a11y-group">
       <button class="a11y-toggle" id="a11y-dyslexia" aria-pressed="false">Aa Czcionka dla dysleksji</button>
     </div>
+    <div class="a11y-group">
+      <button class="a11y-toggle" id="a11y-reset-all" aria-label="Resetuj wszystkie ustawienia dostępności">↺ Resetuj ustawienia</button>
+    </div>
   </div>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV/XN/WLnI=" crossorigin="anonymous"></script>
   <script src="../assets/app.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* ── Institution data ─────────────────────────────── */
+    var institutions = [
+      /* ── Mazowieckie ── */
+      { name: 'OPS Centrum Warszawy', type: 'OPS', city: 'Warszawa', voivodeship: 'Mazowieckie', address: 'ul. Nowy Świat 2, 00-497 Warszawa', phone: '22 628 07 12', lat: 52.2297, lng: 21.0223, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Praga', type: 'CZP', city: 'Warszawa', voivodeship: 'Mazowieckie', address: 'ul. Bródnowska 49, 03-767 Warszawa', phone: '22 326 58 00', lat: 52.2567, lng: 21.0508, free: true, anonymous: false },
+      { name: 'Fundacja Dajemy Dzieciom Siłę', type: 'NGO', city: 'Warszawa', voivodeship: 'Mazowieckie', address: 'ul. Walecznych 59, 03-926 Warszawa', phone: '22 616 02 68', lat: 52.2175, lng: 21.0701, free: true, anonymous: true },
+      { name: 'Punkt Bezpłatnej Pomocy Prawnej – Mokotów', type: 'Prawna', city: 'Warszawa', voivodeship: 'Mazowieckie', address: 'ul. Rakowiecka 25/27, 02-517 Warszawa', phone: '22 443 90 00', lat: 52.1966, lng: 21.0208, free: true, anonymous: false },
+      { name: 'OPS Radom', type: 'OPS', city: 'Radom', voivodeship: 'Mazowieckie', address: 'ul. Limanowskiego 134, 26-600 Radom', phone: '48 385 01 00', lat: 51.4027, lng: 21.1469, free: true, anonymous: false },
+
+      /* ── Małopolskie ── */
+      { name: 'OPS Kraków-Śródmieście', type: 'OPS', city: 'Kraków', voivodeship: 'Małopolskie', address: 'ul. Józefińska 14, 30-529 Kraków', phone: '12 616 54 00', lat: 50.0477, lng: 19.9450, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Kraków', type: 'CZP', city: 'Kraków', voivodeship: 'Małopolskie', address: 'ul. Kopernika 21, 31-501 Kraków', phone: '12 424 87 00', lat: 50.0634, lng: 19.9536, free: true, anonymous: false },
+      { name: 'Stowarzyszenie Otwarte Drzwi', type: 'NGO', city: 'Kraków', voivodeship: 'Małopolskie', address: 'ul. Grodzka 65, 31-001 Kraków', phone: '12 421 93 23', lat: 50.0541, lng: 19.9380, free: true, anonymous: true },
+
+      /* ── Dolnośląskie ── */
+      { name: 'OPS Wrocław-Śródmieście', type: 'OPS', city: 'Wrocław', voivodeship: 'Dolnośląskie', address: 'ul. Strzegomska 6, 53-611 Wrocław', phone: '71 782 38 01', lat: 51.1046, lng: 17.0142, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Wrocław', type: 'CZP', city: 'Wrocław', voivodeship: 'Dolnośląskie', address: 'ul. Wyb. Pasteura 10, 50-367 Wrocław', phone: '71 784 27 50', lat: 51.1041, lng: 17.0410, free: true, anonymous: false },
+      { name: 'Schronisko dla Bezdomnych Wrocław', type: 'Schronisko', city: 'Wrocław', voivodeship: 'Dolnośląskie', address: 'ul. Żniwna 7, 52-210 Wrocław', phone: '71 361 30 02', lat: 51.0917, lng: 16.9901, free: true, anonymous: false },
+
+      /* ── Łódzkie ── */
+      { name: 'MOPS Łódź', type: 'OPS', city: 'Łódź', voivodeship: 'Łódzkie', address: 'ul. Kilińskiego 102/102a, 90-012 Łódź', phone: '42 685 56 00', lat: 51.7592, lng: 19.4584, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Łódź', type: 'CZP', city: 'Łódź', voivodeship: 'Łódzkie', address: 'ul. Aleksandrowska 159, 91-229 Łódź', phone: '42 652 12 00', lat: 51.7848, lng: 19.4226, free: true, anonymous: false },
+
+      /* ── Wielkopolskie ── */
+      { name: 'MOPR Poznań', type: 'OPS', city: 'Poznań', voivodeship: 'Wielkopolskie', address: 'ul. Cześnikowska 18, 60-330 Poznań', phone: '61 878 12 00', lat: 52.3990, lng: 16.9005, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Poznań', type: 'CZP', city: 'Poznań', voivodeship: 'Wielkopolskie', address: 'ul. Collegium Minus 27, 61-841 Poznań', phone: '61 869 14 00', lat: 52.4068, lng: 16.9230, free: true, anonymous: false },
+      { name: 'Punkt Bezpłatnej Pomocy Prawnej – Poznań', type: 'Prawna', city: 'Poznań', voivodeship: 'Wielkopolskie', address: 'ul. Libelta 16/20, 61-706 Poznań', phone: '61 640 17 24', lat: 52.4051, lng: 16.9256, free: true, anonymous: false },
+
+      /* ── Pomorskie ── */
+      { name: 'MOPS Gdańsk', type: 'OPS', city: 'Gdańsk', voivodeship: 'Pomorskie', address: 'ul. Lastadia 2, 80-880 Gdańsk', phone: '58 320 02 42', lat: 54.3521, lng: 18.6465, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Gdańsk', type: 'CZP', city: 'Gdańsk', voivodeship: 'Pomorskie', address: 'ul. Srebrniki 17, 80-180 Gdańsk', phone: '58 524 07 00', lat: 54.3869, lng: 18.5714, free: true, anonymous: false },
+      { name: 'MOPS Gdynia', type: 'OPS', city: 'Gdynia', voivodeship: 'Pomorskie', address: 'ul. Grabowo 2, 81-265 Gdynia', phone: '58 782 01 20', lat: 54.5188, lng: 18.5284, free: true, anonymous: false },
+
+      /* ── Zachodniopomorskie ── */
+      { name: 'MOPR Szczecin', type: 'OPS', city: 'Szczecin', voivodeship: 'Zachodniopomorskie', address: 'ul. Gen. Sikorskiego 3, 70-323 Szczecin', phone: '91 485 83 00', lat: 53.4289, lng: 14.5530, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Szczecin', type: 'CZP', city: 'Szczecin', voivodeship: 'Zachodniopomorskie', address: 'ul. Broniewskiego 26, 71-460 Szczecin', phone: '91 813 02 50', lat: 53.4440, lng: 14.5285, free: true, anonymous: false },
+
+      /* ── Kujawsko-Pomorskie ── */
+      { name: 'MOPR Bydgoszcz', type: 'OPS', city: 'Bydgoszcz', voivodeship: 'Kujawsko-Pomorskie', address: 'ul. Toruńska 174, 85-844 Bydgoszcz', phone: '52 379 02 00', lat: 53.1235, lng: 18.0084, free: true, anonymous: false },
+      { name: 'OPS Toruń', type: 'OPS', city: 'Toruń', voivodeship: 'Kujawsko-Pomorskie', address: 'ul. Konstytucji 3 Maja 40/42, 87-100 Toruń', phone: '56 650 81 50', lat: 53.0138, lng: 18.5984, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Bydgoszcz', type: 'CZP', city: 'Bydgoszcz', voivodeship: 'Kujawsko-Pomorskie', address: 'ul. Marii Curie-Skłodowskiej 9, 85-094 Bydgoszcz', phone: '52 585 42 00', lat: 53.1298, lng: 17.9982, free: true, anonymous: false },
+
+      /* ── Lubelskie ── */
+      { name: 'MOPS Lublin', type: 'OPS', city: 'Lublin', voivodeship: 'Lubelskie', address: 'ul. Grodzka 7, 20-112 Lublin', phone: '81 466 53 00', lat: 51.2487, lng: 22.5681, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Lublin', type: 'CZP', city: 'Lublin', voivodeship: 'Lubelskie', address: 'ul. Abramowicka 2, 20-442 Lublin', phone: '81 748 70 09', lat: 51.2237, lng: 22.5941, free: true, anonymous: false },
+      { name: 'Punkt Bezpłatnej Pomocy Prawnej – Lublin', type: 'Prawna', city: 'Lublin', voivodeship: 'Lubelskie', address: 'ul. Spokojana 9, 20-074 Lublin', phone: '81 466 25 00', lat: 51.2553, lng: 22.5631, free: true, anonymous: false },
+
+      /* ── Podlaskie ── */
+      { name: 'MOPS Białystok', type: 'OPS', city: 'Białystok', voivodeship: 'Podlaskie', address: 'ul. Malmeda 8, 15-440 Białystok', phone: '85 678 26 00', lat: 53.1322, lng: 23.1600, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Białystok', type: 'CZP', city: 'Białystok', voivodeship: 'Podlaskie', address: 'ul. Wołodyjowskiego 2, 15-698 Białystok', phone: '85 746 03 00', lat: 53.1060, lng: 23.1845, free: true, anonymous: false },
+
+      /* ── Śląskie ── */
+      { name: 'MOPS Katowice', type: 'OPS', city: 'Katowice', voivodeship: 'Śląskie', address: 'ul. Jagiellońska 17, 40-032 Katowice', phone: '32 251 02 11', lat: 50.2599, lng: 19.0216, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Katowice', type: 'CZP', city: 'Katowice', voivodeship: 'Śląskie', address: 'ul. Lompy 16, 40-040 Katowice', phone: '32 251 56 63', lat: 50.2621, lng: 19.0274, free: true, anonymous: false },
+      { name: 'OPS Sosnowiec', type: 'OPS', city: 'Sosnowiec', voivodeship: 'Śląskie', address: 'ul. 3 Maja 33, 41-200 Sosnowiec', phone: '32 296 11 00', lat: 50.2863, lng: 19.1044, free: true, anonymous: false },
+      { name: 'OPS Częstochowa', type: 'OPS', city: 'Częstochowa', voivodeship: 'Śląskie', address: 'ul. Polskiej Organizacji Wojskowej 2, 42-217 Częstochowa', phone: '34 372 42 00', lat: 50.8118, lng: 19.1203, free: true, anonymous: false },
+      { name: 'Schronisko dla Bezdomnych Katowice', type: 'Schronisko', city: 'Katowice', voivodeship: 'Śląskie', address: 'ul. Francuska 95, 40-507 Katowice', phone: '32 209 41 32', lat: 50.2422, lng: 19.0421, free: true, anonymous: false },
+
+      /* ── Podkarpackie ── */
+      { name: 'MOPS Rzeszów', type: 'OPS', city: 'Rzeszów', voivodeship: 'Podkarpackie', address: 'ul. Kościuszki 2, 35-030 Rzeszów', phone: '17 748 20 00', lat: 50.0413, lng: 22.0046, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Rzeszów', type: 'CZP', city: 'Rzeszów', voivodeship: 'Podkarpackie', address: 'ul. Tadeusza Rejtana 19, 35-326 Rzeszów', phone: '17 866 40 00', lat: 50.0202, lng: 21.9992, free: true, anonymous: false },
+
+      /* ── Świętokrzyskie ── */
+      { name: 'MOPS Kielce', type: 'OPS', city: 'Kielce', voivodeship: 'Świętokrzyskie', address: 'ul. Studzienna 2, 25-544 Kielce', phone: '41 331 42 52', lat: 50.8661, lng: 20.6286, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Kielce', type: 'CZP', city: 'Kielce', voivodeship: 'Świętokrzyskie', address: 'ul. Grunwaldzka 45, 25-736 Kielce', phone: '41 331 51 11', lat: 50.8558, lng: 20.6214, free: true, anonymous: false },
+
+      /* ── Warmińsko-Mazurskie ── */
+      { name: 'MOPS Olsztyn', type: 'OPS', city: 'Olsztyn', voivodeship: 'Warmińsko-Mazurskie', address: 'ul. Wyzwolenia 23a, 10-106 Olsztyn', phone: '89 534 68 53', lat: 53.7784, lng: 20.4801, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Olsztyn', type: 'CZP', city: 'Olsztyn', voivodeship: 'Warmińsko-Mazurskie', address: 'ul. Wojska Polskiego 35, 10-228 Olsztyn', phone: '89 678 48 00', lat: 53.7903, lng: 20.4730, free: true, anonymous: false },
+
+      /* ── Opolskie ── */
+      { name: 'MOPS Opole', type: 'OPS', city: 'Opole', voivodeship: 'Opolskie', address: 'ul. Armii Krajowej 36, 45-071 Opole', phone: '77 443 98 50', lat: 50.6683, lng: 17.9213, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Opole', type: 'CZP', city: 'Opole', voivodeship: 'Opolskie', address: 'ul. Wodociągowa 4, 45-221 Opole', phone: '77 541 58 00', lat: 50.6723, lng: 17.9420, free: true, anonymous: false },
+
+      /* ── Lubuskie ── */
+      { name: 'MOPS Zielona Góra', type: 'OPS', city: 'Zielona Góra', voivodeship: 'Lubuskie', address: 'ul. Długa 13, 65-401 Zielona Góra', phone: '68 411 98 00', lat: 51.9356, lng: 15.5062, free: true, anonymous: false },
+      { name: 'MOPS Gorzów Wielkopolski', type: 'OPS', city: 'Gorzów Wielkopolski', voivodeship: 'Lubuskie', address: 'ul. Walczaka 42, 66-400 Gorzów Wielkopolski', phone: '95 735 71 30', lat: 52.7368, lng: 15.2288, free: true, anonymous: false },
+      { name: 'Centrum Zdrowia Psychicznego Gorzów Wlkp.', type: 'CZP', city: 'Gorzów Wielkopolski', voivodeship: 'Lubuskie', address: 'ul. Walczaka 42, 66-400 Gorzów Wielkopolski', phone: '95 733 35 00', lat: 52.7329, lng: 15.2253, free: true, anonymous: false }
+    ];
+
+    /* ── Map colours per type ─────────────────────────── */
+    var typeColour = {
+      OPS:       '#1a5276',
+      CZP:       '#1e7e34',
+      NGO:       '#7d6608',
+      Prawna:    '#2c3e50',
+      Schronisko:'#a93226'
+    };
+
+    /* ── Build Leaflet map ────────────────────────────── */
+    var map = L.map('map').setView([52.1, 19.4], 6);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      maxZoom: 18
+    }).addTo(map);
+
+    function makeIcon(type) {
+      var colour = typeColour[type] || '#555';
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="26" height="36" viewBox="0 0 26 36">'
+        + '<path d="M13 0C5.82 0 0 5.82 0 13c0 9.75 13 23 13 23S26 22.75 26 13C26 5.82 20.18 0 13 0z" fill="' + colour + '"/>'
+        + '<circle cx="13" cy="13" r="5" fill="#fff"/>'
+        + '</svg>';
+      return L.divIcon({
+        html: svg,
+        className: '',
+        iconSize: [26, 36],
+        iconAnchor: [13, 36],
+        popupAnchor: [0, -36]
+      });
+    }
+
+    /* ── Render ───────────────────────────────────────── */
+    var markers = [];
+    var markerLayer = L.layerGroup().addTo(map);
+
+    function renderAll(list) {
+      markerLayer.clearLayers();
+      markers = [];
+
+      var listEl = document.getElementById('map-list');
+      var countEl = document.getElementById('map-count');
+      listEl.innerHTML = '';
+      countEl.textContent = list.length;
+
+      list.forEach(function (inst, idx) {
+        /* Marker */
+        var m = L.marker([inst.lat, inst.lng], { icon: makeIcon(inst.type) })
+          .bindPopup(buildPopup(inst));
+        m.addTo(markerLayer);
+        markers.push(m);
+
+        /* List item */
+        var li = document.createElement('li');
+        li.className = 'map-list-item';
+        li.setAttribute('tabindex', '0');
+        li.setAttribute('role', 'button');
+        li.setAttribute('aria-label', inst.name + ', ' + inst.city);
+        li.innerHTML = '<div class="map-list-item__name">'
+          + '<span class="map-badge map-badge--' + inst.type + '">' + inst.type + '</span> '
+          + escHtml(inst.name) + '</div>'
+          + '<div class="map-list-item__sub">' + escHtml(inst.city) + ' · ' + escHtml(inst.voivodeship) + '</div>';
+
+        (function (marker, institution) {
+          function activate() {
+            map.setView([institution.lat, institution.lng], 14);
+            marker.openPopup();
+          }
+          li.addEventListener('click', activate);
+          li.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); }
+          });
+        }(m, inst));
+
+        listEl.appendChild(li);
+      });
+    }
+
+    function buildPopup(inst) {
+      var tags = '';
+      if (inst.free)      tags += '<span style="background:#d6eaf8;color:#1a5276;padding:1px 5px;border-radius:3px;font-size:0.78rem;margin-right:3px;">bezpłatne</span>';
+      if (inst.anonymous) tags += '<span style="background:#d5f5e3;color:#1e7e34;padding:1px 5px;border-radius:3px;font-size:0.78rem;">anonimowo</span>';
+      return '<strong>' + escHtml(inst.name) + '</strong>'
+        + '<br><em>' + escHtml(inst.type) + ' · ' + escHtml(inst.city) + '</em>'
+        + '<br>' + escHtml(inst.address)
+        + (inst.phone ? '<br>📞 <a href="tel:+48' + inst.phone.replace(/\s/g, '') + '">' + escHtml(inst.phone) + '</a>' : '')
+        + (tags ? '<br>' + tags : '');
+    }
+
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function getFiltered() {
+      var q     = (document.getElementById('map-search').value || '').toLowerCase().trim();
+      var type  = document.getElementById('map-type-filter').value;
+      return institutions.filter(function (inst) {
+        var matchType = !type || inst.type === type;
+        var matchQ    = !q
+          || inst.name.toLowerCase().indexOf(q) !== -1
+          || inst.city.toLowerCase().indexOf(q) !== -1
+          || inst.voivodeship.toLowerCase().indexOf(q) !== -1
+          || inst.address.toLowerCase().indexOf(q) !== -1;
+        return matchType && matchQ;
+      });
+    }
+
+    function update() { renderAll(getFiltered()); }
+
+    document.getElementById('map-search').addEventListener('input', update);
+    document.getElementById('map-type-filter').addEventListener('change', update);
+
+    /* Initial render */
+    update();
+  }());
+  </script>
 </body>
 </html>
