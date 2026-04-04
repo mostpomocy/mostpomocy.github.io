@@ -71,78 +71,58 @@
           <p><strong>Ten formularz NIE jest linią kryzysową.</strong> Jeśli potrzebujesz natychmiastowej pomocy, zadzwoń na <a href="tel:112" style="color: var(--color-accent); font-weight:700;">112</a> lub <a href="tel:116123" style="color: var(--color-accent); font-weight:700;">116 123</a> (Telefon Zaufania dla Dorosłych, bezpłatny, całą dobę).</p>
         </div>
 
-        <!-- Formularz – Formspree
-             KONFIGURACJA: Zamień TWOJ_ENDPOINT na swój endpoint z formspree.io
-             Przykład: action="https://formspree.io/f/abcdefgh"
-             Instrukcja w README.md → sekcja "Formspree (formularz kontaktowy)" -->
-        <form
-          id="contact-form"
-          class="contact-form"
-          action="https://formspree.io/f/TWOJ_ENDPOINT"
-          method="POST"
-          novalidate
-          aria-label="Formularz kontaktowy"
-        >
-          <div class="form-group">
-            <label for="contact-topic">Temat <span aria-hidden="true">*</span></label>
-            <select id="contact-topic" name="topic" required aria-required="true">
-              <option value="" disabled selected>Wybierz temat...</option>
-              <option value="pytanie">Pytanie ogólne</option>
-              <option value="instytucja">Chcę zgłosić instytucję do mapy</option>
-              <option value="wspolpraca">Chcę nawiązać współpracę</option>
-              <option value="blad">Zgłoszenie błędu na stronie</option>
-              <option value="inne">Inne</option>
-            </select>
-          </div>
+        <!-- Formularz kontaktowy – Google Forms (bezpłatny)
+             KONFIGURACJA: Wejdź na docs.google.com/forms, utwórz formularz,
+             a następnie kliknij „Wyślij" → ikona „<>" (Osadź) i skopiuj URL
+             z atrybutu src elementu <iframe>. Wklej go poniżej w miejsce:
+             https://docs.google.com/forms/d/e/TUTAJ_WKLEJ_ID_FORMULARZA/viewform?embedded=true -->
 
-          <div class="form-group">
-            <label for="contact-message">Wiadomość <span aria-hidden="true">*</span></label>
-            <textarea
-              id="contact-message"
-              name="message"
-              required
-              aria-required="true"
-              aria-describedby="message-hint"
-              placeholder="Opisz krótko, w czym możemy pomóc..."
-            ></textarea>
-            <p id="message-hint" style="font-size:0.85rem;color:var(--color-text-muted);">
-              Prosimy nie podawać wrażliwych danych osobowych ani szczegółów medycznych.
-            </p>
-          </div>
+        <div class="info-box mt-md mb-lg" aria-label="Informacja RODO o formularzu">
+          <p>
+            Wypełniając formularz, wyrażasz zgodę na przetwarzanie podanych danych osobowych
+            (adres e-mail, treść wiadomości) przez administratora serwisu MostPomocy wyłącznie
+            w celu odpowiedzi na Twoje zapytanie, zgodnie z art. 6 ust. 1 lit. a RODO.
+            Dane są przechowywane przez Google Forms (Google LLC) i nie będą udostępniane
+            osobom trzecim. Przysługuje Ci prawo dostępu do danych, ich sprostowania,
+            usunięcia oraz wycofania zgody w dowolnym momencie.
+            Więcej informacji: <a href="../polityka-prywatnosci/index.html">Polityka prywatności</a>.
+          </p>
+        </div>
 
-          <div class="form-group">
-            <label for="contact-email">Adres e-mail (opcjonalnie)</label>
-            <input
-              type="email"
-              id="contact-email"
-              name="email"
-              autocomplete="email"
-              aria-describedby="email-hint"
-              placeholder="np. jan.kowalski@example.com"
-            >
-            <p id="email-hint" style="font-size:0.85rem;color:var(--color-text-muted);">
-              Podaj adres, jeśli chcesz otrzymać odpowiedź. Adres nie będzie udostępniany osobom trzecim.
-            </p>
-          </div>
+        <div class="google-form-wrapper" style="position:relative;width:100%;overflow:hidden;border-radius:var(--radius);border:1px solid var(--color-border);">
+          <iframe
+            id="contact-google-form"
+            src="https://docs.google.com/forms/d/e/TUTAJ_WKLEJ_ID_FORMULARZA/viewform?embedded=true"
+            width="100%"
+            height="700"
+            frameborder="0"
+            marginheight="0"
+            marginwidth="0"
+            title="Formularz kontaktowy MostPomocy"
+            aria-label="Formularz kontaktowy – Google Forms"
+            loading="lazy"
+          >
+            Ładowanie formularza…
+          </iframe>
+        </div>
 
-          <!-- Honeypot anti-spam -->
-          <div class="visually-hidden" aria-hidden="true">
-            <label for="website">Zostaw puste (ochrona przed spamem)</label>
-            <input type="text" id="website" name="_gotcha" tabindex="-1" autocomplete="off">
-          </div>
+        <p class="mt-md" style="font-size:0.85rem;color:var(--color-text-muted);">
+          Jeśli formularz nie wyświetla się poprawnie,
+          <a href="https://docs.google.com/forms/d/e/TUTAJ_WKLEJ_ID_FORMULARZA/viewform" rel="noopener noreferrer" target="_blank">
+            otwórz go bezpośrednio w nowym oknie
+          </a>.
+        </p>
 
-          <button type="submit" class="btn btn--primary btn--lg">Wyślij wiadomość</button>
-        </form>
-
-        <div id="form-status" hidden role="status" aria-live="polite"></div>
-
-        <h2 class="section-title mt-lg">Zasady korzystania z formularza</h2>
+        <h2 class="section-title mt-lg">Zasady korzystania z formularza (RODO)</h2>
         <ul class="simple-list mt-md">
           <li>Nie prosimy o podanie danych wrażliwych (PESEL, diagnoz, szczegółów medycznych).</li>
           <li>Twoja wiadomość jest traktowana z pełną dyskrecją.</li>
           <li>Nie sprzedajemy ani nie udostępniamy Twoich danych osobom trzecim.</li>
+          <li>Dane kontaktowe (e-mail) są przetwarzane wyłącznie w celu odpowiedzi na zapytanie.</li>
           <li>Odpowiadamy na wiadomości w ciągu kilku dni roboczych (projekt wolontariacki).</li>
+          <li>Masz prawo wycofać zgodę i żądać usunięcia swoich danych w dowolnym momencie.</li>
         </ul>
+        <p class="mt-md">Szczegółowe informacje o przetwarzaniu danych: <a href="../polityka-prywatnosci/index.html">Polityka prywatności</a>.</p>
 
       </div>
     </section>
@@ -156,7 +136,8 @@
         <a href="../index.html">Strona główna</a>
         <a href="../mapa/index.html">Mapa instytucji</a>
         <a href="../bezpiecznik/index.html">Bezpiecznik (PDF)</a>
-        <a href="../kontakt/index.html">Kontakt</a>
+        <a href="../kontakt/index.html" aria-current="page">Kontakt</a>
+        <a href="../polityka-prywatnosci/index.html">Polityka prywatności</a>
       </div>
       <div class="footer-col">
         <h3>Pilna pomoc</h3>
@@ -171,7 +152,7 @@
       </div>
     </div>
     <div class="footer-bottom">
-      <p>© 2025 MostPomocy. Treści mają charakter informacyjny i nie zastępują porady specjalisty.</p>
+      <p>© 2025 MostPomocy. Treści mają charakter informacyjny i nie zastępują porady specjalisty. | <a href="../polityka-prywatnosci/index.html" style="color:inherit;">Polityka prywatności</a></p>
     </div>
   </footer>
 
