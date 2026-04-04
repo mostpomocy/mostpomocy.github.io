@@ -42,32 +42,56 @@
     }
   });
 
-  /* ── Formspree AJAX (contact form) ───────────────── */
-  var form = document.getElementById('contact-form');
-  if (form) {
-    var status = document.getElementById('form-status');
+  /* ── Google Forms contact form ────────────────────── */
+  var gForm      = document.getElementById('contact-form-gforms');
+  var gStatus    = document.getElementById('form-status');
+  var gSubmitBtn = document.getElementById('form-submit-btn');
 
-    form.addEventListener('submit', function (e) {
+  if (gForm) {
+    /* Warn developers when placeholder IDs have not yet been replaced. */
+    if (gForm.action.indexOf('TUTAJ_WKLEJ_ID_FORMULARZA') !== -1) {
+      console.warn('[MostPomocy] Google Forms: replace TUTAJ_WKLEJ_ID_FORMULARZA in form action and update entry.* field names before going live.');
+    }
+
+    gForm.addEventListener('submit', function (e) {
       e.preventDefault();
-      var data = new FormData(form);
 
-      fetch(form.action, {
+      var params = new URLSearchParams();
+      (new FormData(gForm)).forEach(function (value, key) {
+        params.append(key, value);
+      });
+
+      if (gSubmitBtn) {
+        gSubmitBtn.disabled    = true;
+        gSubmitBtn.textContent = 'Wysyłanie\u2026';
+      }
+
+      /* NOTE: mode:'no-cors' is required to POST to Google Forms from a
+         different origin without a preflight. The response is opaque, so
+         we cannot detect server-side errors – the .then() callback fires
+         whenever the network request completes without a network failure. */
+      fetch(gForm.action, {
         method: 'POST',
-        body: data,
-        headers: { 'Accept': 'application/json' }
-      }).then(function (response) {
-        if (response.ok) {
-          status.textContent = 'Wiadomość wysłana. Dziękujemy!';
-          status.className = 'info-box info-box--success mt-md';
-          status.removeAttribute('hidden');
-          form.reset();
-        } else {
-          return response.json().then(function (json) { throw json; });
+        mode:   'no-cors',
+        body:   params
+      }).then(function () {
+        if (gStatus) {
+          gStatus.textContent = 'Wiadomo\u015b\u0107 wys\u0142ana. Dzi\u0119kujemy \u2013 odpowiemy wkr\u00f3tce!';
+          gStatus.className   = 'info-box info-box--success mt-md';
+          gStatus.removeAttribute('hidden');
         }
+        gForm.reset();
       }).catch(function () {
-        status.textContent = 'Wystąpił błąd. Spróbuj ponownie lub napisz bezpośrednio na adres e-mail.';
-        status.className = 'info-box info-box--warning mt-md';
-        status.removeAttribute('hidden');
+        if (gStatus) {
+          gStatus.textContent = 'Wyst\u0105pi\u0142 b\u0142\u0105d. Spr\u00f3buj ponownie lub napisz do nas bezpo\u015brednio.';
+          gStatus.className   = 'info-box info-box--warning mt-md';
+          gStatus.removeAttribute('hidden');
+        }
+      }).finally(function () {
+        if (gSubmitBtn) {
+          gSubmitBtn.disabled    = false;
+          gSubmitBtn.textContent = 'Wy\u015blij';
+        }
       });
     });
   }
