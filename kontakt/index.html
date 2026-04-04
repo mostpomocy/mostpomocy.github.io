@@ -71,58 +71,44 @@
           <p><strong>Ten formularz NIE jest linią kryzysową.</strong> Jeśli potrzebujesz natychmiastowej pomocy, zadzwoń na <a href="tel:112" style="color: var(--color-accent); font-weight:700;">112</a> lub <a href="tel:116123" style="color: var(--color-accent); font-weight:700;">116 123</a> (Telefon Zaufania dla Dorosłych, bezpłatny, całą dobę).</p>
         </div>
 
-        <!-- Formularz kontaktowy – Google Forms (bezpłatny)
-             KONFIGURACJA: Wejdź na docs.google.com/forms, utwórz formularz,
-             a następnie kliknij „Wyślij" → ikona „<>" (Osadź) i skopiuj URL
-             z atrybutu src elementu <iframe>. Wklej go poniżej w miejsce:
-             https://docs.google.com/forms/d/e/TUTAJ_WKLEJ_ID_FORMULARZA/viewform?embedded=true -->
+        <!-- Formularz kontaktowy – Formsubmit.co (bezpłatny, bez serwera)
+             KONFIGURACJA: zastąp TWOJ_EMAIL@DOMENA.PL swoim adresem e-mail
+             w atrybucie action poniżej. Po pierwszym wysłaniu Formsubmit.co
+             wyśle Ci e-mail z prośbą o aktywację – potwierdź go jednorazowo. -->
+        <form id="contact-form" class="contact-form mt-lg"
+              action="https://formsubmit.co/TWOJ_EMAIL@DOMENA.PL"
+              method="POST">
 
-        <div class="info-box mt-md mb-lg" aria-label="Informacja RODO o formularzu">
-          <p>
-            Wypełniając formularz, wyrażasz zgodę na przetwarzanie podanych danych osobowych
-            (adres e-mail, treść wiadomości) przez administratora serwisu MostPomocy wyłącznie
-            w celu odpowiedzi na Twoje zapytanie, zgodnie z art. 6 ust. 1 lit. a RODO.
-            Dane są przechowywane przez Google Forms (Google LLC) i nie będą udostępniane
-            osobom trzecim. Przysługuje Ci prawo dostępu do danych, ich sprostowania,
-            usunięcia oraz wycofania zgody w dowolnym momencie.
-            Więcej informacji: <a href="../polityka-prywatnosci/index.html">Polityka prywatności</a>.
+          <input type="hidden" name="_subject" value="Nowa wiadomość z formularza MostPomocy">
+          <input type="hidden" name="_captcha" value="false">
+          <input type="hidden" name="_template" value="table">
+          <!-- Honeypot – pułapka na spam (nie widoczna dla użytkownika) -->
+          <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off">
+
+          <div class="form-group">
+            <label for="contact-name">Imię <span style="font-weight:400;color:var(--color-text-muted);">(opcjonalnie)</span></label>
+            <input type="text" id="contact-name" name="imię" autocomplete="given-name" placeholder="np. Anna">
+          </div>
+
+          <div class="form-group">
+            <label for="contact-email">Adres e-mail <span aria-hidden="true" style="color:#c0392b;">*</span></label>
+            <input type="email" id="contact-email" name="email" required autocomplete="email" placeholder="twoj@email.pl">
+          </div>
+
+          <div class="form-group">
+            <label for="contact-message">Wiadomość <span aria-hidden="true" style="color:#c0392b;">*</span></label>
+            <textarea id="contact-message" name="wiadomość" required rows="5" placeholder="Twoja wiadomość…"></textarea>
+          </div>
+
+          <button type="submit" class="btn btn--primary">Wyślij</button>
+
+          <p class="mt-sm" style="font-size:0.85rem;color:var(--color-text-muted);">
+            Klikając „Wyślij", akceptujesz <a href="../polityka-prywatnosci/index.html">Politykę prywatności</a>
+            i wyrażasz zgodę na kontakt w odpowiedzi na Twoje zapytanie.
           </p>
-        </div>
+        </form>
 
-        <div class="google-form-wrapper" style="position:relative;width:100%;overflow:hidden;border-radius:var(--radius);border:1px solid var(--color-border);">
-          <iframe
-            id="contact-google-form"
-            src="https://docs.google.com/forms/d/e/TUTAJ_WKLEJ_ID_FORMULARZA/viewform?embedded=true"
-            width="100%"
-            height="700"
-            frameborder="0"
-            marginheight="0"
-            marginwidth="0"
-            title="Formularz kontaktowy MostPomocy"
-            aria-label="Formularz kontaktowy – Google Forms"
-            loading="lazy"
-          >
-            Ładowanie formularza…
-          </iframe>
-        </div>
-
-        <p class="mt-md" style="font-size:0.85rem;color:var(--color-text-muted);">
-          Jeśli formularz nie wyświetla się poprawnie,
-          <a href="https://docs.google.com/forms/d/e/TUTAJ_WKLEJ_ID_FORMULARZA/viewform" rel="noopener noreferrer" target="_blank">
-            otwórz go bezpośrednio w nowym oknie
-          </a>.
-        </p>
-
-        <h2 class="section-title mt-lg">Zasady korzystania z formularza (RODO)</h2>
-        <ul class="simple-list mt-md">
-          <li>Nie prosimy o podanie danych wrażliwych (PESEL, diagnoz, szczegółów medycznych).</li>
-          <li>Twoja wiadomość jest traktowana z pełną dyskrecją.</li>
-          <li>Nie sprzedajemy ani nie udostępniamy Twoich danych osobom trzecim.</li>
-          <li>Dane kontaktowe (e-mail) są przetwarzane wyłącznie w celu odpowiedzi na zapytanie.</li>
-          <li>Odpowiadamy na wiadomości w ciągu kilku dni roboczych (projekt wolontariacki).</li>
-          <li>Masz prawo wycofać zgodę i żądać usunięcia swoich danych w dowolnym momencie.</li>
-        </ul>
-        <p class="mt-md">Szczegółowe informacje o przetwarzaniu danych: <a href="../polityka-prywatnosci/index.html">Polityka prywatności</a>.</p>
+        <div id="form-status" class="mt-md" hidden></div>
 
       </div>
     </section>

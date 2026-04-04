@@ -42,7 +42,7 @@
     }
   });
 
-  /* ── Formspree AJAX (contact form) ───────────────── */
+  /* ── Formsubmit.co AJAX (contact form) ───────────── */
   var form = document.getElementById('contact-form');
   if (form) {
     var status = document.getElementById('form-status');
@@ -50,19 +50,24 @@
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var data = new FormData(form);
+      var ajaxUrl = form.action.replace('formsubmit.co/', 'formsubmit.co/ajax/');
 
-      fetch(form.action, {
+      fetch(ajaxUrl, {
         method: 'POST',
         body: data,
         headers: { 'Accept': 'application/json' }
       }).then(function (response) {
-        if (response.ok) {
+        if (!response.ok) { throw new Error('Network error'); }
+        return response.json();
+      }).then(function (json) {
+        /* Formsubmit.co returns success as the string "true"; guard for boolean too */
+        if (json.success === 'true' || json.success === true) {
           status.textContent = 'Wiadomość wysłana. Dziękujemy!';
           status.className = 'info-box info-box--success mt-md';
           status.removeAttribute('hidden');
           form.reset();
         } else {
-          return response.json().then(function (json) { throw json; });
+          throw new Error('Submission failed');
         }
       }).catch(function () {
         status.textContent = 'Wystąpił błąd. Spróbuj ponownie lub napisz bezpośrednio na adres e-mail.';
