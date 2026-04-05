@@ -71,21 +71,15 @@
           <p><strong>Ten formularz NIE jest linią kryzysową.</strong> Jeśli potrzebujesz natychmiastowej pomocy, zadzwoń na <a href="tel:112" style="color: var(--color-accent); font-weight:700;">112</a> lub <a href="tel:116123" style="color: var(--color-accent); font-weight:700;">116 123</a> (Telefon Zaufania dla Dorosłych, bezpłatny, całą dobę).</p>
         </div>
 
-        <!-- Formularz kontaktowy – dane trafiają do Google Forms (bezpłatne, bez osadzania iframe)
-             KONFIGURACJA (jednorazowa):
-             1. Utwórz formularz na docs.google.com/forms z polami:
-                Imię / pseudonim, Adres e-mail, Wiadomość
-             2. Kliknij Wyślij → „<>" (Osadź) – skopiuj ID formularza z URL (część po /e/)
-                i wklej poniżej zamiast TUTAJ_WKLEJ_ID_FORMULARZA.
-             3. Kliknij prawym przyciskiem na pole → „Zbadaj" (DevTools) i odnajdź atrybut
-                name="entry.XXXXXXXXXX" dla każdego pola; zaktualizuj atrybuty name poniżej. -->
+        <!-- Formularz kontaktowy – dane trafiają przez Google Apps Script do Google Sheet.
+             Endpoint: Apps Script web app (doPost) – parametry: imie, email, wiadomosc. -->
 
         <div class="info-box mt-md mb-lg" aria-label="Informacja RODO o formularzu">
           <p>
             Wypełniając formularz, wyrażasz zgodę na przetwarzanie podanych danych osobowych
             (adres e-mail, treść wiadomości) przez administratora serwisu MostPomocy wyłącznie
             w celu odpowiedzi na Twoje zapytanie, zgodnie z art. 6 ust. 1 lit. a RODO.
-            Dane są przechowywane przez Google Forms (Google LLC) i nie będą udostępniane
+            Dane są przesyłane za pośrednictwem Google Apps Script i przechowywane w Google Sheets (Google LLC) i nie będą udostępniane
             osobom trzecim. Przysługuje Ci prawo dostępu do danych, ich sprostowania,
             usunięcia oraz wycofania zgody w dowolnym momencie.
             Więcej informacji: <a href="../polityka-prywatnosci/index.html">Polityka prywatności</a>.
@@ -95,17 +89,16 @@
         <form
           id="contact-form-gforms"
           class="contact-form mt-md"
-          action="https://docs.google.com/forms/d/e/1FAIpQLSc2Uoxa0f2fYD-rHG6Ufi8ufqKHNrD88VoXlfyYb1ne6Gg6Iw/formResponse"
+          action="https://script.google.com/macros/s/AKfycbzrqBzeGZOiaAHN8x4N66Yh73bMUU13xa_FZJ0yqItNGR--F71zUhxwoIknoR4c56jj/exec"
           method="POST"
           novalidate
         >
-          <input type="hidden" name="fbzx" value="-5738367500334812328">
           <div class="form-group">
             <label for="f-name">Imię lub pseudonim</label>
             <input
               type="text"
               id="f-name"
-              name="entry.159397985"
+              name="imie"
               autocomplete="given-name"
               required
               aria-required="true"
@@ -118,7 +111,7 @@
             <input
               type="email"
               id="f-email"
-              name="entry.1465228189"
+              name="email"
               autocomplete="email"
               required
               aria-required="true"
@@ -130,7 +123,7 @@
             <label for="f-message">Wiadomość</label>
             <textarea
               id="f-message"
-              name="entry.1691238495"
+              name="wiadomosc"
               required
               aria-required="true"
               placeholder="Napisz swoją wiadomość…"

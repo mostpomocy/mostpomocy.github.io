@@ -42,17 +42,12 @@
     }
   });
 
-  /* ── Google Forms contact form ────────────────────── */
+  /* ── Apps Script contact form ────────────────────── */
   var gForm      = document.getElementById('contact-form-gforms');
   var gStatus    = document.getElementById('form-status');
   var gSubmitBtn = document.getElementById('form-submit-btn');
 
   if (gForm) {
-    /* Warn developers when placeholder IDs have not yet been replaced. */
-    if (gForm.action.indexOf('TUTAJ_WKLEJ_ID_FORMULARZA') !== -1) {
-      console.warn('[MostPomocy] Google Forms: replace TUTAJ_WKLEJ_ID_FORMULARZA in form action and update entry.* field names before going live.');
-    }
-
     gForm.addEventListener('submit', function (e) {
       e.preventDefault();
 
@@ -66,10 +61,11 @@
         gSubmitBtn.textContent = 'Wysyłanie\u2026';
       }
 
-      /* NOTE: mode:'no-cors' is required to POST to Google Forms from a
-         different origin without a preflight. The response is opaque, so
-         we cannot detect server-side errors – the .then() callback fires
-         whenever the network request completes without a network failure. */
+      /* NOTE: mode:'no-cors' is required to POST to a Google Apps Script
+         web app from a different origin without a preflight redirect error.
+         The response is opaque, so we cannot detect server-side errors –
+         the .then() callback fires whenever the network request completes
+         without a network failure. */
       fetch(gForm.action, {
         method: 'POST',
         mode:   'no-cors',
