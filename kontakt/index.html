@@ -33,6 +33,46 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
+  <script>
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('contact-form-gforms');
+  const statusBox = document.getElementById('form-status');
+  const submitBtn = document.getElementById('form-submit-btn');
+
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbzhxH2fwJuXML9XFcJAzEKXshecrPeTg2pDyMTSEuqxTfwPDV9IOWWGR2JH8d6HYuXrFQ/exec';
+
+  if (!form) return;
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    statusBox.hidden = false;
+    statusBox.textContent = 'Wysyłanie wiadomości...';
+    submitBtn.disabled = true;
+
+    const formData = new FormData(form);
+
+    try {
+      const response = await fetch(scriptURL, {
+        method: 'POST',
+        body: formData
+      });
+
+      const text = await response.text();
+
+      statusBox.hidden = false;
+      statusBox.textContent = 'Wiadomość została wysłana.';
+      form.reset();
+    } catch (error) {
+      statusBox.hidden = false;
+      statusBox.textContent = 'Błąd wysyłki. Sprawdź Apps Script i link /exec.';
+    } finally {
+      submitBtn.disabled = false;
+    }
+  });
+});
+</script>
+
 <body>
 
   <a class="skip-link" href="#main-content">Przejdź do treści</a>
@@ -94,48 +134,20 @@
           </p>
         </div>
 
-        <form
-  id="contact-form-gforms"
-  class="contact-form mt-md"
-  action="https://script.google.com/macros/s/AKfycbzhxH2fwJuXML9XFcJAzEKXshecrPeTg2pDyMTSEuqxTfwPDV9IOWWGR2JH8d6HYuXrFQ/exec"
-  method="POST"
-  novalidate
->
+       <form id="contact-form-gforms" class="contact-form mt-md" novalidate>
   <div class="form-group">
     <label for="f-name">Imię lub pseudonim</label>
-    <input
-      type="text"
-      id="f-name"
-      name="imie"
-      autocomplete="given-name"
-      required
-      aria-required="true"
-      placeholder="np. Anna"
-    >
+    <input type="text" id="f-name" name="imie" autocomplete="given-name" required aria-required="true" placeholder="np. Anna">
   </div>
 
   <div class="form-group">
     <label for="f-email">Adres e-mail <span style="font-weight:400;color:var(--color-text-muted)">potrzebny do odpowiedzi</span></label>
-    <input
-      type="email"
-      id="f-email"
-      name="email"
-      autocomplete="email"
-      required
-      aria-required="true"
-      placeholder="twoj@email.pl"
-    >
+    <input type="email" id="f-email" name="email" autocomplete="email" required aria-required="true" placeholder="twoj@email.pl">
   </div>
 
   <div class="form-group">
     <label for="f-message">Wiadomość</label>
-    <textarea
-      id="f-message"
-      name="wiadomosc"
-      required
-      aria-required="true"
-      placeholder="Napisz swoją wiadomość"
-    ></textarea>
+    <textarea id="f-message" name="wiadomosc" required aria-required="true" placeholder="Napisz swoją wiadomość"></textarea>
   </div>
 
   <div id="form-status" class="info-box mt-md" hidden aria-live="polite" role="status"></div>
