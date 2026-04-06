@@ -33,7 +33,7 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
-</script>
+
 
 <body>
 
@@ -98,7 +98,7 @@
 
 <form
   id="contact-form"
-  action="https://script.google.com/macros/s/AKfycbwPvYeQLq4JDN_MsAhCUasgNbET9aYhsJYeG7NJA6_aDV7jga3hHx--mNyKvSv1qfrCbQ/exec"
+  action="https://docs.google.com/forms/d/e/1FAIpQLSc2Uoxa0f2fYD-rHG6Ufi8ufqKHNrD88VoXlfyYb1ne6Gg6Iw/formResponse"
   method="POST"
   target="hidden_iframe"
   class="contact-form mt-md"
@@ -109,7 +109,7 @@
     <input
       type="text"
       id="f-name"
-      name="imie"
+      name="entry.2005620554"
       autocomplete="given-name"
       required
       aria-required="true"
@@ -125,7 +125,7 @@
     <input
       type="email"
       id="f-email"
-      name="email"
+      name="entry.1045781291"
       autocomplete="email"
       required
       aria-required="true"
@@ -137,14 +137,16 @@
     <label for="f-message">Wiadomość</label>
     <textarea
       id="f-message"
-      name="wiadomosc"
+      name="entry.839337160"
       required
       aria-required="true"
       placeholder="Napisz swoją wiadomość"
     ></textarea>
   </div>
 
-  <div id="form-status" class="info-box mt-md" hidden aria-live="polite" role="status"></div>
+  <div id="form-success" class="info-box mt-md" hidden>
+    Dziękujemy. Twoja wiadomość została wysłana.
+  </div>
 
   <button type="submit" id="form-submit-btn" class="btn btn--primary mt-sm">
     Wyślij
@@ -157,40 +159,24 @@
   </p>
 </form>
 
-<iframe
-  name="hidden_iframe"
-  id="hidden_iframe"
-  style="display:none;"
-  onload="handleFormIframeLoad()"
-></iframe>
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
 
 <script>
-let formSubmitting = false;
-
-function handleFormIframeLoad() {
-  if (!formSubmitting) return;
-
-  const statusBox = document.getElementById('form-status');
-  const submitBtn = document.getElementById('form-submit-btn');
-  const form = document.getElementById('contact-form');
-
-  statusBox.hidden = false;
-  statusBox.textContent = 'Wiadomość została wysłana.';
-  submitBtn.disabled = false;
-  form.reset();
-  formSubmitting = false;
-}
-
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('contact-form');
-  const statusBox = document.getElementById('form-status');
+  const successBox = document.getElementById('form-success');
   const submitBtn = document.getElementById('form-submit-btn');
 
   form.addEventListener('submit', function () {
-    formSubmitting = true;
-    statusBox.hidden = false;
-    statusBox.textContent = 'Wysyłanie wiadomości...';
     submitBtn.disabled = true;
+    submitBtn.textContent = 'Wysyłanie...';
+
+    setTimeout(function () {
+      form.reset();
+      successBox.hidden = false;
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Wyślij';
+    }, 1200);
   });
 });
 </script>
