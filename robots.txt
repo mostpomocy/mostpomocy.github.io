@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://mapapomocy.pl/sitemap.xml
+Sitemap: https://mostpomocy.pl/sitemap.xml
