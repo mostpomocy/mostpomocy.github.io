@@ -95,57 +95,60 @@
         </div>
 
         <form
-          id="contact-form-gforms"
-          class="contact-form mt-md"
-          action="https://script.google.com/macros/s/AKfycbzrqBzeGZOiaAHN8x4N66Yh73bMUU13xa_FZJ0yqItNGR--F71zUhxwoIknoR4c56jj/exec"
-          method="POST"
-          novalidate
-        >
-          <div class="form-group">
-            <label for="f-name">Imię lub pseudonim</label>
-            <input
-              type="text"
-              id="f-name"
-              name="imie"
-              autocomplete="given-name"
-              required
-              aria-required="true"
-              placeholder="np. Anna"
-            >
-          </div>
+  id="contact-form-gforms"
+  class="contact-form mt-md"
+  action="TU_WKLEJ_SWOJ_NOWY_LINK_APPS_SCRIPT_EXEC"
+  method="POST"
+  novalidate
+>
+  <div class="form-group">
+    <label for="f-name">Imię lub pseudonim</label>
+    <input
+      type="text"
+      id="f-name"
+      name="imie"
+      autocomplete="given-name"
+      required
+      aria-required="true"
+      placeholder="np. Anna"
+    >
+  </div>
 
-          <div class="form-group">
-            <label for="f-email">Adres e-mail <span style="font-weight:400;color:var(--color-text-muted);">(potrzebny do odpowiedzi)</span></label>
-            <input
-              type="email"
-              id="f-email"
-              name="email"
-              autocomplete="email"
-              required
-              aria-required="true"
-              placeholder="twoj@email.pl"
-            >
-          </div>
+  <div class="form-group">
+    <label for="f-email">Adres e-mail <span style="font-weight:400;color:var(--color-text-muted)">potrzebny do odpowiedzi</span></label>
+    <input
+      type="email"
+      id="f-email"
+      name="email"
+      autocomplete="email"
+      required
+      aria-required="true"
+      placeholder="twoj@email.pl"
+    >
+  </div>
 
-          <div class="form-group">
-            <label for="f-message">Wiadomość</label>
-            <textarea
-              id="f-message"
-              name="wiadomosc"
-              required
-              aria-required="true"
-              placeholder="Napisz swoją wiadomość…"
-            ></textarea>
-          </div>
+  <div class="form-group">
+    <label for="f-message">Wiadomość</label>
+    <textarea
+      id="f-message"
+      name="wiadomosc"
+      required
+      aria-required="true"
+      placeholder="Napisz swoją wiadomość"
+    ></textarea>
+  </div>
 
-          <div id="form-status" class="info-box mt-md" hidden aria-live="polite" role="status"></div>
+  <div id="form-status" class="info-box mt-md" hidden aria-live="polite" role="status"></div>
 
-          <button type="submit" id="form-submit-btn" class="btn btn--primary mt-sm">Wyślij</button>
+  <button type="submit" id="form-submit-btn" class="btn btn--primary mt-sm">Wyślij</button>
 
-          <p class="mt-sm" style="font-size:0.85rem;color:var(--color-text-muted);">
-            Klikając „Wyślij", akceptujesz <a href="../polityka-prywatnosci/index.html">Politykę prywatności</a> i wyrażasz zgodę na kontakt w odpowiedzi na Twoje zapytanie.
-          </p>
-        </form>
+  <p class="mt-sm" style="font-size:0.85rem;color:var(--color-text-muted)">
+    Klikając „Wyślij”, akceptujesz
+    <a href="../polityka-prywatnosci/index.html">Politykę prywatności</a>
+    i wyrażasz zgodę na kontakt w odpowiedzi na Twoje zapytanie.
+  </p>
+</form>
+
 
         <h2 class="section-title mt-lg">Zasady korzystania z formularza (RODO)</h2>
         <ul class="simple-list mt-md">
