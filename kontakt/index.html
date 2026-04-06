@@ -97,9 +97,10 @@
         </div>
 
 <form
-  action="https://script.google.com/macros/s/AKfycbzhxH2fwJuXML9XFcJAzEKXshecrPeTg2pDyMTSEuqxTfwPDV9IOWWGR2JH8d6HYuXrFQ/exec"
+  id="contact-form"
+  action="https://script.google.com/macros/s/AKfycbwPvYeQLq4JDN_MsAhCUasgNbET9aYhsJYeG7NJA6_aDV7jga3hHx--mNyKvSv1qfrCbQ/exec"
   method="POST"
-  target="_blank"
+  target="hidden_iframe"
   class="contact-form mt-md"
   novalidate
 >
@@ -143,7 +144,11 @@
     ></textarea>
   </div>
 
-  <button type="submit" class="btn btn--primary mt-sm">Wyślij</button>
+  <div id="form-status" class="info-box mt-md" hidden aria-live="polite" role="status"></div>
+
+  <button type="submit" id="form-submit-btn" class="btn btn--primary mt-sm">
+    Wyślij
+  </button>
 
   <p class="mt-sm" style="font-size:0.85rem;color:var(--color-text-muted)">
     Klikając „Wyślij”, akceptujesz
@@ -151,6 +156,45 @@
     i wyrażasz zgodę na kontakt w odpowiedzi na Twoje zapytanie.
   </p>
 </form>
+
+<iframe
+  name="hidden_iframe"
+  id="hidden_iframe"
+  style="display:none;"
+  onload="handleFormIframeLoad()"
+></iframe>
+
+<script>
+let formSubmitting = false;
+
+function handleFormIframeLoad() {
+  if (!formSubmitting) return;
+
+  const statusBox = document.getElementById('form-status');
+  const submitBtn = document.getElementById('form-submit-btn');
+  const form = document.getElementById('contact-form');
+
+  statusBox.hidden = false;
+  statusBox.textContent = 'Wiadomość została wysłana.';
+  submitBtn.disabled = false;
+  form.reset();
+  formSubmitting = false;
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('contact-form');
+  const statusBox = document.getElementById('form-status');
+  const submitBtn = document.getElementById('form-submit-btn');
+
+  form.addEventListener('submit', function () {
+    formSubmitting = true;
+    statusBox.hidden = false;
+    statusBox.textContent = 'Wysyłanie wiadomości...';
+    submitBtn.disabled = true;
+  });
+});
+</script>
+
 
 
 
