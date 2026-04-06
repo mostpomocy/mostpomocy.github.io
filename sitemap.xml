@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mapapomocy.pl/</loc>
+    <loc>https://mostpomocy.pl/</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://mapapomocy.pl/mapa/</loc>
+    <loc>https://mostpomocy.pl/mapa/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mapapomocy.pl/bezpiecznik/</loc>
+    <loc>https://mostpomocy.pl/bezpiecznik/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://mapapomocy.pl/kontakt/</loc>
+    <loc>https://mostpomocy.pl/sosnowiec-bez-stygmy/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://mostpomocy.pl/kontakt/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.5</priority>
   </url>
   <url>
-    <loc>https://mapapomocy.pl/polityka-prywatnosci/</loc>
+    <loc>https://mostpomocy.pl/polityka-prywatnosci/</loc>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
