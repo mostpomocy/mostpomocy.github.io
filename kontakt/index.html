@@ -96,90 +96,116 @@
           </p>
         </div>
 
-<form
-  id="contact-form"
-  action="https://docs.google.com/forms/d/e/1FAIpQLSc2Uoxa0f2fYD-rHG6Ufi8ufqKHNrD88VoXlfyYb1ne6Gg6Iw/formResponse"
-  method="POST"
-  target="hidden_iframe"
-  class="contact-form mt-md"
-  novalidate
->
-  <div class="form-group">
-    <label for="f-name">Imię lub pseudonim</label>
-    <input
-      type="text"
-      id="f-name"
-      name="entry.2005620554"
-      autocomplete="given-name"
-      required
-      aria-required="true"
-      placeholder="np. Anna"
+<section class="contact-embed-shell mt-md">
+  <div class="contact-embed-header">
+    <span class="contact-embed-badge">Formularz kontaktowy</span>
+    <h2>Napisz do nas</h2>
+    <p>
+      Jeśli masz pytanie, chcesz zgłosić instytucję lub nawiązać współpracę,
+      skorzystaj z formularza poniżej.
+    </p>
+  </div>
+
+  <div class="contact-embed-frame">
+    <iframe
+      src="https://docs.google.com/forms/d/e/1FAIpQLSc2Uoxa0f2fYD-rHG6Ufi8ufqKHNrD88VoXlfyYb1ne6Gg6Iw/viewform?embedded=true"
+      title="Formularz kontaktowy MostPomocy"
+      loading="lazy"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
     >
+      Trwa ładowanie…
+    </iframe>
   </div>
 
-  <div class="form-group">
-    <label for="f-email">
-      Adres e-mail
-      <span style="font-weight:400;color:var(--color-text-muted)">potrzebny do odpowiedzi</span>
-    </label>
-    <input
-      type="email"
-      id="f-email"
-      name="entry.1045781291"
-      autocomplete="email"
-      required
-      aria-required="true"
-      placeholder="twoj@email.pl"
-    >
-  </div>
-
-  <div class="form-group">
-    <label for="f-message">Wiadomość</label>
-    <textarea
-      id="f-message"
-      name="entry.839337160"
-      required
-      aria-required="true"
-      placeholder="Napisz swoją wiadomość"
-    ></textarea>
-  </div>
-
-  <div id="form-success" class="info-box mt-md" hidden>
-    Dziękujemy. Twoja wiadomość została wysłana.
-  </div>
-
-  <button type="submit" id="form-submit-btn" class="btn btn--primary mt-sm">
-    Wyślij
-  </button>
-
-  <p class="mt-sm" style="font-size:0.85rem;color:var(--color-text-muted)">
-    Klikając „Wyślij”, akceptujesz
+  <p class="contact-embed-note">
+    Klikając „Wyślij” w formularzu, akceptujesz
     <a href="../polityka-prywatnosci/index.html">Politykę prywatności</a>
     i wyrażasz zgodę na kontakt w odpowiedzi na Twoje zapytanie.
   </p>
-</form>
+</section>
+<style>
+.contact-embed-shell{
+  background: linear-gradient(180deg, #f8fbfd 0%, #ffffff 100%);
+  border: 1px solid rgba(16, 24, 40, 0.08);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+}
 
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;"></iframe>
+.contact-embed-header{
+  max-width: 720px;
+  margin-bottom: 20px;
+}
 
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('contact-form');
-  const successBox = document.getElementById('form-success');
-  const submitBtn = document.getElementById('form-submit-btn');
+.contact-embed-badge{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(24, 119, 242, 0.08);
+  color: #1b4f72;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
 
-  form.addEventListener('submit', function () {
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Wysyłanie...';
+.contact-embed-header h2{
+  margin: 0 0 10px 0;
+  font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+  line-height: 1.15;
+  color: #12344d;
+}
 
-    setTimeout(function () {
-      form.reset();
-      successBox.hidden = false;
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Wyślij';
-    }, 1200);
-  });
-});
-</script>
+.contact-embed-header p{
+  margin: 0;
+  color: #4a5565;
+  line-height: 1.65;
+}
+
+.contact-embed-frame{
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 24, 40, 0.06);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
+}
+
+.contact-embed-frame iframe{
+  display: block;
+  width: 100%;
+  min-height: 980px;
+  border: 0;
+  background: #ffffff;
+}
+
+.contact-embed-note{
+  margin-top: 16px;
+  font-size: 0.9rem;
+  color: #667085;
+  line-height: 1.6;
+}
+
+.contact-embed-note a{
+  color: inherit;
+  font-weight: 600;
+}
+
+@media (max-width: 768px){
+  .contact-embed-shell{
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .contact-embed-frame iframe{
+    min-height: 1120px;
+  }
+}
+</style>
+
 
 
 
