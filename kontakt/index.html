@@ -33,44 +33,6 @@
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/styles.css">
 </head>
-  <script>
-document.addEventListener('DOMContentLoaded', function () {
-  const form = document.getElementById('contact-form-gforms');
-  const statusBox = document.getElementById('form-status');
-  const submitBtn = document.getElementById('form-submit-btn');
-
-  const scriptURL = 'https://script.google.com/macros/s/AKfycbzhxH2fwJuXML9XFcJAzEKXshecrPeTg2pDyMTSEuqxTfwPDV9IOWWGR2JH8d6HYuXrFQ/exec';
-
-  if (!form) return;
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-
-    statusBox.hidden = false;
-    statusBox.textContent = 'Wysyłanie wiadomości...';
-    submitBtn.disabled = true;
-
-    const formData = new FormData(form);
-
-    try {
-      const response = await fetch(scriptURL, {
-        method: 'POST',
-        body: formData
-      });
-
-      const text = await response.text();
-
-      statusBox.hidden = false;
-      statusBox.textContent = 'Wiadomość została wysłana.';
-      form.reset();
-    } catch (error) {
-      statusBox.hidden = false;
-      statusBox.textContent = 'Błąd wysyłki. Sprawdź Apps Script i link /exec.';
-    } finally {
-      submitBtn.disabled = false;
-    }
-  });
-});
 </script>
 
 <body>
