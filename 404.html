@@ -9,8 +9,8 @@
         content="Nie możemy znaleźć tej strony. To nie Twoja wina. Wróć na stronę główną MostPomocy i skorzystaj z mapy pomocy." />
   <link rel="stylesheet" href="/assets/styles.css" />
 
-  <!-- Google Analytics – wklej tutaj swój kod z index.html -->
-  <!-- PRZYKŁAD:
+  <!-- Google Analytics – WSTAW TU SWÓJ KOD z index.html -->
+  <!--
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -98,11 +98,13 @@
           Najważniejsze jest to, że nadal możesz szukać wsparcia i zrobić kolejny krok.
         </p>
 
-        <div class="info-box info-box--success mt-md" aria-live="polite">
+        <!-- Box motywujący – poprawiony kontrast -->
+        <div class="info-box info-box--success mt-md" aria-live="polite"
+             style="background:#d3f3dc;color:#1a1a1a;">
           <p><strong>Nic nie szkodzi, że trafiłeś/trafiłaś tutaj.</strong></p>
           <p>
-            To, że szukasz informacji i pomocy, pokazuje, że robisz coś ważnego dla siebie
-            lub dla kogoś bliskiego. Błąd 404 nie zatrzymuje Twojej drogi po wsparcie.
+            To, że szukasz informacji i pomocy, pokazuje, że robisz coś ważnego
+            dla siebie lub dla kogoś bliskiego. Błąd 404 nie zatrzymuje Twojej drogi po wsparcie.
           </p>
           <p>
             Możesz spokojnie kliknąć przycisk poniżej i wrócić do mapy pomocy.
@@ -122,12 +124,12 @@
         <p class="mt-md" style="max-width: 36rem; margin: 1.5rem auto 0; font-size:0.95rem; opacity:0.9;">
           Jeśli nie wiesz, od czego zacząć – wybierz po prostu miejsce, które najbardziej
           pasuje do Twojej sytuacji. Nie musisz mieć wszystkiego zaplanowanego.
-          Wystarczy **jeden krok na raz**.
+          Wystarczy jeden krok na raz.
         </p>
       </div>
     </section>
 
-    <!-- Kategorie – szybkie linki -->
+    <!-- Kategorie – szybkie linki (spójne emotki) -->
     <section class="section" aria-labelledby="categories-heading">
       <div class="section-inner">
         <h2 class="section-title" id="categories-heading">
@@ -137,7 +139,7 @@
         <div class="category-grid">
 
           <a href="/mapa/seniorzy/" class="category-card">
-            <span class="category-card__icon" aria-hidden="true">👴</span>
+            <span class="category-card__icon" aria-hidden="true">🧓</span>
             <span class="category-card__title">Seniorzy</span>
             <span class="category-card__desc">Wsparcie dla osób starszych i ich opiekunów</span>
           </a>
