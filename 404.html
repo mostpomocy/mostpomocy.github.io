@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>Strona nie znaleziona (404) – MostPomocy</title>
+  <meta name="description"
+        content="Nie możemy znaleźć tej strony. To nie Twoja wina. Wróć na stronę główną MostPomocy i skorzystaj z mapy pomocy." />
+  <link rel="stylesheet" href="/assets/styles.css" />
+
+  <!-- Google Analytics – wklej tutaj swój kod z index.html -->
+  <!-- PRZYKŁAD:
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+  -->
+</head>
+<body>
+
+  <a href="#main-content" class="skip-link">Przejdź do treści głównej</a>
+
+  <header class="site-header" role="banner">
+    <div class="header-inner">
+      <a href="/" class="site-logo" aria-label="MostPomocy – strona główna">
+        MostPomocy
+        <span>Kompas szukania wsparcia</span>
+      </a>
+
+      <div class="header-controls">
+        <button class="a11y-header-btn" id="a11y-trigger" aria-expanded="false"
+                aria-controls="a11y-panel" aria-label="Opcje dostępności">
+          <span aria-hidden="true">♿</span>
+          <span class="a11y-header-btn__label">Dostępność</span>
+        </button>
+
+        <button class="nav-toggle" aria-expanded="false" aria-controls="site-navigation"
+                aria-label="Otwórz menu nawigacji">☰</button>
+      </div>
+
+      <nav class="site-nav" id="site-navigation" aria-label="Nawigacja główna">
+        <ul>
+          <li><a href="/">Strona główna</a></li>
+          <li><a href="/mapa/">Mapa pomocy</a></li>
+          <li><a href="/bezpiecznik/">Bezpiecznik</a></li>
+          <li><a href="/kontakt/">Kontakt</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Panel dostępności -->
+    <div class="a11y-panel" id="a11y-panel" hidden
+         role="dialog" aria-modal="true" aria-labelledby="a11y-panel-title">
+      <p class="a11y-panel__title" id="a11y-panel-title">Opcje dostępności</p>
+
+      <div class="a11y-group">
+        <span class="a11y-group__label" id="font-size-label">Rozmiar tekstu</span>
+        <div class="a11y-row" role="group" aria-labelledby="font-size-label">
+          <button class="a11y-btn" id="a11y-font-dec" aria-label="Zmniejsz tekst">A−</button>
+          <button class="a11y-btn" id="a11y-font-reset" aria-label="Domyślny rozmiar tekstu">A</button>
+          <button class="a11y-btn" id="a11y-font-inc" aria-label="Zwiększ tekst">A+</button>
+        </div>
+      </div>
+
+      <div class="a11y-group">
+        <button class="a11y-toggle" id="a11y-contrast" aria-pressed="false">Wysoki kontrast</button>
+      </div>
+
+      <div class="a11y-group">
+        <button class="a11y-toggle" id="a11y-links" aria-pressed="false">Podkreśl linki</button>
+      </div>
+
+      <div class="a11y-group">
+        <button class="a11y-toggle" id="a11y-dyslexia" aria-pressed="false">Czcionka dla dysleksji</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+
+    <!-- Hero 404 z tekstem wspierającym -->
+    <section class="page-hero" aria-labelledby="error-heading">
+      <div class="container">
+        <p aria-hidden="true"
+           style="font-size:clamp(4rem,15vw,8rem);font-weight:900;line-height:1;margin-bottom:0.5rem;opacity:0.20;">
+          404
+        </p>
+
+        <h1 id="error-heading">Nie możemy znaleźć tej strony</h1>
+
+        <p style="max-width: 40rem; margin: 0 auto;">
+          To nie Twoja wina – czasem linki się psują albo strony zmieniają adres.
+          <br />
+          Najważniejsze jest to, że nadal możesz szukać wsparcia i zrobić kolejny krok.
+        </p>
+
+        <div class="info-box info-box--success mt-md" aria-live="polite">
+          <p><strong>Nic nie szkodzi, że trafiłeś/trafiłaś tutaj.</strong></p>
+          <p>
+            To, że szukasz informacji i pomocy, pokazuje, że robisz coś ważnego dla siebie
+            lub dla kogoś bliskiego. Błąd 404 nie zatrzymuje Twojej drogi po wsparcie.
+          </p>
+          <p>
+            Możesz spokojnie kliknąć przycisk poniżej i wrócić do mapy pomocy.
+            Jesteś o jedno kliknięcie od miejsca, które może Ci realnie pomóc.
+          </p>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;margin-top:1.5rem;">
+          <a href="/" class="btn btn--primary btn--lg">
+            ⬅ Wróć na stronę główną
+          </a>
+          <a href="/mapa/" class="btn btn--outline btn--lg">
+            🗺 Przejdź do mapy pomocy
+          </a>
+        </div>
+
+        <p class="mt-md" style="max-width: 36rem; margin: 1.5rem auto 0; font-size:0.95rem; opacity:0.9;">
+          Jeśli nie wiesz, od czego zacząć – wybierz po prostu miejsce, które najbardziej
+          pasuje do Twojej sytuacji. Nie musisz mieć wszystkiego zaplanowanego.
+          Wystarczy **jeden krok na raz**.
+        </p>
+      </div>
+    </section>
+
+    <!-- Kategorie – szybkie linki -->
+    <section class="section" aria-labelledby="categories-heading">
+      <div class="section-inner">
+        <h2 class="section-title" id="categories-heading">
+          Wybierz obszar, w którym potrzebujesz wsparcia
+        </h2>
+
+        <div class="category-grid">
+
+          <a href="/mapa/seniorzy/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">👴</span>
+            <span class="category-card__title">Seniorzy</span>
+            <span class="category-card__desc">Wsparcie dla osób starszych i ich opiekunów</span>
+          </a>
+
+          <a href="/mapa/rodzina/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">👨‍👩‍👧</span>
+            <span class="category-card__title">Rodzina</span>
+            <span class="category-card__desc">Pomoc dla rodzin w trudnych sytuacjach</span>
+          </a>
+
+          <a href="/mapa/dzieci/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">🧒</span>
+            <span class="category-card__title">Dzieci i młodzież</span>
+            <span class="category-card__desc">Bezpłatne wsparcie dla najmłodszych</span>
+          </a>
+
+          <a href="/mapa/zdrowie/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">🧠</span>
+            <span class="category-card__title">Zdrowie psychiczne</span>
+            <span class="category-card__desc">Pomoc psychologiczna i psychiatryczna</span>
+          </a>
+
+          <a href="/mapa/uzaleznienia/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">🤝</span>
+            <span class="category-card__title">Uzależnienia</span>
+            <span class="category-card__desc">Leczenie i wsparcie dla osób w nałogu</span>
+          </a>
+
+          <a href="/mapa/przemoc/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">🛡</span>
+            <span class="category-card__title">Przemoc</span>
+            <span class="category-card__desc">Bezpieczne miejsca dla osób doświadczających przemocy</span>
+          </a>
+
+          <a href="/mapa/niepelnosprawnosc/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">♿</span>
+            <span class="category-card__title">Niepełnosprawność</span>
+            <span class="category-card__desc">Wsparcie, orzecznictwo i świadczenia</span>
+          </a>
+
+          <a href="/mapa/sytuacja-materialna/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">💶</span>
+            <span class="category-card__title">Sytuacja materialna</span>
+            <span class="category-card__desc">Zasiłki, pomoc społeczna, żywność</span>
+          </a>
+
+          <a href="/mapa/onkologia/" class="category-card">
+            <span class="category-card__icon" aria-hidden="true">🎗</span>
+            <span class="category-card__title">Onkologia</span>
+            <span class="category-card__desc">Wsparcie dla osób chorych onkologicznie i ich bliskich</span>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Pilna pomoc -->
+    <section class="urgent-banner" aria-labelledby="urgent-heading">
+      <div class="container">
+        <span class="urgent-banner__icon" aria-hidden="true">🆘</span>
+        <div class="urgent-banner__body">
+          <h2 id="urgent-heading">Potrzebujesz pomocy natychmiast?</h2>
+          <p>
+            Jeśli Ty lub ktoś bliski jesteście w kryzysie – zadzwoń teraz.
+            Linia czynna całą dobę, bezpłatnie i anonimowo.
+          </p>
+          <a href="tel:116123" class="urgent-banner__phone"
+             aria-label="Zadzwoń na Telefon Zaufania: 116 123">116 123</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h3>MostPomocy</h3>
+        <p style="font-size:0.9rem;opacity:0.85;margin-top:0.25rem;">
+          Most między Tobą a pomocą.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h3>Nawigacja</h3>
+        <a href="/">Strona główna</a>
+        <a href="/mapa/">Mapa pomocy</a>
+        <a href="/bezpiecznik/">Bezpiecznik (PDF)</a>
+        <a href="/kontakt/">Kontakt</a>
+        <a href="/mapa-strony/">Mapa strony</a>
+      </div>
+      <div class="footer-col">
+        <h3>Kategorie pomocy</h3>
+        <a href="/mapa/seniorzy/">Seniorzy</a>
+        <a href="/mapa/dzieci/">Dzieci i młodzież</a>
+        <a href="/mapa/zdrowie/">Zdrowie psychiczne</a>
+        <a href="/mapa/onkologia/">Onkologia</a>
+      </div>
+      <div class="footer-col">
+        <h3>Informacje</h3>
+        <a href="/polityka-prywatnosci/">Polityka prywatności</a>
+        <a href="/sosnowiec-bez-stygmy/">Sosnowiec bez stygmy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>Serwis zgodny z WCAG 2.1 AA &bull; MostPomocy &copy; 2025–2026</p>
+    </div>
+  </footer>
+
+  <script src="/assets/app.js" defer></script>
+</body>
+</html>
