@@ -1,0 +1,87 @@
+---
+layout: default
+---
+
+{% assign post_alt = page.alt | default: page.title %}
+
+<nav aria-label="Ścieżka nawigacji" class="breadcrumb">
+  <a href="{{ '/' | relative_url }}">Start</a>
+  <span aria-hidden="true"> › </span>
+  <a href="{{ '/blog/' | relative_url }}">Blog</a>
+  <span aria-hidden="true"> › </span>
+  {% if page.category %}
+  <a href="{{ '/mapa/' | append: page.category | append: '/' | relative_url }}">{{ page.category | capitalize }}</a>
+  <span aria-hidden="true"> › </span>
+  {% endif %}
+  <span aria-current="page">{{ page.title }}</span>
+</nav>
+
+<article class="post-article" itemscope itemtype="https://schema.org/BlogPosting">
+
+  <!-- ─── Post Hero ──────────────────────────── -->
+  <div class="blog-hero">
+    {% if page.image %}
+      {% unless page.alt %}
+        <!-- WARNING: Brak alt tekstu dla obrazu. Dodaj 'alt:' w front matter posta. -->
+      {% endunless %}
+      <img
+        src="{{ page.image }}"
+        alt="{{ post_alt }}"
+        class="blog-hero__img"
+        loading="eager"
+        itemprop="image"
+      >
+    {% endif %}
+    <div class="blog-hero__content">
+      <div class="post-meta">
+        <time class="post-meta__date" datetime="{{ page.date | date_to_xmlschema }}" itemprop="datePublished">
+          {{ page.date | date: "%d.%m.%Y" }}
+        </time>
+        {% if page.category %}
+          <a href="{{ '/mapa/' | append: page.category | append: '/' | relative_url }}" class="category-pill">
+            {{ page.category }}
+          </a>
+        {% endif %}
+      </div>
+      <h1 class="blog-hero__title" itemprop="headline">{{ page.title }}</h1>
+      {% if page.excerpt %}
+        <p class="blog-hero__excerpt" itemprop="description">{{ page.excerpt }}</p>
+      {% endif %}
+      {% if page.tags.size > 0 %}
+        <div class="post-tags" aria-label="Tagi artykułu">
+          {% for tag in page.tags %}
+            <span class="tag-chip">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ─── Post Content ───────────────────────── -->
+  <div class="post-content-wrap container">
+    <div class="post-content" itemprop="articleBody">
+      {{ content }}
+    </div>
+
+    <!-- ─── Post Footer ─────────────────────── -->
+    <footer class="post-footer">
+      {% if page.tags.size > 0 %}
+        <div class="post-tags post-tags--footer" aria-label="Tagi">
+          <strong>Tagi:</strong>
+          {% for tag in page.tags %}
+            <span class="tag-chip">{{ tag }}</span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      <div class="post-footer__nav">
+        <a href="{{ '/blog/' | relative_url }}" class="btn btn--outline">← Wróć do bloga</a>
+        {% if page.category %}
+          <a href="{{ '/mapa/' | append: page.category | append: '/' | relative_url }}" class="btn btn--primary">
+            Więcej o: {{ page.category }}
+          </a>
+        {% endif %}
+      </div>
+    </footer>
+  </div>
+
+</article>

@@ -1,0 +1,30 @@
+<!-- ═══════════════ HEADER ═══════════════════════ -->
+<header class="site-header" role="banner">
+  <div class="header-inner">
+    <a href="{{ '/' | relative_url }}" class="site-logo" aria-label="Mapa Pomocy – strona główna">
+      Mapa Pomocy
+      <span>MostPomocy.pl</span>
+    </a>
+
+    <div class="header-controls">
+      <button class="a11y-header-btn" id="a11y-trigger" aria-expanded="false" aria-controls="a11y-panel" aria-label="Otwórz panel ułatwień dostępu" title="Ułatwiony dostęp">
+        <span aria-hidden="true">♿</span><span class="a11y-header-btn__label">Dostępność</span>
+      </button>
+      <button class="nav-toggle" aria-controls="main-nav" aria-expanded="false" aria-label="Otwórz menu nawigacji">
+        ☰
+      </button>
+    </div>
+
+    <nav id="main-nav" class="site-nav" aria-label="Nawigacja główna">
+      <ul>
+        <li><a href="{{ '/' | relative_url }}">Start</a></li>
+        <li><a href="{{ '/#kompas' | relative_url }}">Kompas</a></li>
+        <li><a href="{{ '/mapa/' | relative_url }}">Mapa pomocy</a></li>
+        <li><a href="{{ '/mapa/onkologia/' | relative_url }}">Onkologia</a></li>
+        <li><a href="{{ '/bezpiecznik/' | relative_url }}">Bezpiecznik</a></li>
+        <li><a href="{{ '/blog/' | relative_url }}">Blog</a></li>
+        <li><a href="{{ '/kontakt/' | relative_url }}">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,81 @@
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YD2QTX4YNR"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-YD2QTX4YNR');
+</script>
+<script type="text/javascript" data-cmp-ab="1" src="https://cdn.consentmanager.net/delivery/autoblocking/9290d5ab02578.js" data-cmp-host="b.delivery.consentmanager.net" data-cmp-cdn="cdn.consentmanager.net" data-cmp-codesrc="16"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="Igor Pabiańczyk">
+
+<title>{% if page.title %}{{ page.title }} | MostPomocy{% else %}{{ site.title }}{% endif %}</title>
+<meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% elsif page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+
+<!-- Canonical -->
+<link rel="canonical" href="{{ page.url | remove: 'index.html' | prepend: site.url }}">
+
+<!-- OpenGraph -->
+<meta property="og:type" content="{% if page.layout == 'post' %}article{% else %}website{% endif %}">
+<meta property="og:url" content="{{ page.url | remove: 'index.html' | prepend: site.url }}">
+<meta property="og:title" content="{% if page.title %}{{ page.title }} | MostPomocy{% else %}{{ site.title }}{% endif %}">
+<meta property="og:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% elsif page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+<meta property="og:locale" content="pl_PL">
+{% if page.image %}<meta property="og:image" content="{{ page.image | prepend: site.url }}">{% endif %}
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary{% if page.image %}_large_image{% endif %}">
+<meta name="twitter:title" content="{% if page.title %}{{ page.title }} | MostPomocy{% else %}{{ site.title }}{% endif %}">
+<meta name="twitter:description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% elsif page.description %}{{ page.description }}{% else %}{{ site.description }}{% endif %}">
+{% if page.image %}<meta name="twitter:image" content="{{ page.image | prepend: site.url }}">{% endif %}
+
+{% if page.layout == 'post' %}
+<!-- JSON-LD: BlogPosting -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ page.excerpt | strip_html | strip_newlines | truncate: 160 | jsonify }},
+  "url": "{{ page.url | remove: 'index.html' | prepend: site.url }}",
+  "datePublished": "{{ page.date | date_to_xmlschema }}",
+  "author": {
+    "@type": "Person",
+    "name": "Igor Pabiańczyk"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "MostPomocy",
+    "url": "{{ site.url }}"
+  }{% if page.image %},
+  "image": "{{ page.image | prepend: site.url }}"{% endif %}
+}
+</script>
+{% else %}
+<!-- JSON-LD: Organization + WebSite -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "name": "MostPomocy",
+      "url": "{{ site.url }}/",
+      "description": "Projekt społeczny łączący ludzi ze wsparciem – bezpłatny przewodnik po systemie pomocy w Polsce.",
+      "inLanguage": "pl"
+    },
+    {
+      "@type": "WebSite",
+      "name": "MostPomocy",
+      "url": "{{ site.url }}/",
+      "inLanguage": "pl"
+    }
+  ]
+}
+</script>
+{% endif %}
+
+<link rel="icon" href="{{ '/assets/favicon.svg' | relative_url }}" type="image/svg+xml">
+<link rel="stylesheet" href="{{ '/assets/styles.css' | relative_url }}">
