@@ -28,9 +28,7 @@ pagination:
         aria-label="Szukaj artykułów"
         autocomplete="off"
       >
-      <button type="submit" class="search-bar__btn btn btn--primary" aria-label="Szukaj">
-        <span aria-hidden="true">🔍</span> Szukaj
-      </button>
+      <button type="submit" class="search-bar__btn btn btn--primary" aria-label="Szukaj">Szukaj</button>
     </form>
   </div>
 </section>
@@ -51,13 +49,12 @@ pagination:
                   alt="{{ post.alt | default: post.title }}"
                   class="post-card__img"
                   loading="lazy"
+                  onerror="this.parentElement.classList.add('post-card__img-wrap--empty'); this.remove();"
                   itemprop="image"
                 >
               </a>
             {% else %}
-              <div class="post-card__img-wrap post-card__img-wrap--placeholder" aria-hidden="true">
-                <span>📝</span>
-              </div>
+              <div class="post-card__img-wrap post-card__img-wrap--empty" aria-hidden="true"></div>
             {% endif %}
 
             <div class="post-card__body">

@@ -19,7 +19,7 @@ layout: default
 <article class="post-article" itemscope itemtype="https://schema.org/BlogPosting">
 
   <!-- ─── Post Hero ──────────────────────────── -->
-  <div class="blog-hero">
+  <div class="blog-hero{% unless page.image %} blog-hero--no-img{% endunless %}">
     {% if page.image %}
       {% unless page.alt %}
         <!-- WARNING: Brak alt tekstu dla obrazu. Dodaj 'alt:' w front matter posta. -->
@@ -29,6 +29,7 @@ layout: default
         alt="{{ post_alt }}"
         class="blog-hero__img"
         loading="eager"
+        onerror="this.closest('.blog-hero').classList.add('blog-hero--no-img'); this.remove();"
         itemprop="image"
       >
     {% endif %}

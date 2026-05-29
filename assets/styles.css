@@ -988,7 +988,7 @@ html.a11y-dyslexia * {
 .blog-index-hero {
   background: linear-gradient(135deg, var(--color-primary) 0%, #154360 100%);
   color: #fff;
-  padding: var(--space-xl) var(--space-md);
+  padding: clamp(2.2rem, 5vw, 3.2rem) var(--space-md);
   text-align: center;
 }
 
@@ -999,31 +999,31 @@ html.a11y-dyslexia * {
 }
 
 .blog-index-hero p {
-  font-size: 1.1rem;
-  opacity: 0.9;
-  max-width: 620px;
-  margin: 0 auto var(--space-lg);
+  font-size: 1rem;
+  opacity: 0.92;
+  max-width: 680px;
+  margin: 0 auto var(--space-md);
 }
 
 /* === 29. Search Bar ================================== */
 .search-bar {
   display: flex;
-  gap: var(--space-sm);
+  gap: 0.5rem;
   max-width: 540px;
   margin: 0 auto;
   flex-wrap: wrap;
 }
 
 .search-bar--page {
-  margin: var(--space-lg) 0;
+  margin: var(--space-md) 0 var(--space-lg);
   max-width: 640px;
 }
 
 .search-bar__input {
   flex: 1;
-  min-width: 200px;
-  padding: 0.65rem 1rem;
-  border: 2px solid rgba(255,255,255,0.7);
+  min-width: 220px;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid rgba(255,255,255,0.7);
   border-radius: var(--radius);
   font-family: var(--font-family);
   font-size: 1rem;
@@ -1047,31 +1047,33 @@ html.a11y-dyslexia * {
   border: none;
   cursor: pointer;
   font-family: var(--font-family);
+  padding-inline: 1rem;
 }
 
 /* === 30. Post Grid =================================== */
 .post-grid {
   display: grid;
-  gap: var(--space-lg);
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  margin-top: var(--space-lg);
+  gap: var(--space-md);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  margin-top: var(--space-md);
 }
 
 /* === 31. Post Card =================================== */
 .post-card {
   background: var(--color-bg);
-  border: 2px solid var(--color-border);
-  border-radius: calc(var(--radius) * 2);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 2px 8px rgba(26,82,118,0.04);
   transition: border-color 0.15s, box-shadow 0.2s, transform 0.15s;
 }
 
 .post-card:hover {
   border-color: var(--color-primary-light);
-  box-shadow: 0 6px 24px rgba(26,82,118,0.12);
-  transform: translateY(-3px);
+  box-shadow: 0 8px 18px rgba(26,82,118,0.09);
+  transform: translateY(-2px);
 }
 
 .post-card__img-wrap {
@@ -1079,14 +1081,11 @@ html.a11y-dyslexia * {
   width: 100%;
   aspect-ratio: 16 / 9;
   overflow: hidden;
-  background: var(--color-surface);
+  background: linear-gradient(145deg, #eef4f9 0%, #e7eff6 100%);
 }
 
-.post-card__img-wrap--placeholder {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
+.post-card__img-wrap--empty {
+  border-bottom: 1px solid var(--color-border);
 }
 
 .post-card__img {
@@ -1101,10 +1100,10 @@ html.a11y-dyslexia * {
 }
 
 .post-card__body {
-  padding: var(--space-md) var(--space-md) var(--space-lg);
+  padding: var(--space-md);
   display: flex;
   flex-direction: column;
-  gap: var(--space-xs);
+  gap: 0.35rem;
   flex: 1;
 }
 
@@ -1112,7 +1111,7 @@ html.a11y-dyslexia * {
   display: flex;
   align-items: center;
   gap: var(--space-sm);
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--color-text-muted);
   flex-wrap: wrap;
 }
@@ -1120,9 +1119,9 @@ html.a11y-dyslexia * {
 .post-card__meta time { }
 
 .post-card__title {
-  font-size: 1.1rem;
+  font-size: 1.02rem;
   line-height: 1.3;
-  margin-top: var(--space-xs);
+  margin-top: 0.15rem;
 }
 
 .post-card__title a {
@@ -1135,11 +1134,11 @@ html.a11y-dyslexia * {
 }
 
 .post-card__excerpt {
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   color: var(--color-text-muted);
-  line-height: 1.55;
+  line-height: 1.5;
   flex: 1;
-  margin-top: var(--space-xs);
+  margin-top: 0.25rem;
 }
 
 .post-card__tags {
@@ -1150,7 +1149,7 @@ html.a11y-dyslexia * {
 }
 
 .post-card__link {
-  margin-top: var(--space-sm);
+  margin-top: 0.45rem;
   align-self: flex-start;
 }
 
@@ -1200,10 +1199,10 @@ html.a11y-dyslexia * {
 
 .blog-hero__img {
   width: 100%;
-  max-height: 420px;
+  max-height: 340px;
   object-fit: cover;
   display: block;
-  opacity: 0.45;
+  opacity: 0.4;
 }
 
 .blog-hero__content {
@@ -1212,7 +1211,7 @@ html.a11y-dyslexia * {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: var(--space-xl) var(--space-md) var(--space-lg);
+  padding: var(--space-lg) var(--space-md);
   background: linear-gradient(to top, rgba(26,82,118,0.92) 0%, rgba(26,82,118,0.4) 60%, transparent 100%);
   max-width: 860px;
   margin: 0 auto;
@@ -1223,26 +1222,19 @@ html.a11y-dyslexia * {
 .blog-hero--no-img .blog-hero__content {
   position: static;
   background: linear-gradient(135deg, var(--color-primary) 0%, #154360 100%);
-  padding: var(--space-xl) var(--space-md);
+  padding: clamp(2rem, 4vw, 2.8rem) var(--space-md);
 }
 
 .blog-hero__title {
-  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-size: clamp(1.5rem, 3.8vw, 2.1rem);
   line-height: 1.2;
-  margin-bottom: var(--space-sm);
+  margin-bottom: 0.35rem;
 }
 
 .blog-hero__excerpt {
-  font-size: 1.05rem;
+  font-size: 1rem;
   opacity: 0.9;
   max-width: 620px;
-}
-
-/* When no image, content is static (not absolute) */
-.post-article:not(:has(.blog-hero__img)) .blog-hero__content {
-  position: static;
-  background: linear-gradient(135deg, var(--color-primary) 0%, #154360 100%);
-  padding: var(--space-xl) var(--space-md);
 }
 
 .post-meta {
@@ -1289,8 +1281,8 @@ html.a11y-dyslexia * {
 
 /* === 34. Post Content ================================ */
 .post-content-wrap {
-  padding-top: var(--space-xl);
-  padding-bottom: var(--space-xl);
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
   max-width: 800px;
 }
 
@@ -1431,7 +1423,7 @@ html.a11y-dyslexia * {
 
 /* === 38. Small button variant ======================= */
 .btn--sm {
-  padding: 0.4rem 0.9rem;
+  padding: 0.35rem 0.8rem;
   font-size: 0.85rem;
 }
 
@@ -1448,11 +1440,15 @@ html.a11y-dyslexia * {
   }
 
   .blog-hero__content {
-    padding: var(--space-lg) var(--space-md) var(--space-md);
+    padding: var(--space-md);
   }
 
   .blog-hero__title {
     font-size: 1.4rem;
+  }
+
+  .search-bar__btn {
+    width: 100%;
   }
 
   .post-content-wrap {

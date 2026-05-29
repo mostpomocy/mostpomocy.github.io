@@ -46,27 +46,91 @@
 
   /* ── Render a single result card ─────────── */
   function renderCard(doc) {
-    var categoryHtml = doc.category
-      ? '<a href="/mapa/' + doc.category + '/" class="category-pill">' + doc.category + '</a>'
-      : '';
-    var tagsHtml = '';
-    if (doc.tags && doc.tags.length) {
-      tagsHtml = '<div class="post-card__tags">' +
-        doc.tags.slice(0, 3).map(function (t) {
-          return '<span class="tag-chip tag-chip--sm">' + t + '</span>';
-        }).join('') +
-        '</div>';
+    var article = document.createElement('article');
+    article.className = 'post-card';
+    article.setAttribute('role', 'listitem');
+
+    if (doc.image) {
+      var imgLink = document.createElement('a');
+      imgLink.href = doc.url;
+      imgLink.className = 'post-card__img-wrap';
+      imgLink.tabIndex = -1;
+      imgLink.setAttribute('aria-hidden', 'true');
+
+      var image = document.createElement('img');
+      image.src = doc.image;
+      image.alt = doc.alt || doc.title || '';
+      image.className = 'post-card__img';
+      image.loading = 'lazy';
+      image.addEventListener('error', function () {
+        imgLink.classList.add('post-card__img-wrap--empty');
+        image.remove();
+      });
+      imgLink.appendChild(image);
+      article.appendChild(imgLink);
+    } else {
+      var imgFallback = document.createElement('div');
+      imgFallback.className = 'post-card__img-wrap post-card__img-wrap--empty';
+      imgFallback.setAttribute('aria-hidden', 'true');
+      article.appendChild(imgFallback);
     }
-    var excerpt = doc.excerpt ? '<p class="post-card__excerpt">' + doc.excerpt + '</p>' : '';
-    return '<article class="post-card" role="listitem">' +
-      '<div class="post-card__body">' +
-        '<div class="post-card__meta">' + categoryHtml + '</div>' +
-        '<h3 class="post-card__title"><a href="' + doc.url + '">' + doc.title + '</a></h3>' +
-        excerpt +
-        tagsHtml +
-        '<a href="' + doc.url + '" class="post-card__link btn btn--outline btn--sm">Czytaj dalej →</a>' +
-      '</div>' +
-    '</article>';
+
+    var body = document.createElement('div');
+    body.className = 'post-card__body';
+
+    var meta = document.createElement('div');
+    meta.className = 'post-card__meta';
+
+    if (doc.date) {
+      var time = document.createElement('time');
+      time.textContent = doc.date;
+      meta.appendChild(time);
+    }
+
+    if (doc.category) {
+      var category = document.createElement('a');
+      category.href = '/mapa/' + doc.category + '/';
+      category.className = 'category-pill';
+      category.textContent = doc.category;
+      meta.appendChild(category);
+    }
+    body.appendChild(meta);
+
+    var title = document.createElement('h3');
+    title.className = 'post-card__title';
+    var titleLink = document.createElement('a');
+    titleLink.href = doc.url;
+    titleLink.textContent = doc.title || '';
+    title.appendChild(titleLink);
+    body.appendChild(title);
+
+    if (doc.excerpt) {
+      var excerpt = document.createElement('p');
+      excerpt.className = 'post-card__excerpt';
+      excerpt.textContent = doc.excerpt;
+      body.appendChild(excerpt);
+    }
+
+    if (doc.tags && doc.tags.length) {
+      var tagsWrap = document.createElement('div');
+      tagsWrap.className = 'post-card__tags';
+      doc.tags.slice(0, 3).forEach(function (tag) {
+        var tagEl = document.createElement('span');
+        tagEl.className = 'tag-chip tag-chip--sm';
+        tagEl.textContent = tag;
+        tagsWrap.appendChild(tagEl);
+      });
+      body.appendChild(tagsWrap);
+    }
+
+    var readMore = document.createElement('a');
+    readMore.href = doc.url;
+    readMore.className = 'post-card__link btn btn--outline btn--sm';
+    readMore.textContent = 'Czytaj dalej →';
+    body.appendChild(readMore);
+
+    article.appendChild(body);
+    return article;
   }
 
   /* ── Perform search and render results ────── */
@@ -78,7 +142,7 @@
     var q = (query || '').trim();
     if (!q) {
       if (statusEl) { statusEl.textContent = ''; }
-      resultsEl.innerHTML = '';
+      resultsEl.replaceChildren();
       return;
     }
 
@@ -112,18 +176,33 @@
     }
 
     if (raw.length === 0) {
-      resultsEl.innerHTML =
-        '<div class="search-no-results">' +
-          '<p>Nie znaleziono artykułów pasujących do zapytania <strong>„' + q + '"</strong>.</p>' +
-          '<p>Sprawdź pisownię lub spróbuj innych słów kluczowych.</p>' +
-        '</div>';
+      var noResults = document.createElement('div');
+      noResults.className = 'search-no-results';
+
+      var p1 = document.createElement('p');
+      p1.appendChild(document.createTextNode('Nie znaleziono artykułów pasujących do zapytania '));
+      var strong = document.createElement('strong');
+      strong.textContent = '„' + q + '"';
+      p1.appendChild(strong);
+      p1.appendChild(document.createTextNode('.'));
+
+      var p2 = document.createElement('p');
+      p2.textContent = 'Sprawdź pisownię lub spróbuj innych słów kluczowych.';
+
+      noResults.appendChild(p1);
+      noResults.appendChild(p2);
+      resultsEl.replaceChildren(noResults);
       return;
     }
 
-    resultsEl.innerHTML = raw.map(function (r) {
+    var fragment = document.createDocumentFragment();
+    raw.forEach(function (r) {
       var doc = docsMap[r.ref];
-      return doc ? renderCard(doc) : '';
-    }).join('');
+      if (doc) {
+        fragment.appendChild(renderCard(doc));
+      }
+    });
+    resultsEl.replaceChildren(fragment);
   }
 
   /* ── Wire up form ─────────────────────────── */
