@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - master
+      - wersja-robocza
 
 permissions:
   contents: read
