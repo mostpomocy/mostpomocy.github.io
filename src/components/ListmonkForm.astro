@@ -1,0 +1,46 @@
+---
+// Formularz zapisu do newslettera Listmonk
+---
+
+<div class="newsletter-box">
+  <h3>Zapisz się do newslettera</h3>
+  <!-- Upewnij się, że podajesz poprawny adres URL twojej instancji Listmonk -->
+  <form method="post" action="https://twoj-listmonk.com/subscription/form">
+    <input type="hidden" name="nonce" />
+    <input type="hidden" name="l" value="UUID-TWOJEJ-LISTY" />
+    
+    <div>
+      <label for="email">Twój E-mail</label>
+      <input type="email" name="email" id="email" required placeholder="np. jan@kowalski.pl" />
+    </div>
+    
+    <div>
+      <label for="name">Imię (opcjonalnie)</label>
+      <input type="text" name="name" id="name" />
+    </div>
+    
+    <button type="submit">Zapisz się</button>
+  </form>
+</div>
+
+<style>
+  .newsletter-box {
+    padding: 2rem;
+    background: #f4f4f4;
+    border-radius: 8px;
+    margin-top: 2rem;
+  }
+  .newsletter-box input {
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+  }
+  .newsletter-box button {
+    background: #007bff;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+</style>
