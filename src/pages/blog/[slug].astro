@@ -1,0 +1,51 @@
+---
+import { getCollection } from 'astro:content';
+import SeoHead from '../../components/SeoHead.astro';
+import ListmonkForm from '../../components/ListmonkForm.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <SeoHead 
+      title={post.data.title} 
+      description={post.data.description} 
+      image={post.data.thumbnail} 
+    />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Strona główna</a>
+        <a href="/blog">Blog</a>
+      </nav>
+    </header>
+    
+    <main>
+      <article>
+        <h1>{post.data.title}</h1>
+        <p><em>Opublikowano: {post.data.date.toLocaleDateString('pl-PL')} | Autor: {post.data.author}</em></p>
+        
+        {post.data.thumbnail && <img src={post.data.thumbnail} alt={post.data.title} />}
+        
+        <div class="content">
+          <Content />
+        </div>
+      </article>
+      
+      <!-- Listmonk Formularz pod postem -->
+      <ListmonkForm />
+    </main>
+  </body>
+</html>

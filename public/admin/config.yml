@@ -1,0 +1,23 @@
+backend:
+  name: github
+  repo: mostpomocy/mostpomocy.github.io # Twoje repozytorium z kodem strony
+  branch: main # Gałąź, na której zapisywane są zmiany
+  site_domain: admin.mostpomocy.pl # Twoja domena dla CMS (konfiguracja OAuth na GitHub)
+
+media_folder: "public/uploads"
+public_folder: "/uploads"
+
+collections:
+  - name: "blog"
+    label: "Blog"
+    folder: "src/content/blog"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Tytuł", name: "title", widget: "string"}
+      - {label: "Data Publikacji", name: "date", widget: "datetime"}
+      - {label: "Autor", name: "author", widget: "string", default: "Most Pomocy"}
+      - {label: "Miniaturka", name: "thumbnail", widget: "image", required: false}
+      - {label: "Opis SEO (Meta Description)", name: "description", widget: "text"}
+      - {label: "Tagi", name: "tags", widget: "list", default: ["pomoc"]}
+      - {label: "Treść", name: "body", widget: "markdown"}

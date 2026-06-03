@@ -1,0 +1,35 @@
+---
+import SeoHead from '../components/SeoHead.astro';
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog');
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <SeoHead 
+      title="Most Pomocy - Strona Główna" 
+      description="Pomagamy potrzebującym, najnowsze wiadomości na blogu." 
+    />
+  </head>
+  <body>
+    <header>
+      <h1>Witaj na Most Pomocy</h1>
+      <nav>
+        <a href="/blog">Nasz Blog</a>
+      </nav>
+    </header>
+    
+    <main>
+      <h2>Najnowsze posty</h2>
+      <ul>
+        {posts.map(post => (
+          <li>
+            <a href={`/blog/${post.slug}`}>{post.data.title}</a> - {post.data.date.toLocaleDateString('pl-PL')}
+          </li>
+        ))}
+      </ul>
+    </main>
+  </body>
+</html>
