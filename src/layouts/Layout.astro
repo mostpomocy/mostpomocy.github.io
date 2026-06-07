@@ -1,0 +1,125 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{title} | Most Pomocy</title>
+    <meta name="description" content={description} />
+    <script defer data-domain="mostpomocy.pl" src="https://plausible.io/js/script.js"></script>
+  </head>
+  <body>
+    <header class="top-bar">
+      <a href="tel:116123">116 123</a>
+      <a href="tel:112">112</a>
+      <button id="quick-exit" type="button">SZYBKIE WYJŚCIE</button>
+    </header>
+    <main class="page-content">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <h2>Zapisz się do newslettera</h2>
+      <form method="post" action="https://twoj-listmonk.com/subscription/form">
+        <input type="hidden" name="nonce" />
+        <input type="hidden" name="l" value="UUID-TWOJEJ-LISTY" />
+        <label>
+          Twój e-mail
+          <input type="email" name="email" required />
+        </label>
+        <label>
+          Imię (opcjonalnie)
+          <input type="text" name="name" />
+        </label>
+        <button type="submit">Zapisz się</button>
+      </form>
+    </footer>
+    <script>
+      const quickExitButton = document.getElementById('quick-exit');
+      quickExitButton?.addEventListener('click', () => {
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.replace('https://www.google.pl');
+      });
+    </script>
+  </body>
+</html>
+
+<style>
+  :global(body) {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #fff;
+    color: #1f2937;
+  }
+
+  .top-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    background: #111827;
+  }
+
+  .top-bar a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  #quick-exit {
+    border: 0;
+    border-radius: 4px;
+    padding: 0.5rem 0.75rem;
+    background: #dc2626;
+    color: #fff;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .page-content {
+    max-width: 960px;
+    margin: 1.5rem auto;
+    padding: 0 1rem;
+  }
+
+  .site-footer {
+    margin-top: 3rem;
+    padding: 2rem 1rem;
+    background: #f3f4f6;
+  }
+
+  .site-footer form {
+    max-width: 420px;
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .site-footer input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-top: 0.25rem;
+    padding: 0.5rem;
+  }
+
+  .site-footer button {
+    width: fit-content;
+    border: 0;
+    border-radius: 4px;
+    padding: 0.6rem 1rem;
+    background: #1d4ed8;
+    color: #fff;
+    cursor: pointer;
+  }
+</style>

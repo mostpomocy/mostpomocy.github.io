@@ -12,6 +12,17 @@ const blogCollection = defineCollection({
   })
 });
 
+const pagesCollection = defineCollection({
+  type: 'content',
+  schema: z.object({
+    type: z.enum(['page', 'mapa']),
+    title: z.string(),
+    description: z.string(),
+    tags: z.array(z.string()).default(['pomoc'])
+  })
+});
+
 export const collections = {
   'blog': blogCollection,
+  'pages': pagesCollection,
 };
