@@ -1,23 +1,54 @@
 backend:
   name: github
-  repo: mostpomocy/mostpomocy.github.io # Twoje repozytorium z kodem strony
-  branch: main # Gałąź, na której zapisywane są zmiany
-  site_domain: admin.mostpomocy.pl # Twoja domena dla CMS (konfiguracja OAuth na GitHub)
+  repo: mostpomocy/mostpomocy.github.io
+  branch: main
+  site_domain: admin.mostpomocy.pl
 
 media_folder: "public/uploads"
 public_folder: "/uploads"
 
 collections:
-  - name: "blog"
-    label: "Blog"
-    folder: "src/content/blog"
-    create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+  - name: "strony"
+    label: "Strony główne"
+    files:
+      - label: "Kontakt"
+        name: "kontakt"
+        file: "src/content/pages/kontakt.md"
+        fields:
+          - { label: "Typ", name: "type", widget: "hidden", default: "page" }
+          - { label: "Tytuł", name: "title", widget: "string" }
+          - { label: "Opis SEO", name: "description", widget: "text" }
+          - { label: "Tagi", name: "tags", widget: "list", default: ["pomoc"] }
+          - { label: "Treść", name: "body", widget: "markdown" }
+      - label: "Bezpiecznik"
+        name: "bezpiecznik"
+        file: "src/content/pages/bezpiecznik.md"
+        fields:
+          - { label: "Typ", name: "type", widget: "hidden", default: "page" }
+          - { label: "Tytuł", name: "title", widget: "string" }
+          - { label: "Opis SEO", name: "description", widget: "text" }
+          - { label: "Tagi", name: "tags", widget: "list", default: ["pomoc"] }
+          - { label: "Treść", name: "body", widget: "markdown" }
+      - label: "Sosnowiec bez stygmy"
+        name: "sosnowiec-bez-stygmy"
+        file: "src/content/pages/sosnowiec-bez-stygmy.md"
+        fields:
+          - { label: "Typ", name: "type", widget: "hidden", default: "page" }
+          - { label: "Tytuł", name: "title", widget: "string" }
+          - { label: "Opis SEO", name: "description", widget: "text" }
+          - { label: "Tagi", name: "tags", widget: "list", default: ["pomoc"] }
+          - { label: "Treść", name: "body", widget: "markdown" }
+  - name: "mapa"
+    label: "Mapa pomocy"
+    folder: "src/content/pages"
+    create: false
+    slug: "{{slug}}"
+    filter:
+      field: "type"
+      value: "mapa"
     fields:
-      - {label: "Tytuł", name: "title", widget: "string"}
-      - {label: "Data Publikacji", name: "date", widget: "datetime"}
-      - {label: "Autor", name: "author", widget: "string", default: "Most Pomocy"}
-      - {label: "Miniaturka", name: "thumbnail", widget: "image", required: false}
-      - {label: "Opis SEO (Meta Description)", name: "description", widget: "text"}
-      - {label: "Tagi", name: "tags", widget: "list", default: ["pomoc"]}
-      - {label: "Treść", name: "body", widget: "markdown"}
+      - { label: "Typ", name: "type", widget: "hidden", default: "mapa" }
+      - { label: "Tytuł", name: "title", widget: "string" }
+      - { label: "Opis SEO", name: "description", widget: "text" }
+      - { label: "Tagi", name: "tags", widget: "list", default: ["pomoc"] }
+      - { label: "Treść", name: "body", widget: "markdown" }
