@@ -1,35 +1,90 @@
 ---
-import SeoHead from '../components/SeoHead.astro';
+import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 
-const posts = await getCollection('blog');
+const pages = await getCollection('pages').catch(() => []);
+const mainPages = pages.filter((entry) => entry.data.type === 'page');
+const mapaPages = pages.filter((entry) => entry.data.type === 'mapa');
+
+const featured = [...mainPages, ...mapaPages].sort((a, b) => a.slug.localeCompare(b.slug, 'pl'));
 ---
 
-<!DOCTYPE html>
-<html lang="pl">
-  <head>
-    <SeoHead 
-      title="Most Pomocy - Strona Główna" 
-      description="Pomagamy potrzebującym, najnowsze wiadomości na blogu." 
-    />
-  </head>
-  <body>
-    <header>
-      <h1>Witaj na Most Pomocy</h1>
-      <nav>
-        <a href="/blog">Nasz Blog</a>
-      </nav>
-    </header>
-    
-    <main>
-      <h2>Najnowsze posty</h2>
-      <ul>
-        {posts.map(post => (
-          <li>
-            <a href={`/blog/${post.slug}`}>{post.data.title}</a> - {post.data.date.toLocaleDateString('pl-PL')}
-          </li>
-        ))}
-      </ul>
-    </main>
-  </body>
-</html>
+<Layout
+  title="Most Pomocy"
+  description="Mapa pomocy, wsparcie i szybki dostęp do najważniejszych stron."
+  tags={['pomoc', 'wsparcie', 'mapa pomocy', 'bezpieczeństwo']}
+>
+  <section class="hero">
+    <h1>Most Pomocy</h1>
+    <p>Wybierz podstronę, aby przejść do potrzebnych informacji i wsparcia.</p>
+  </section>
+
+  <section class="grid" aria-label="Lista podstron">
+    {featured.map((page) => (
+      <a class="card" href={page.data.type === 'mapa' ? `/mapa/${page.slug}` : `/${page.slug}`}>
+        <h2>{page.data.title}</h2>
+        <p>{page.data.description}</p>
+        <span>{page.data.type === 'mapa' ? 'Mapa pomocy' : 'Strona'}</span>
+      </a>
+    ))}
+  </section>
+
+  <style>
+    .hero {
+      padding: 2rem 1.25rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 1.25rem;
+      background: linear-gradient(180deg, #fff, #fafafa);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 {
+      margin: 0 0 .75rem;
+      font-size: clamp(2rem, 4vw, 3.25rem);
+    }
+
+    .hero p {
+      margin: 0;
+      color: #4b5563;
+      font-size: 1.05rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .card {
+      display: grid;
+      gap: .65rem;
+      padding: 1.25rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 1rem;
+      text-decoration: none;
+      background: #fff;
+      transition: transform .15s ease, box-shadow .15s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: #4b5563;
+    }
+
+    .card span {
+      color: #b91c1c;
+      font-weight: 700;
+      font-size: .9rem;
+    }
+  </style>
+</Layout>
