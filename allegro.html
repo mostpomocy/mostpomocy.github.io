@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Autoryzacja Allegro</h1>
+    <p>Twój kod autoryzacyjny:</p>
+    <textarea id="codeDisplay" style="width:100%; height:100px;"></textarea>
+    <script>
+        // Pobiera parametr 'code' z adresu URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        document.getElementById('codeDisplay').value = code || "Nie znaleziono kodu!";
+    </script>
+</body>
+</html>
