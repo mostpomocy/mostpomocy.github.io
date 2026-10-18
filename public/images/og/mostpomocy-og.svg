@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+  <title id="title">MostPomocy.pl</title>
+  <desc id="desc">Most między Tobą a pomocą</desc>
+  <rect width="1200" height="630" fill="#EFFAFB"/>
+  <rect x="60" y="60" width="1080" height="510" rx="32" fill="#FFFFFF" stroke="#009DA4" stroke-width="4"/>
+  <text x="110" y="270" fill="#073760" font-family="Arial, sans-serif" font-size="86" font-weight="700">MOSTPOMOCY.PL</text>
+  <text x="110" y="350" fill="#009DA4" font-family="Arial, sans-serif" font-size="44">Znajdź pomoc. Nie jesteś sam.</text>
+</svg>

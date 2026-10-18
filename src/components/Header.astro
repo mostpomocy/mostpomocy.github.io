@@ -1,0 +1,52 @@
+---
+const links = [
+  { href: '/', label: 'Strona główna' },
+  { href: '/wsparcie/', label: 'Rodzaje wsparcia' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/sosnowiec/', label: 'Sosnowiec' },
+  { href: '/o-projekcie/', label: 'O projekcie' },
+];
+---
+<header class="site-header">
+  <div class="container header-row">
+    <a href="/" class="brand" aria-label="MostPomocy - strona główna">
+      <span>MOSTPOMOCY.PL</span>
+    </a>
+
+    <details class="mobile-menu">
+      <summary aria-label="Otwórz menu">Menu</summary>
+      <nav aria-label="Nawigacja główna">
+        <ul>
+          {links.map((link) => (
+            <li><a href={link.href}>{link.label}</a></li>
+          ))}
+        </ul>
+      </nav>
+    </details>
+
+    <nav class="desktop-nav" aria-label="Nawigacja główna">
+      <ul>
+        {links.map((link) => (
+          <li><a href={link.href}>{link.label}</a></li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header { position: sticky; top: 0; background: rgba(255,255,255,.95); backdrop-filter: blur(6px); border-bottom: 1px solid #d8e4ee; z-index: 9; }
+  .header-row { display: flex; align-items: center; justify-content: space-between; min-height: 72px; gap: 1rem; }
+  .brand { text-decoration: none; color: var(--navy); font-weight: 800; letter-spacing: .03em; }
+  .desktop-nav ul, .mobile-menu ul { list-style: none; margin: 0; padding: 0; display: flex; gap: .2rem; }
+  .desktop-nav a, .mobile-menu a, summary { text-decoration: none; color: var(--text); font-weight: 600; padding: .55rem .75rem; border-radius: .75rem; display: block; }
+  .desktop-nav a:hover, .mobile-menu a:hover { background: var(--teal-light); }
+  .mobile-menu { display: none; }
+  summary { cursor: pointer; }
+  @media (max-width: 768px) {
+    .desktop-nav { display: none; }
+    .mobile-menu { display: block; }
+    .mobile-menu nav { margin-top: .75rem; background: var(--white); border: 1px solid #d8e4ee; border-radius: .75rem; padding: .25rem; box-shadow: var(--shadow); }
+    .mobile-menu ul { flex-direction: column; min-width: 220px; }
+  }
+</style>

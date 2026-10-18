@@ -1,0 +1,28 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import SectionHeader from '../../../components/SectionHeader.astro';
+import ArticleGrid from '../../../components/ArticleGrid.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+
+const posts = (await getCollection('blog-sosnowiec', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.publicationDate.getTime() - a.data.publicationDate.getTime(),
+);
+---
+<BaseLayout
+  title="Blog Sosnowiec"
+  description="Lokalny blog MostPomocy z informacjami i materiałami dla mieszkańców Sosnowca."
+  breadcrumbs={[
+    { name: 'Strona główna', item: 'https://www.mostpomocy.pl/' },
+    { name: 'Sosnowiec', item: 'https://www.mostpomocy.pl/sosnowiec/' },
+    { name: 'Blog Sosnowiec', item: 'https://www.mostpomocy.pl/sosnowiec/blog/' },
+  ]}
+>
+  <section class="section">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Strona główna', href: '/' }, { label: 'Sosnowiec', href: '/sosnowiec/' }, { label: 'Blog Sosnowiec' }]} />
+      <SectionHeader title="Blog Sosnowiec" description="Lokalne aktualności, inicjatywy i wskazówki dot. wsparcia." />
+      <ArticleGrid posts={posts} basePath="/sosnowiec/blog" />
+    </div>
+  </section>
+</BaseLayout>
