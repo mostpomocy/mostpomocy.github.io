@@ -1,0 +1,23 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+}
+
+const { title, description, image = '/default-og.png' } = Astro.props;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width" />
+<title>{title} | Most Pomocy</title>
+<meta name="description" content={description} />
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:image" content={new URL(image, Astro.site)} />
+
+<!-- Plausible Analytics (zgodne z RODO, bez cookies) -->
+<script defer data-domain="mostpomocy.pl" src="https://plausible.io/js/script.js"></script>

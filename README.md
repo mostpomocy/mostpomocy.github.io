@@ -1,71 +1,58 @@
 # MostPomocy.pl
 
-Nowoczesny, statyczny portal społeczny oparty na **Astro** i **GitHub Pages**. Projekt wykorzystuje **Astro Content Collections** oraz **Pages CMS** (konfiguracja w `.pages.yml`) do wygodnej edycji treści przez osoby nietechniczne.
+Projekt społeczny – Mapa Pomocy oraz Baza Wiedzy.
 
-## Architektura
+## Jak uruchomić lokalnie?
 
-- `src/pages/` – routing Astro (strona główna, wsparcie, blog, Sosnowiec, admin, strony informacyjne)
-- `src/components/` – komponenty wielokrotnego użytku (Header, Footer, Hero, EmergencyBanner, SupportCard, SupportGrid, ArticleCard, ArticleGrid, Breadcrumbs, Callout, CTA, LocalHelpCard, SectionHeader)
-- `src/content/` – kolekcje treści:
-  - `blog-polska`
-  - `blog-sosnowiec`
-  - `wsparcie`
-  - `miasta` (obecnie `sosnowiec`, gotowe pod kolejne miasta)
-- `.pages.yml` – konfiguracja Pages CMS i formularzy redakcyjnych
-- `.github/workflows/deploy.yml` – build i deploy na GitHub Pages po zmianie na `main`
+Zanim zaczniesz, upewnij się, że masz zainstalowany **Node.js** (zalecana wersja 18 lub nowsza).
 
-## Uruchomienie lokalne
+1. **Pobierz projekt** na swój komputer.
+2. **Otwórz terminal** w folderze projektu.
+3. **Zainstaluj zależności**:
+   ```bash
+   npm install
+   ```
+4. **Uruchom serwer deweloperski**:
+   ```bash
+   npm run dev
+   ```
+5. Otwórz w przeglądarce adres: `http://localhost:3000`
 
+## Jak dodać nowy wpis na blogu?
+
+### Opcja A: Automatyczny generator (Zalecane)
+Jeśli pracujesz lokalnie, uruchom proste narzędzie w terminalu:
 ```bash
-npm install
-npm run dev
+node scripts/gen-post.cjs
+```
+Skrypt zapyta Cię o tytuł i inne dane, a następnie sam wygeneruje poprawny plik w `src/content/posts/`.
+
+### Opcja B: Ręczne tworzenie pliku
+1. Przejdź do folderu `src/content/posts/`.
+2. Stwórz nowy plik z rozszerzeniem `.md` (np. `moj-nowy-artykul.md`).
+3. Skopiuj strukturę nagłówka (YAML Front Matter):
+
+```markdown
+---
+title: "Tytuł artykułu"
+date: "2024-05-18"
+category: "Kategoria"
+tags: ["tag1", "tag2"]
+excerpt: "Krótki opis..."
+image: "https://link-do-obrazka.jpg"
+resources:
+  - title: "Link wsparcia"
+    desc: "Krótki opis linku"
+    url: "https://mostpomocy.pl"
+---
 ```
 
-Build produkcyjny:
+System automatycznie wykryje nowy plik i doda go do listy na stronie Blog.
 
-```bash
-npm run build
-```
+## Praca z GitHub
 
-## Edycja treści (Pages CMS)
-
-Panel CMS: `https://app.pagescms.org/` (link także na `/admin/`).
-
-W CMS znajdują się sekcje:
-- MostPomocy CMS
-- Blog ogólnopolski
-- Blog Sosnowiec
-- Rodzaje wsparcia
-- Sosnowiec
-- Strony
-- Ustawienia serwisu
-- Media
-
-### Dodawanie artykułów
-
-Dodaj wpis w kolekcji **Blog ogólnopolski** lub **Blog Sosnowiec**. Formularz obejmuje:
-- tytuł, slug, opis,
-- datę publikacji i aktualizacji,
-- autora, kategorię, tagi,
-- zdjęcie wyróżniające i alt,
-- SEO title + SEO description,
-- status szkic/opublikowany,
-- treść artykułu (rich-text).
-
-### Dodawanie kategorii wsparcia
-
-Dodanie nowego pliku w `src/content/wsparcie/` (lub wpisu w CMS) automatycznie tworzy nową stronę `/wsparcie/{slug}/`.
-
-## Publikacja
-
-Workflow `.github/workflows/deploy.yml` uruchamia:
-1. `npm install`
-2. `npm run build`
-3. publikację artefaktu `dist/` na GitHub Pages
-
-Repozytorium zawiera `CNAME` z domeną `mostpomocy.pl`. Jeśli docelowo ma działać `www.mostpomocy.pl`, ustaw przekierowanie DNS i/lub wartość CNAME zgodnie z konfiguracją domeny u rejestratora.
-
-## Ograniczenia i rzeczy do dalszej weryfikacji
-
-- Dane kontaktowe placówek zostały zostawione jako struktury „do uzupełnienia”, bez wprowadzania niezweryfikowanych numerów/adresów.
-- Przed publikacją operacyjną należy potwierdzić wszystkie lokalne dane instytucji oraz politykę prywatności pod kątem finalnych narzędzi analitycznych/formularzy.
+Projekt jest gotowy do hostowania na **GitHub Pages**.
+Po wrzuceniu plików na repozytorium:
+1. Upewnij się, że w `vite.config.ts` wartość `base` jest ustawiona poprawnie (obecnie `./` dla maksymalnej kompatybilności).
+2. Zbuduj projekt: `npm run build`.
+3. Zawartość folderu `dist/` wrzuć na gałąź `gh-pages` lub skonfiguruj GitHub Actions.
