@@ -5,6 +5,7 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Minimalne uprawnienia wymagane do publikacji na GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -28,11 +29,12 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Astro
         run: npm run build
 
+      # Astro dla GitHub Pages powinno generować plik .nojekyll, żeby Pages nie próbowało traktować /_astro jako Jekyll
       - name: Disable Jekyll
         run: |
           mkdir -p dist
@@ -44,11 +46,12 @@ jobs:
           path: './dist'
 
   deploy:
-    needs: build
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    needs: build
+    runs-on: ubuntu-latest
+    name: Deploy
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
