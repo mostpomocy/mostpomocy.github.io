@@ -1,0 +1,85 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import Callout from '../../components/Callout.astro';
+import CTA from '../../components/CTA.astro';
+
+export async function getStaticPaths() {
+  const categories = await getCollection('wsparcie');
+  return categories.map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+
+const { category } = Astro.props;
+const related = await getCollection('blog-polska', ({ data, slug }) => !data.draft && category.data.relatedArticles.includes(slug));
+const { Content } = await category.render();
+---
+<BaseLayout
+  title={category.data.title}
+  description={category.data.seo.description}
+  breadcrumbs={[
+    { name: 'Strona główna', item: 'https://www.mostpomocy.pl/' },
+    { name: 'Rodzaje wsparcia', item: 'https://www.mostpomocy.pl/wsparcie/' },
+    { name: category.data.title, item: `https://www.mostpomocy.pl/wsparcie/${category.slug}/` },
+  ]}
+>
+  <section class="section">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Strona główna', href: '/' }, { label: 'Rodzaje wsparcia', href: '/wsparcie/' }, { label: category.data.title }]} />
+      <h1>{category.data.title}</h1>
+      <p class="intro">{category.data.problemDescription}</p>
+      <Callout title="Ważne" content="Jeśli sytuacja zagraża życiu lub bezpieczeństwu, zadzwoń pod 112." tone="alert" />
+
+      <div class="grid blocks">
+        <article class="card block"><h2>Od czego zacząć?</h2><ul>{category.data.odCzegoZaczac.map((item) => <li>{item}</li>)}</ul></article>
+        <article class="card block"><h2>Kiedy szukać wsparcia?</h2><ul>{category.data.kiedySzukacWsparcia.map((item) => <li>{item}</li>)}</ul></article>
+        <article class="card block"><h2>Formy pomocy</h2><ul>{category.data.formyPomocy.map((item) => <li>{item}</li>)}</ul></article>
+        <article class="card block"><h2>Pierwszy kontakt</h2><ul>{category.data.pierwszyKontakt.map((item) => <li>{item}</li>)}</ul></article>
+        <article class="card block"><h2>Ważne informacje</h2><ul>{category.data.wazneInformacje.map((item) => <li>{item}</li>)}</ul></article>
+      </div>
+
+      <SectionHeader title="Przydatne kontakty" />
+      <div class="grid contact-grid">
+        {category.data.kontakty.map((kontakt) => (
+          <article class="card block">
+            <h3>{kontakt.name}</h3>
+            <p>{kontakt.description}</p>
+            {kontakt.phone && <p><strong>Telefon:</strong> {kontakt.phone}</p>}
+            {kontakt.website && <p><a href={kontakt.website} rel="noopener noreferrer">Strona internetowa</a></p>}
+            {!kontakt.verified && <p class="verify">Dane do potwierdzenia przed publikacją operacyjną.</p>}
+          </article>
+        ))}
+      </div>
+
+      <SectionHeader title="Wiarygodne źródła" />
+      <ul>{category.data.zrodla.map((src) => <li><a href={src.url} rel="noopener noreferrer">{src.title}</a></li>)}</ul>
+
+      {related.length > 0 && (
+        <>
+          <SectionHeader title="Powiązane materiały" />
+          <ul>{related.map((post) => <li><a href={`/blog/${post.slug}/`}>{post.data.title}</a></li>)}</ul>
+        </>
+      )}
+
+      <div class="markdown"><Content /></div>
+
+      <CTA title="Potrzebujesz kolejnego kroku?" description="Możesz przejść do lokalnego przewodnika lub wrócić do kategorii." primary={{ label: 'Pomoc w Sosnowcu', href: '/sosnowiec/' }} secondary={{ label: 'Wszystkie kategorie', href: '/wsparcie/' }} />
+    </div>
+  </section>
+
+  <style>
+    h1 { margin-bottom: .3rem; }
+    .intro { margin-top: 0; color: var(--muted); }
+    .blocks { grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); margin: 1rem 0 2rem; }
+    .block { padding: 1rem; }
+    .block h2 { margin: 0 0 .5rem; font-size: 1.1rem; }
+    .block ul { margin: 0; padding-left: 1rem; }
+    .contact-grid { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-bottom: 1rem; }
+    .verify { color: var(--danger); font-weight: 600; }
+    .markdown :global(p) { color: var(--muted); }
+  </style>
+</BaseLayout>

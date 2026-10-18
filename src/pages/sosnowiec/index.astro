@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Hero from '../../components/Hero.astro';
+import LocalHelpCard from '../../components/LocalHelpCard.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import ArticleGrid from '../../components/ArticleGrid.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const city = (await getCollection('miasta')).find((entry) => entry.slug === 'sosnowiec');
+if (!city) {
+  throw new Error('Brak treści miasta: sosnowiec');
+}
+const localPosts = (await getCollection('blog-sosnowiec', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publicationDate.getTime() - a.data.publicationDate.getTime())
+  .slice(0, 3);
+---
+<BaseLayout
+  title="Pomoc w Sosnowcu"
+  description={city.data.seo.description}
+  breadcrumbs={[
+    { name: 'Strona główna', item: 'https://www.mostpomocy.pl/' },
+    { name: 'Sosnowiec', item: 'https://www.mostpomocy.pl/sosnowiec/' },
+  ]}
+>
+  <section class="section">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Strona główna', href: '/' }, { label: 'Sosnowiec' }]} />
+    </div>
+    <Hero
+      eyebrow="MostPomocy Lokalnie"
+      title="Pomoc w Sosnowcu"
+      subtitle={city.data.heroSubtitle}
+      description={city.data.heroDescription}
+      ctas={[
+        { label: 'Rodzaje wsparcia', href: '/wsparcie/' },
+        { label: 'Blog Sosnowiec', href: '/sosnowiec/blog/', variant: 'secondary' },
+      ]}
+    />
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeader title="Lokalny przewodnik" description="Architektura treści gotowa do uruchomienia kolejnych miast (np. Katowice, Dąbrowa Górnicza)." />
+      <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));">
+        {city.data.sections.map((section) => (
+          <LocalHelpCard title={section.title} description={section.description} points={section.points} />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeader title="Najnowsze artykuły lokalne" />
+      <ArticleGrid posts={localPosts} basePath="/sosnowiec/blog" />
+    </div>
+  </section>
+</BaseLayout>

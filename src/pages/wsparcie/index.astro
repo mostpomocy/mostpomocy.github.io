@@ -1,0 +1,25 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SectionHeader from '../../components/SectionHeader.astro';
+import SupportGrid from '../../components/SupportGrid.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+
+const categories = (await getCollection('wsparcie')).sort((a, b) => a.data.title.localeCompare(b.data.title, 'pl'));
+---
+<BaseLayout
+  title="Rodzaje wsparcia"
+  description="Kategorie wsparcia na MostPomocy.pl: od zdrowia psychicznego po pomoc materialną i prawną."
+  breadcrumbs={[
+    { name: 'Strona główna', item: 'https://www.mostpomocy.pl/' },
+    { name: 'Rodzaje wsparcia', item: 'https://www.mostpomocy.pl/wsparcie/' },
+  ]}
+>
+  <section class="section">
+    <div class="container">
+      <Breadcrumbs items={[{ label: 'Strona główna', href: '/' }, { label: 'Rodzaje wsparcia' }]} />
+      <SectionHeader title="Rodzaje wsparcia" description="Każda kategoria prowadzi przez pierwsze kroki, sygnały alarmowe i wiarygodne źródła." />
+      <SupportGrid items={categories.map((entry) => ({ slug: entry.slug, title: entry.data.title, shortDescription: entry.data.shortDescription }))} />
+    </div>
+  </section>
+</BaseLayout>

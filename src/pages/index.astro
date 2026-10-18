@@ -1,90 +1,91 @@
 ---
-import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import EmergencyBanner from '../components/EmergencyBanner.astro';
+import SectionHeader from '../components/SectionHeader.astro';
+import SupportGrid from '../components/SupportGrid.astro';
+import ArticleGrid from '../components/ArticleGrid.astro';
+import CTA from '../components/CTA.astro';
 
-const pages = await getCollection('pages').catch(() => []);
-const mainPages = pages.filter((entry) => entry.data.type === 'page');
-const mapaPages = pages.filter((entry) => entry.data.type === 'mapa');
-
-const featured = [...mainPages, ...mapaPages].sort((a, b) => a.slug.localeCompare(b.slug, 'pl'));
+const wsparcie = (await getCollection('wsparcie')).sort((a, b) => a.data.title.localeCompare(b.data.title, 'pl'));
+const blogPolska = (await getCollection('blog-polska', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publicationDate.getTime() - a.data.publicationDate.getTime())
+  .slice(0, 3);
+const blogSosnowiec = (await getCollection('blog-sosnowiec', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.publicationDate.getTime() - a.data.publicationDate.getTime())
+  .slice(0, 3);
 ---
-
-<Layout
-  title="Most Pomocy"
-  description="Mapa pomocy, wsparcie i szybki dostęp do najważniejszych stron."
-  tags={['pomoc', 'wsparcie', 'mapa pomocy', 'bezpieczeństwo']}
+<BaseLayout
+  title="MostPomocy.pl"
+  description="Znajdź pomoc. Nie jesteś sam. MostPomocy.pl to przewodnik po wsparciu i pierwszym kontakcie z pomocą."
+  jsonLd={{
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: 'MostPomocy.pl',
+    url: 'https://www.mostpomocy.pl/',
+  }}
 >
-  <section class="hero">
-    <h1>Most Pomocy</h1>
-    <p>Wybierz podstronę, aby przejść do potrzebnych informacji i wsparcia.</p>
+  <Hero
+    title="MOSTPOMOCY.PL"
+    subtitle="Znajdź pomoc. Nie jesteś sam."
+    description="Most między Tobą a pomocą. Pomagamy znaleźć właściwą drogę do wsparcia, zrozumieć dostępne możliwości i zrobić pierwszy krok."
+    ctas={[
+      { label: 'Zobacz rodzaje wsparcia', href: '/wsparcie/' },
+      { label: 'Pomoc w Sosnowcu', href: '/sosnowiec/', variant: 'secondary' },
+    ]}
+  />
+
+  <EmergencyBanner />
+
+  <section class="section">
+    <div class="container">
+      <SectionHeader
+        title="Jakiego wsparcia potrzebujesz?"
+        description="Wybierz obszar, aby zobaczyć bezpieczny plan pierwszych kroków oraz wiarygodne źródła."
+      />
+      <SupportGrid items={wsparcie.map((entry) => ({ slug: entry.slug, title: entry.data.title, shortDescription: entry.data.shortDescription }))} />
+    </div>
   </section>
 
-  <section class="grid" aria-label="Lista podstron">
-    {featured.map((page) => (
-      <a class="card" href={page.data.type === 'mapa' ? `/mapa/${page.slug}` : `/${page.slug}`}>
-        <h2>{page.data.title}</h2>
-        <p>{page.data.description}</p>
-        <span>{page.data.type === 'mapa' ? 'Mapa pomocy' : 'Strona'}</span>
-      </a>
-    ))}
+  <section class="section">
+    <div class="container grid" style="grid-template-columns:repeat(auto-fit,minmax(250px,1fr));">
+      <a class="card feature-link" href="/kompas-pomocy/"><h2>Kompas Pomocy</h2><p>Przewodnik krok po kroku, od pierwszego sygnału do konkretnego działania.</p></a>
+      <a class="card feature-link" href="/sosnowiec/"><h2>Sosnowiec</h2><p>Lokalny przewodnik po wsparciu miejskim i obywatelskim.</p></a>
+      <a class="card feature-link" href="/bezpiecznik/"><h2>Bezpiecznik</h2><p>Materiały bezpieczeństwa i szybkie instrukcje działania.</p></a>
+      <a class="card feature-link" href="/edukacja/"><h2>Edukacja</h2><p>Treści wzmacniające kompetencje i świadomość społeczną.</p></a>
+      <a class="card feature-link" href="/o-projekcie/"><h2>O projekcie</h2><p>Misja, założenia oraz sposób rozwoju MostPomocy.pl.</p></a>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeader title="Blog ogólnopolski" description="Artykuły edukacyjne i praktyczne poradniki dla całej Polski." />
+      <ArticleGrid posts={blogPolska} basePath="/blog" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <SectionHeader title="Blog Sosnowiec" description="Lokalne informacje, inicjatywy i praktyczne wskazówki dla mieszkańców." />
+      <ArticleGrid posts={blogSosnowiec} basePath="/sosnowiec/blog" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <CTA
+        title="Potrzebujesz spokojnego pierwszego kroku?"
+        description="Zacznij od kategorii wsparcia lub lokalnego przewodnika. Nie musisz przechodzić przez to samodzielnie."
+        primary={{ label: 'Przejdź do wsparcia', href: '/wsparcie/' }}
+        secondary={{ label: 'Przejdź do Sosnowca', href: '/sosnowiec/' }}
+      />
+    </div>
   </section>
 
   <style>
-    .hero {
-      padding: 2rem 1.25rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 1.25rem;
-      background: linear-gradient(180deg, #fff, #fafafa);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero h1 {
-      margin: 0 0 .75rem;
-      font-size: clamp(2rem, 4vw, 3.25rem);
-    }
-
-    .hero p {
-      margin: 0;
-      color: #4b5563;
-      font-size: 1.05rem;
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 1rem;
-    }
-
-    .card {
-      display: grid;
-      gap: .65rem;
-      padding: 1.25rem;
-      border: 1px solid #e5e7eb;
-      border-radius: 1rem;
-      text-decoration: none;
-      background: #fff;
-      transition: transform .15s ease, box-shadow .15s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, .06);
-    }
-
-    .card h2 {
-      margin: 0;
-      font-size: 1.2rem;
-    }
-
-    .card p {
-      margin: 0;
-      color: #4b5563;
-    }
-
-    .card span {
-      color: #b91c1c;
-      font-weight: 700;
-      font-size: .9rem;
-    }
+    .feature-link { padding: 1.2rem; text-decoration: none; color: inherit; }
+    .feature-link h2 { margin: 0 0 .4rem; font-size: 1.2rem; color: var(--navy); }
+    .feature-link p { margin: 0; color: var(--muted); }
   </style>
-</Layout>
+</BaseLayout>

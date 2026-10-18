@@ -1,0 +1,14 @@
+---
+import SupportCard from './SupportCard.astro';
+interface Item { slug: string; title: string; shortDescription: string; }
+interface Props { items: Item[]; }
+const { items } = Astro.props;
+---
+<div class="grid support-grid">
+  {items.map((item) => (
+    <SupportCard href={`/wsparcie/${item.slug}/`} title={item.title} description={item.shortDescription} />
+  ))}
+</div>
+<style>
+  .support-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+</style>
