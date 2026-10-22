@@ -162,3 +162,23 @@ test("redakcja zachowuje projekt i obsługuje lokalne podstrony oraz relacje", (
   assert.equal(ref.options.value, "{fields.id}");
   assert.equal(ref.options.label, "{fields.name}");
 });
+test("CMS odczytuje i zapisuje daty ISO bez resetowania terminu publikacji", () => {
+  const cms = YAML.parse(fs.readFileSync(".pages.yml", "utf8"));
+  for (const name of ["posts", "pages"]) {
+    for (const key of ["published_at", "updated_at"])
+      assert.equal(
+        cms.content
+          .find((c) => c.name === name)
+          .fields.find((f) => f.name === key).options.format,
+        "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
+      );
+    for (const file of fs.readdirSync(`content/${name}`)) {
+      const entry = JSON.parse(
+        fs.readFileSync(`content/${name}/${file}`, "utf8"),
+      );
+      for (const key of ["published_at", "updated_at"])
+        if (entry[key])
+          assert.equal(entry[key], new Date(entry[key]).toISOString());
+    }
+  }
+});
