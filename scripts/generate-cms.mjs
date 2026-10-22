@@ -50,9 +50,9 @@ const reference = (name, label, collection, multiple = false) =>
   f(name, label, "reference", {
     options: {
       collection,
-      search: "name",
+      search: "fields.name",
       value: "{fields.id}",
-      label: "{primary}",
+      label: "{fields.name}",
       multiple,
     },
   });

@@ -160,5 +160,5 @@ test("redakcja zachowuje projekt i obsługuje lokalne podstrony oraz relacje", (
     .find((c) => c.name === "posts")
     .fields.find((f) => f.name === "local_category_id");
   assert.equal(ref.options.value, "{fields.id}");
-  assert.equal(ref.options.label, "{primary}");
+  assert.equal(ref.options.label, "{fields.name}");
 });
