@@ -53,7 +53,7 @@ for (const post of all.posts) {
 }
 assert.match(
   fs.readFileSync("dist/admin/index.html", "utf8"),
-  /app.pagescms.org/,
+  /app\.pagescms\.org/,
 );
 console.log(
   `Sprawdzono ${files.length} stron HTML, ${links} odnośników lokalnych, dane JSON-LD, mapę i wykluczenie szkiców.`,

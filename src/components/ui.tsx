@@ -110,7 +110,7 @@ export const date = (value: string) =>
 export const readingTime = (body: string) =>
   Math.max(
     1,
-    Math.ceil(body.replace(/<[^>]*>/g, "").split(/\s+/).length / 200),
+    Math.ceil(body.replace(/<[^>]*>/g, " ").split(/\s+/).length / 200),
   );
 const symbols: Record<string, string> = {
   "praca-socjalna": "↔",
