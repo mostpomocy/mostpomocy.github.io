@@ -1,0 +1,64 @@
+---
+import Base from "../../layouts/Base.astro";
+import {
+  pages,
+  rows,
+  published,
+  prepareBody,
+  siteURL,
+} from "../../lib/content";
+import { ArticleCard } from "../../components/ui";
+import { visible } from "../../lib/schema.mjs";
+export function getStaticPaths() {
+  return (
+    import.meta.env.DEV
+      ? rows("pages").filter((p) => p.status !== "trashed")
+      : pages()
+  )
+    .filter((p) => p.section === "sosnowiec")
+    .map((page) => ({ params: { slug: page.slug }, props: { page } }));
+}
+const { page } = Astro.props;
+const { body } = prepareBody(page.body);
+const related = page.related_category_id
+  ? published().filter((p) => p.category_id === page.related_category_id)
+  : [];
+---
+
+<Base
+  title={page.seo_title || page.title}
+  description={page.seo_description || page.excerpt}
+  noindex={page.noindex || !visible(page)}
+  canonical={page.canonical_url || siteURL("/sosnowiec/" + page.slug + "/")}
+>
+  <main id="main" tabindex="-1" class="container inner-page custom-page">
+    {!visible(page) && (
+      <p class="preview-notice">
+        Lokalny podgląd szkicu. Podstrona nie jest publikowana.
+      </p>
+    )}
+    <nav class="breadcrumbs" aria-label="Okruszki">
+      <a href="/sosnowiec/">Sosnowiec</a> / Podstrona
+    </nav>
+    <span class="eyebrow">BLISKO CIEBIE</span>
+    <h1>{page.title}</h1>
+    {page.notice && (
+      <aside class="project-notice">
+        <span class="eyebrow">STATUS PROJEKTU</span>
+        <p>{page.notice}</p>
+      </aside>
+    )}
+    {page.excerpt && <p class="lead narrow">{page.excerpt}</p>}
+    <article class="prose narrow" set:html={body} />
+    {related.length > 0 && (
+      <section class="related">
+        <h2>Artykuły w tym temacie</h2>
+        <div class="article-grid">
+          {related.map((p) => (
+            <ArticleCard post={p} categories={rows("categories")} />
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</Base>

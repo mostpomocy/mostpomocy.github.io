@@ -45,3 +45,6 @@ export const readingTime = (body: string) =>
     1,
     Math.ceil(body.replace(/<[^>]*>/g, " ").split(/\s+/).length / 200),
   );
+
+export const pagePath = (page: RecordData) =>
+  `/${page.section === "sosnowiec" ? "sosnowiec/" : ""}${page.slug}/`;

@@ -1,0 +1,26 @@
+---
+import Base from "../../../layouts/Base.astro";
+import ArticleList from "../../../components/ArticleList.astro";
+import { published } from "../../../lib/content";
+const posts = published().filter((p) => p.scope === "sosnowiec");
+---
+
+<Base
+  title="Blog Sosnowiec — ludzie, wsparcie i lokalne inicjatywy"
+  description="Artykuły o Sosnowcu: przemoc i bezpieczeństwo, uzależnienia, miejsca pomocy oraz inicjatywy społeczne."
+>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <nav class="breadcrumbs" aria-label="Okruszki">
+      <a href="/sosnowiec/">Sosnowiec</a> / Blog
+    </nav>
+    <span class="eyebrow">Z MIASTA. DLA LUDZI.</span>
+    <h1>
+      Blog <em>Sosnowiec.</em>
+    </h1>
+    <p class="lead narrow">
+      Lokalne historie, praktyczne informacje i sprawy, o których warto
+      rozmawiać. Wybierz kategorię albo zacznij od najnowszego tekstu.
+    </p>
+    <ArticleList posts={posts} local heading="Najnowsze z Sosnowca" />
+  </main>
+</Base>

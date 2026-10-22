@@ -8,24 +8,35 @@ const {
   tag = "",
   local = false,
 } = Astro.props;
-const categories = rows("categories");
+const categories = rows(local ? "local_categories" : "categories");
+const allPosts = local
+  ? published().filter((p) => p.scope === "sosnowiec")
+  : published();
+const base = local ? "/sosnowiec/blog/" : "/blog/";
+const categoryBase = local ? "/sosnowiec/kategorie/" : "/kategorie/";
 const tags = rows("tags");
 ---
 
-<section class="blog-explorer" data-explorer>
+<section class="blog-explorer" data-explorer data-local={String(local)}>
   <nav class="category-chips" aria-label="Kategorie bloga">
-    <a href="/blog/">Wszystkie tematy</a>
+    <a href={base}>Wszystkie tematy</a>
     {categories.map((c) => (
       <a
         class={category === c.id ? "active" : ""}
-        href={"/kategorie/" + c.slug + "/"}
+        href={categoryBase + c.slug + "/"}
       >
         {c.name}
-        <span>{published().filter((p) => p.category_id === c.id).length}</span>
+        <span>
+          {
+            allPosts.filter(
+              (p) => (local ? p.local_category_id : p.category_id) === c.id,
+            ).length
+          }
+        </span>
       </a>
     ))}
   </nav>
-  <form class="blog-filters advanced-filters" action="/blog/" method="get">
+  <form class="blog-filters advanced-filters" action={base} method="get">
     <label for="blog-search">
       Szukaj w artykułach
       <input
@@ -69,7 +80,7 @@ const tags = rows("tags");
     <button class="button dark" type="submit">
       Pokaż artykuły ↗
     </button>
-    <a href="/blog/" class="text-link">
+    <a href={base} class="text-link">
       Wyczyść filtry
     </a>
   </form>
@@ -81,7 +92,7 @@ const tags = rows("tags");
   </div>
   <div class="article-grid" data-cards>
     {posts.map((p: import("../lib/content").RecordData) => (
-      <ArticleCard post={p} categories={categories} />
+      <ArticleCard post={p} categories={rows("categories")} />
     ))}
   </div>
   <div class="empty" data-no-results hidden>
@@ -134,7 +145,10 @@ const tags = rows("tags");
       );
       for (const card of cards) {
         const matches =
-          (!category.value || card.dataset.category === category.value) &&
+          (!category.value ||
+            (section.dataset.local === "true"
+              ? card.dataset.localCategory
+              : card.dataset.category) === category.value) &&
           (!tag.value ||
             JSON.parse(card.dataset.tags || "[]").includes(tag.value)) &&
           (!text || card.dataset.search?.includes(text)) &&
@@ -159,12 +173,15 @@ const tags = rows("tags");
       event.preventDefault();
       if (
         location.pathname.startsWith("/kategorie/") ||
-        location.pathname.startsWith("/tagi/")
+        location.pathname.startsWith("/tagi/") ||
+        location.pathname.startsWith("/sosnowiec/kategorie/")
       ) {
         const query = new URLSearchParams();
         for (const [key, value] of new FormData(form).entries())
           if (value) query.set(key, String(value));
-        location.href = "/blog/?" + query;
+        location.href =
+          (section.dataset.local === "true" ? "/sosnowiec/blog/?" : "/blog/?") +
+          query;
         return;
       }
       filter(true);

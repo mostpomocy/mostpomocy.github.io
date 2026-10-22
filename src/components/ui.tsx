@@ -41,7 +41,7 @@ export function Header({
         </a>
         <nav aria-label="Menu główne">
           <a href="/blog">Blog</a>
-          <a href="/sosnowiec">Pomoc w Sosnowcu</a>
+          <a href="/sosnowiec/">Sosnowiec</a>
           <a href="/od-czego-zaczac">Pierwszy krok</a>
           {navigation.map((p) => (
             <a key={p.slug} href={"/" + p.slug + "/"}>
@@ -75,8 +75,9 @@ export function Footer({ note }: { note?: string }) {
         </div>
         <div>
           <strong>Odkrywaj</strong>
+          <a href="/sosnowiec-bez-stygmy/">Sosnowiec bez stygmy</a>
           <a href="/blog">Artykuły i poradniki</a>
-          <a href="/sosnowiec">Pomoc w Sosnowcu</a>
+          <a href="/sosnowiec/">Sosnowiec</a>
           <a href="/o-projekcie">O projekcie i kontakt</a>
         </div>
         <div>
@@ -112,16 +113,42 @@ export const readingTime = (body: string) =>
     1,
     Math.ceil(body.replace(/<[^>]*>/g, " ").split(/\s+/).length / 200),
   );
-const symbols: Record<string, string> = {
-  "praca-socjalna": "↔",
-  "osoby-starsze": "◷",
-  niepelnosprawnosc: "∞",
-  rodzina: "⌂",
-  kryzys: "↗",
-  poradniki: "✳",
-  onkologia: "✳",
-  "zdrowie-psychiczne": "≈",
-};
+function TopicMark({ topic }: { topic: string }) {
+  return (
+    <svg
+      className="cover-symbol topic-mark"
+      viewBox="0 0 120 120"
+      fill="none"
+      aria-hidden="true"
+    >
+      <circle cx="60" cy="60" r="44" stroke="currentColor" strokeWidth="2" />
+      {topic === "zdrowie-psychiczne" ? (
+        <path
+          d="M22 56c20-30 34 30 54 0s24-10 28-8M22 72c20-30 34 30 54 0s24-10 28-8"
+          stroke="currentColor"
+          strokeWidth="5"
+        />
+      ) : topic === "przemoc" ? (
+        <path
+          d="M60 24 88 36v26c0 20-28 36-28 36S32 82 32 62V36l28-12ZM46 61l10 10 21-24"
+          stroke="currentColor"
+          strokeWidth="4"
+          strokeLinejoin="round"
+        />
+      ) : (
+        <>
+          <path
+            d="M32 42h23c7 0 12 5 12 12v32c-6-5-13-7-20-7H32V42ZM88 42H77c-6 0-10 5-10 12"
+            stroke="currentColor"
+            strokeWidth="4"
+            strokeLinejoin="round"
+          />
+          <path d="M88 42v37H77" stroke="currentColor" strokeWidth="4" />
+        </>
+      )}
+    </svg>
+  );
+}
 export function ArticleCard({
   post,
   categories,
@@ -134,6 +161,7 @@ export function ArticleCard({
       className="article-card"
       data-post
       data-category={post.category_id}
+      data-local-category={post.local_category_id || ""}
       data-tags={JSON.stringify(post.tags || [])}
       data-scope={post.scope || "general"}
       data-title={post.title.toLocaleLowerCase("pl")}
@@ -160,9 +188,7 @@ export function ArticleCard({
             <span className="cover-word">
               {categoryName(categories, post.category_id)}
             </span>
-            <span className="cover-symbol">
-              {symbols[post.category_id] || "↔"}
-            </span>
+            <TopicMark topic={post.category_id} />
             <span className="cover-brand">MOSTPOMOCY / CZYTELNIA</span>
           </>
         )}
@@ -185,7 +211,7 @@ export function ArticleCard({
       </h3>
       <p>{post.excerpt}</p>
       {post.scope === "sosnowiec" && (
-        <a className="local-badge" href="/sosnowiec?zakladka=artykuly">
+        <a className="local-badge" href="/sosnowiec/blog/">
           Z Sosnowca ↗
         </a>
       )}
@@ -195,7 +221,19 @@ export function ArticleCard({
           href={"/artykuly/" + post.slug}
           aria-label={"Przeczytaj: " + post.title}
         >
-          ↗
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            aria-hidden="true"
+          >
+            <path
+              d="M5 19 19 5M5 5h14v14"
+              stroke="currentColor"
+              strokeWidth="1.8"
+            />
+          </svg>
         </a>
       </div>
     </article>

@@ -3,6 +3,7 @@ import Base from "../layouts/Base.astro";
 import Editor from "../components/LocalEditor";
 import { settings } from "../lib/content";
 const config = settings();
+const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
 ---
 
 {import.meta.env.DEV ? (
@@ -31,7 +32,7 @@ const config = settings();
       <div class="admin-links">
         <a
           class="button dark"
-          href="https://app.pagescms.org"
+          href={cms}
           target="_blank"
           rel="noopener noreferrer"
         >
@@ -62,6 +63,25 @@ const config = settings();
           Google Search Console ↗
         </a>
       </div>
+      <section class="admin-task-grid" aria-label="Szybka edycja">
+        <a class="editorial-link" href={cms + "/collection/posts"}>
+          <strong>Artykuły</strong>
+          <span>
+            Nowy tekst, tagi i kategorie. Dla lokalnego tekstu wybierz Sosnowiec
+            oraz kategorię lokalną.
+          </span>
+        </a>
+        <a class="editorial-link" href={cms + "/collection/pages"}>
+          <strong>Podstrony</strong>
+          <span>
+            Dodawaj i edytuj strony z treścią, ilustracjami i własnym adresem.
+          </span>
+        </a>
+        <a class="editorial-link" href={cms + "/collection/local_categories"}>
+          <strong>Sosnowiec — kategorie</strong>
+          <span>Własne działy lokalnego bloga i poradników.</span>
+        </a>
+      </section>
       <section class="info-box">
         <h2>Pierwsze połączenie</h2>
         <p>
@@ -78,8 +98,10 @@ const config = settings();
         <h2>Jak dodać podstronę?</h2>
         <p>
           W Pages CMS wybierz „Podstrony” → nowy wpis, wpisz tytuł i adres,
-          dodaj treść, wybierz status publikacji oraz opcjonalnie „Pokaż w
-          menu”. Po zapisie poczekaj na zakończenie publikacji.
+          dodaj treść i wybierz sekcję. „Ogólna” tworzy /adres/, a „Sosnowiec”
+          tworzy /sosnowiec/adres/ i dodaje podstronę do lokalnej zakładki.
+          Wybierz status publikacji oraz opcjonalnie „Pokaż w menu”. Po zapisie
+          poczekaj na zakończenie publikacji.
         </p>
       </section>
     </main>

@@ -16,7 +16,20 @@ export function Accessibility() {
   const [speaking, setSpeaking] = useState(false);
   const [speech, setSpeech] = useState(false);
   const [status, setStatus] = useState("");
-  const root = useRef<HTMLDetailsElement>(null);
+  const root = useRef<HTMLDialogElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const dialog = root.current;
+    if (!dialog) return;
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+    const previous = document.body.style.overflow;
+    if (open) document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = previous;
+    };
+  }, [open]);
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem("mp-reading-v2") || "null");
@@ -33,8 +46,9 @@ export function Accessibility() {
     setSpeech("speechSynthesis" in window);
     const escape = (e: KeyboardEvent) => {
       if (e.key === "Escape" && root.current?.open) {
-        root.current.open = false;
-        root.current.querySelector("summary")?.focus();
+        root.current.close();
+        setOpen(false);
+        trigger.current?.focus();
       }
     };
     document.addEventListener("keydown", escape);
@@ -82,94 +96,198 @@ export function Accessibility() {
   }
   return (
     <>
-      <details className="reading-tools accessibility-tools" ref={root}>
-        <summary>
-          Dostępność <span aria-hidden="true">Aa</span>
-        </summary>
-        <div aria-label="Dostosuj czytanie">
-          <strong>Dostosuj stronę do siebie</strong>
+      <button
+        className="a11y-trigger"
+        ref={trigger}
+        onClick={() => setOpen(true)}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="4" r="2" fill="currentColor" />
+          <path
+            d="m4 8 8 2 8-2M12 10v5m0 0-5 7m5-7 5 7"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          />
+        </svg>
+        Dostępność
+      </button>
+      <dialog
+        className="a11y-dialog"
+        ref={root}
+        aria-labelledby="a11y-title"
+        onCancel={() => {
+          setOpen(false);
+          trigger.current?.focus();
+        }}
+        onClose={() => {
+          setOpen(false);
+          trigger.current?.focus();
+        }}
+        onClick={(e) => {
+          if (e.target === e.currentTarget) {
+            setOpen(false);
+          }
+        }}
+      >
+        <header className="a11y-heading">
+          <div>
+            <span className="eyebrow">CZYTAJ PO SWOJEMU</span>
+            <h2 id="a11y-title">Dostosuj stronę</h2>
+          </div>
+          <button
+            type="button"
+            className="a11y-close"
+            aria-label="Zamknij panel dostępności"
+            onClick={() => setOpen(false)}
+          >
+            ×
+          </button>
+        </header>
+        <div className="a11y-content">
+          <div className="a11y-presets" aria-label="Szybkie ustawienia">
+            <button
+              type="button"
+              onClick={() => {
+                setPrefs({
+                  ...defaults,
+                  scale: 1.25,
+                  font: "simple",
+                  spacing: "comfortable",
+                  links: true,
+                });
+                setStatus("Włączono łatwiejsze czytanie");
+              }}
+            >
+              Łatwiejsze czytanie
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setPrefs((p) => ({ ...p, contrast: "high", links: true }));
+                setStatus("Włączono wysoki kontrast");
+              }}
+            >
+              Wysoki kontrast
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setPrefs((p) => ({ ...p, scale: 1.5 }));
+                setStatus("Powiększono tekst do 150%");
+              }}
+            >
+              Większy tekst
+            </button>
+          </div>
           <p>
             Ustawienia zapisują się tylko w tej przeglądarce. Menu zamkniesz
             klawiszem Escape.
           </p>
-          <label htmlFor="a11y-scale">
-            Wielkość tekstu
-            <select
-              aria-label="Wielkość tekstu"
-              id="a11y-scale"
-              value={prefs.scale}
-              onChange={(e) => update("scale", Number(e.target.value))}
-            >
-              {[1, 1.25, 1.5, 1.75, 2].map((v) => (
-                <option value={v} key={v}>
-                  {v * 100}%
-                </option>
-              ))}
-            </select>
-          </label>
-          <label htmlFor="a11y-contrast">
-            Kolory i kontrast
-            <select
-              aria-label="Kolory i kontrast"
-              id="a11y-contrast"
-              value={prefs.contrast}
-              onChange={(e) => update("contrast", e.target.value)}
-            >
-              <option value="normal">Domyślne</option>
-              <option value="high">Wysoki kontrast</option>
-              <option value="dark">Ciemne tło</option>
-              <option value="sepia">Ciepłe tło — sepia</option>
-            </select>
-          </label>
-          <label htmlFor="a11y-font">
-            Krój pisma
-            <select
-              aria-label="Krój pisma"
-              id="a11y-font"
-              value={prefs.font}
-              onChange={(e) => update("font", e.target.value)}
-            >
-              <option value="default">Domyślny</option>
-              <option value="simple">Prosty, bezszeryfowy</option>
-            </select>
-          </label>
-          <label htmlFor="a11y-spacing">
-            Odstępy w tekście
-            <select
-              aria-label="Odstępy w tekście"
-              id="a11y-spacing"
-              value={prefs.spacing}
-              onChange={(e) => update("spacing", e.target.value)}
-            >
-              <option value="normal">Domyślne</option>
-              <option value="comfortable">Większe</option>
-              <option value="wide">Bardzo duże</option>
-            </select>
-          </label>
-          {[
-            ["links", "Podkreśl wszystkie linki"],
-            ["motion", "Ogranicz ruch i animacje"],
-            ["images", "Ukryj ilustracje"],
-            ["reading", "Skup się na treści artykułu"],
-            ["ruler", "Pokaż linię ułatwiającą czytanie"],
-          ].map(([key, label]) => (
-            <label className="a11y-check" key={key}>
-              <input
-                type="checkbox"
-                aria-label={label}
-                checked={!!prefs[key as keyof typeof defaults]}
-                onChange={(e) => update(key, e.target.checked)}
-              />
-              {label}
-            </label>
-          ))}
-          {speech && (
-            <button type="button" onClick={read}>
-              {speaking ? "Zatrzymaj odczyt" : "Odczytaj tekst przeglądarką"}
-            </button>
-          )}
+          <fieldset>
+            <legend>Tekst i kolory</legend>
+            <div className="a11y-selects">
+              <label htmlFor="a11y-scale">
+                Wielkość tekstu
+                <select
+                  aria-label="Wielkość tekstu"
+                  id="a11y-scale"
+                  value={prefs.scale}
+                  onChange={(e) => update("scale", Number(e.target.value))}
+                >
+                  {[1, 1.25, 1.5, 1.75, 2].map((v) => (
+                    <option value={v} key={v}>
+                      {v * 100}%
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label htmlFor="a11y-contrast">
+                Kolory i kontrast
+                <select
+                  aria-label="Kolory i kontrast"
+                  id="a11y-contrast"
+                  value={prefs.contrast}
+                  onChange={(e) => update("contrast", e.target.value)}
+                >
+                  <option value="normal">Domyślne</option>
+                  <option value="high">Wysoki kontrast</option>
+                  <option value="dark">Ciemne tło</option>
+                  <option value="sepia">Ciepłe tło — sepia</option>
+                </select>
+              </label>
+              <label htmlFor="a11y-font">
+                Krój pisma
+                <select
+                  aria-label="Krój pisma"
+                  id="a11y-font"
+                  value={prefs.font}
+                  onChange={(e) => update("font", e.target.value)}
+                >
+                  <option value="default">Domyślny</option>
+                  <option value="simple">Prosty, bezszeryfowy</option>
+                </select>
+              </label>
+              <label htmlFor="a11y-spacing">
+                Odstępy w tekście
+                <select
+                  aria-label="Odstępy w tekście"
+                  id="a11y-spacing"
+                  value={prefs.spacing}
+                  onChange={(e) => update("spacing", e.target.value)}
+                >
+                  <option value="normal">Domyślne</option>
+                  <option value="comfortable">Większe</option>
+                  <option value="wide">Bardzo duże</option>
+                </select>
+              </label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Spokojniejszy widok</legend>
+            {[
+              ["links", "Podkreśl wszystkie linki"],
+              ["motion", "Ogranicz ruch i animacje"],
+              ["images", "Ukryj ilustracje"],
+              ["reading", "Skup się na treści artykułu"],
+              ["ruler", "Pokaż linię ułatwiającą czytanie"],
+            ].map(([key, label]) => (
+              <label className="a11y-check" key={key}>
+                <input
+                  type="checkbox"
+                  aria-label={label}
+                  checked={!!prefs[key as keyof typeof defaults]}
+                  onChange={(e) => update(key, e.target.checked)}
+                />
+                {label}
+              </label>
+            ))}
+          </fieldset>
+          <fieldset>
+            <legend>Odsłuchaj treść</legend>
+            {speech && (
+              <button type="button" onClick={read}>
+                {speaking ? "Zatrzymaj odczyt" : "Odczytaj tekst przeglądarką"}
+              </button>
+            )}
+            {!speech && (
+              <p>
+                Ta przeglądarka nie udostępnia odczytu głosowego. Możesz użyć
+                czytnika ekranu swojego urządzenia.
+              </p>
+            )}
+          </fieldset>
           <button
             type="button"
+            className="a11y-reset"
             onClick={() => {
               setPrefs(defaults);
               window.speechSynthesis?.cancel();
@@ -184,7 +302,7 @@ export function Accessibility() {
             {status}
           </span>
         </div>
-      </details>
+      </dialog>
       {prefs.ruler && <div className="reading-ruler" aria-hidden="true" />}
     </>
   );

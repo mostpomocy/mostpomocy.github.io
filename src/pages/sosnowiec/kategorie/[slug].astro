@@ -1,0 +1,49 @@
+---
+import Base from "../../../layouts/Base.astro";
+import ArticleList from "../../../components/ArticleList.astro";
+import { published, rows, pages, pagePath } from "../../../lib/content";
+export function getStaticPaths() {
+  return rows("local_categories").map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+const { category } = Astro.props;
+const posts = published().filter(
+  (p) => p.scope === "sosnowiec" && p.local_category_id === category.id,
+);
+const related = pages().filter(
+  (p) => p.section === "sosnowiec" && p.local_category_id === category.id,
+);
+---
+
+<Base title={category.name + " — Sosnowiec"} description={category.description}>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <nav class="breadcrumbs" aria-label="Okruszki">
+      <a href="/sosnowiec/">Sosnowiec</a> / <a href="/sosnowiec/blog/">Blog</a>
+    </nav>
+    <span class="eyebrow">TEMAT LOKALNY</span>
+    <h1>{category.name}</h1>
+    <p class="lead narrow">{category.description}</p>
+    {related.length > 0 && (
+      <section
+        class="local-page-links"
+        aria-label="Przewodniki w tej kategorii"
+      >
+        {related.map((p) => (
+          <a class="editorial-link" href={pagePath(p)}>
+            <strong>{p.title}</strong>
+            <span>{p.excerpt}</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        ))}
+      </section>
+    )}
+    <ArticleList
+      posts={posts}
+      local
+      category={category.id}
+      heading="Artykuły w tym temacie"
+    />
+  </main>
+</Base>
