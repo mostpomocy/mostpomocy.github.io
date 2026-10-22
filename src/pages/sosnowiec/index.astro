@@ -1,0 +1,215 @@
+---
+import Base from "../../layouts/Base.astro";
+import { rows, published } from "../../lib/content";
+import { ArticleCard } from "../../components/ui";
+const places = rows("places").filter((p) => p.status === "published");
+const roots = places.filter((p) => p.section === "mops" && !p.parent_id);
+const institutions = places.filter((p) => p.section === "institution");
+const local = published().filter((p) => p.scope === "sosnowiec");
+---
+
+<Base title="Pomoc w Sosnowcu — MOPS, instytucje i artykuły">
+  <main id="main" tabindex="-1" class="container inner-page sosnowiec-page">
+    <span class="eyebrow">JEDNO MIASTO. KONKRETNE MIEJSCA.</span>
+    <h1>
+      Pomoc w <em>Sosnowcu.</em>
+    </h1>
+    <p class="lead narrow">
+      Sprawdź, z kim możesz porozmawiać i gdzie zapytać o swoją sprawę. Obok
+      kontaktów znajdziesz lokalne teksty i inicjatywy.
+    </p>
+    <nav class="local-tabs" aria-label="Działy pomocy w Sosnowcu">
+      <a href="#mops" data-local-tab="mops">
+        MOPS i działy <span>01</span>
+      </a>
+      <a href="#instytucje" data-local-tab="instytucje">
+        Inne instytucje <span>02</span>
+      </a>
+      <a href="#artykuly" data-local-tab="artykuly">
+        Z Sosnowca <span>{local.length}</span>
+      </a>
+    </nav>
+    <section id="mops" data-local-section="mops" aria-label="MOPS i działy">
+      {roots.map((root) => (
+        <div class="mops-group">
+          <article class="mops-head">
+            <span class="eyebrow">GŁÓWNY KONTAKT</span>
+            <h2>{root.name}</h2>
+            <p>{root.description}</p>
+            <p>{root.address}</p>
+            {root.phone && (
+              <p>
+                Telefon:{" "}
+                <a href={"tel:" + root.phone.replace(/[^+\d]/g, "")}>
+                  {root.phone}
+                </a>
+              </p>
+            )}
+            {root.email && (
+              <p>
+                E-mail: <a href={"mailto:" + root.email}>{root.email}</a>
+              </p>
+            )}
+            <a
+              class="text-link"
+              href={root.website}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Oficjalna strona MOPS ↗
+            </a>
+            <p class="muted">Dane sprawdzono: {root.verified_at}</p>
+          </article>
+          <div class="department-heading">
+            <h2>W jakiej sprawie chcesz zapytać?</h2>
+            <p>Rozwiń dział. Nie musisz znać urzędowej nazwy swojej sprawy.</p>
+          </div>
+          <div class="department-grid">
+            {places
+              .filter((p) => p.parent_id === root.id)
+              .map((p) => (
+                <details class="department">
+                  <summary>
+                    <span>{p.name}</span>
+                    <span class="expand-icon" aria-hidden="true">
+                      +
+                    </span>
+                  </summary>
+                  <div class="contact-details">
+                    <p>{p.description}</p>
+                    {p.phone && (
+                      <p>
+                        Telefon:{" "}
+                        <a href={"tel:" + p.phone.replace(/[^+\d]/g, "")}>
+                          {p.phone}
+                        </a>
+                      </p>
+                    )}
+                    {p.email && (
+                      <p>
+                        E-mail: <a href={"mailto:" + p.email}>{p.email}</a>
+                      </p>
+                    )}
+                    <a
+                      class="text-link"
+                      href={p.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Oficjalne informacje ↗
+                    </a>
+                    <p class="muted">Dane sprawdzono: {p.verified_at}</p>
+                  </div>
+                </details>
+              ))}
+          </div>
+        </div>
+      ))}
+      <aside class="info-box">
+        <h2>Nie wiesz, który dział wybrać?</h2>
+        <p>
+          Możesz opisać krótko swoją sprawę w głównym kontakcie MOPS i zapytać o
+          właściwy dział. Przed wizytą potwierdź aktualny adres, godziny i
+          wymagane dokumenty.
+        </p>
+        <a class="text-link" href="/moja-kartka/">
+          Przygotuj pytania do rozmowy ↗
+        </a>
+      </aside>
+    </section>
+    <section
+      id="instytucje"
+      data-local-section="instytucje"
+      aria-label="Inne instytucje"
+    >
+      <div class="results-heading">
+        <h2>Inne miejsca, od których możesz zacząć</h2>
+      </div>
+      <div class="place-list">
+        {institutions.map((p) => (
+          <article class="place">
+            <div class="place-icon" aria-hidden="true">
+              ↗
+            </div>
+            <div>
+              <span class="eyebrow">SOSNOWIEC</span>
+              <h2>{p.name}</h2>
+              <div class="contact-details">
+                <p>{p.description}</p>
+                {p.address && <p>{p.address}</p>}
+                {p.phone && (
+                  <p>
+                    Telefon:{" "}
+                    <a href={"tel:" + p.phone.replace(/[^+\d]/g, "")}>
+                      {p.phone}
+                    </a>
+                  </p>
+                )}
+                {p.email && (
+                  <p>
+                    E-mail: <a href={"mailto:" + p.email}>{p.email}</a>
+                  </p>
+                )}
+                <a
+                  class="text-link"
+                  href={p.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Oficjalna strona i aktualne informacje ↗
+                </a>
+                <p class="muted">Dane sprawdzono: {p.verified_at}</p>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+    <section
+      id="artykuly"
+      data-local-section="artykuly"
+      aria-label="Artykuły o Sosnowcu"
+    >
+      <div class="results-heading">
+        <h2>O Sosnowcu i dla Sosnowca</h2>
+        <a class="text-link" href="/blog/?lokalne=1">
+          Przeszukaj lokalne artykuły ↗
+        </a>
+      </div>
+      <div class="article-grid">
+        {local.map((p) => (
+          <ArticleCard post={p} categories={rows("categories")} />
+        ))}
+      </div>
+    </section>
+  </main>
+</Base>
+<script>
+  const tabs = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>("[data-local-tab]"),
+  );
+  const sections = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-local-section]"),
+  );
+  function show(id: string) {
+    const selected = ["mops", "instytucje", "artykuly"].includes(id)
+      ? id
+      : "mops";
+    for (const section of sections)
+      section.hidden = section.dataset.localSection !== selected;
+    for (const tab of tabs) {
+      if (tab.dataset.localTab === selected)
+        tab.setAttribute("aria-current", "page");
+      else tab.removeAttribute("aria-current");
+    }
+  }
+  const params = new URLSearchParams(location.search);
+  show(params.get("zakladka") || location.hash.slice(1) || "mops");
+  for (const tab of tabs)
+    tab.addEventListener("click", (event) => {
+      event.preventDefault();
+      const id = tab.dataset.localTab!;
+      show(id);
+      history.replaceState(null, "", "?zakladka=" + id);
+    });
+</script>

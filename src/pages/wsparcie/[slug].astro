@@ -1,0 +1,29 @@
+---
+export function getStaticPaths() {
+  return [
+    {
+      params: { slug: "onkologia" },
+      props: { target: "/wsparcie-onkologiczne/" },
+    },
+    {
+      params: { slug: "zdrowie-psychiczne" },
+      props: { target: "/zdrowie-psychiczne/" },
+    },
+  ];
+}
+const { target } = Astro.props;
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <title>Przejdź do aktualnej strony</title>
+    <meta name="robots" content="noindex,follow" />
+    <meta http-equiv="refresh" content={"0;url=" + target} />
+    <link rel="canonical" href={"https://mostpomocy.pl" + target} />
+  </head>
+  <body>
+    <a href={target}>Przejdź do aktualnej strony</a>
+  </body>
+</html>

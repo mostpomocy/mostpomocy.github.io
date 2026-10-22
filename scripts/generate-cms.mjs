@@ -1,0 +1,237 @@
+import fs from "node:fs";
+import YAML from "yaml";
+const f = (name, label, type = "string", extra = {}) => ({
+  name,
+  label,
+  type,
+  ...extra,
+});
+const id = f("id", "ID", "uuid", {
+  hidden: true,
+  options: { editable: false, generate: false },
+});
+const slug = f("slug", "Adres URL", "string", {
+  required: true,
+  description: "Małe litery bez polskich znaków, np. wolontariat",
+  pattern: {
+    regex: "^[a-z0-9]+(-[a-z0-9]+)*$",
+    message: "Użyj małych liter, cyfr i myślników.",
+  },
+});
+const body = f("body", "Treść", "rich-text", {
+  required: true,
+  options: { format: "html", media: "images", switcher: true },
+});
+const status = f("status", "Status", "select", {
+  default: "draft",
+  options: {
+    values: [
+      { name: "draft", label: "Szkic" },
+      { name: "published", label: "Opublikowany" },
+      { name: "scheduled", label: "Zaplanowany" },
+      { name: "trashed", label: "Kosz" },
+    ],
+  },
+});
+const seo = [
+  f("seo_title", "Tytuł dla Google"),
+  f("seo_description", "Opis w wynikach wyszukiwania", "text"),
+  f("canonical_url", "Adres kanoniczny (opcjonalnie)"),
+  f("noindex", "Nie indeksuj tej treści", "boolean", { default: false }),
+];
+const dates = [
+  f("published_at", "Termin publikacji", "date", {
+    required: true,
+    options: { time: true },
+  }),
+  f("updated_at", "Data aktualizacji", "date", { options: { time: true } }),
+];
+const reference = (name, label, collection, multiple = false) =>
+  f(name, label, "reference", {
+    options: {
+      collection,
+      search: "name",
+      value: "{id}",
+      label: "{name}",
+      multiple,
+    },
+  });
+const collection = (name, label, fields, view = {}) => ({
+  name,
+  label,
+  type: "collection",
+  path: "content/" + name,
+  format: "json",
+  filename: { template: "{fields.id}.json", field: false },
+  fields: [id, ...fields],
+  view: { primary: "name", ...view },
+});
+const cms = {
+  media: [
+    {
+      name: "images",
+      label: "Zdjęcia",
+      input: "public/uploads",
+      output: "/uploads",
+      categories: ["image"],
+      extensions: ["png", "jpg", "jpeg", "webp"],
+      rename: "random",
+    },
+  ],
+  content: [
+    collection(
+      "posts",
+      "Artykuły",
+      [
+        f("title", "Tytuł", "string", { required: true }),
+        slug,
+        reference("category_id", "Kategoria", "categories"),
+        reference("tags", "Tagi", "tags", true),
+        f("scope", "Publikacja", "select", {
+          default: "general",
+          options: {
+            values: [
+              { name: "general", label: "Blog ogólny" },
+              { name: "sosnowiec", label: "Blog + Z Sosnowca" },
+            ],
+          },
+        }),
+        f("excerpt", "Wprowadzenie", "text"),
+        body,
+        f("image", "Zdjęcie główne", "image", { options: { media: "images" } }),
+        f("image_alt", "Opis alternatywny zdjęcia"),
+        f("author", "Autor", "string", { default: "Igor Pabiańczyk" }),
+        status,
+        ...dates,
+        f("featured", "Wyróżnij na głównej", "boolean"),
+        f("toc", "Pokaż spis treści", "boolean", { default: true }),
+        f("sources", "Źródła — po jednym adresie HTTPS w wierszu", "text"),
+        ...seo,
+      ],
+      {
+        primary: "title",
+        fields: ["title", "status", "category_id", "published_at"],
+        sort: ["published_at", "title"],
+        default: { sort: "published_at", order: "desc" },
+      },
+    ),
+    collection(
+      "pages",
+      "Podstrony",
+      [
+        f("title", "Tytuł", "string", { required: true }),
+        slug,
+        f("excerpt", "Wprowadzenie", "text"),
+        body,
+        reference(
+          "related_category_id",
+          "Powiązana kategoria (opcjonalnie)",
+          "categories",
+        ),
+        status,
+        ...dates,
+        f("show_in_nav", "Pokaż w menu głównym", "boolean", { default: false }),
+        f("menu_label", "Krótka nazwa w menu"),
+        f("nav_order", "Kolejność w menu (0–100)", "number", {
+          default: 50,
+          options: { min: 0, max: 100 },
+        }),
+        ...seo,
+      ],
+      { primary: "title", fields: ["title", "slug", "status", "show_in_nav"] },
+    ),
+    collection("tags", "Tagi", [
+      f("name", "Nazwa", "string", { required: true }),
+      slug,
+      f("description", "Opis tagu", "text"),
+    ]),
+    collection("categories", "Kategorie", [
+      f("name", "Nazwa", "string", { required: true }),
+      slug,
+      f("description", "Opis kategorii", "text"),
+    ]),
+    collection("places", "Pomoc w Sosnowcu", [
+      f("name", "Nazwa", "string", { required: true }),
+      f("section", "Zakładka", "select", {
+        default: "institution",
+        options: {
+          values: [
+            { name: "mops", label: "MOPS i działy" },
+            { name: "institution", label: "Inne instytucje" },
+          ],
+        },
+      }),
+      reference("parent_id", "Dział należy do (główny wpis MOPS)", "places"),
+      f("description", "Opis", "text"),
+      f("address", "Adres"),
+      f("phone", "Telefon"),
+      f("email", "E-mail"),
+      f("website", "Oficjalna strona"),
+      f("city", "Miasto", "string", { default: "Sosnowiec", readonly: true }),
+      f("verified_at", "Data sprawdzenia kontaktu"),
+      f("status", "Status", "select", {
+        default: "draft",
+        options: {
+          values: [
+            { name: "draft", label: "Szkic" },
+            { name: "published", label: "Opublikowany" },
+          ],
+        },
+      }),
+    ]),
+    {
+      name: "settings",
+      label: "Google, SEO i ustawienia strony",
+      type: "file",
+      path: "content/settings/main.json",
+      format: "json",
+      fields: [
+        f("id", "ID", "string", { hidden: true, default: "main" }),
+        f("title", "Nazwa strony", "string", { required: true }),
+        f("description", "Domyślny opis strony", "text"),
+        f("site_url", "Publiczny adres HTTPS", "string", { required: true }),
+        f("repository", "Repozytorium", "string", { readonly: true }),
+        f("branch", "Gałąź publikacji", "string", { readonly: true }),
+        f("author_name", "Autor"),
+        f("contact_email", "Publiczny adres e-mail"),
+        f("about", "O projekcie", "text"),
+        f("default_image", "Domyślny obraz udostępniania", "image", {
+          options: { media: "images" },
+        }),
+        f("ga_measurement_id", "Google Analytics 4 — identyfikator G-…"),
+        f("google_verification", "Google Search Console — kod weryfikacyjny"),
+        f("bing_verification", "Bing Webmaster Tools — kod weryfikacyjny"),
+        f(
+          "allow_indexing",
+          "Zezwól na indeksowanie publicznej strony",
+          "boolean",
+          { default: true },
+        ),
+        f(
+          "allow_ai_search",
+          "Publikuj opcjonalny spis llms.txt dla narzędzi AI",
+          "boolean",
+          { default: true },
+        ),
+        f("social_profiles", "Oficjalne profile autora / projektu", "string", {
+          list: true,
+        }),
+        f("footer_note", "Tekst stopki", "text"),
+      ],
+    },
+  ],
+  actions: [
+    {
+      name: "publish",
+      label: "Zbuduj i opublikuj stronę",
+      workflow: "pages.yml",
+      confirm: {
+        title: "Opublikować aktualną treść?",
+        message: "Uruchomi budowanie strony na GitHub Pages.",
+        button: "Publikuj",
+      },
+    },
+  ],
+};
+fs.writeFileSync(".pages.yml", YAML.stringify(cms));
+console.log("Pages CMS configuration generated");

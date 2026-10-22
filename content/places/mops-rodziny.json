@@ -1,0 +1,15 @@
+{
+  "id": "mops-rodziny",
+  "name": "Dział ds. Rodzin",
+  "description": "Kontakt do działu zajmującego się sprawami rodzin. Zapytaj o odpowiednią formę kontaktu i zakres wsparcia.",
+  "address": "",
+  "phone": "32 296 22 73",
+  "email": "dr@mopssosnowiec.pl",
+  "website": "https://mopssosnowiec.pl/o-osrodku/dzial-ds-rodzin.html",
+  "section": "mops",
+  "parent_id": "mops-sosnowiec",
+  "city": "Sosnowiec",
+  "verified_at": "21.10.2026",
+  "status": "published",
+  "updated_at": "2026-10-21T19:28:00.517Z"
+}

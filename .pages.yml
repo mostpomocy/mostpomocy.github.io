@@ -1,0 +1,404 @@
+media:
+  - name: images
+    label: Zdjęcia
+    input: public/uploads
+    output: /uploads
+    categories:
+      - image
+    extensions:
+      - png
+      - jpg
+      - jpeg
+      - webp
+    rename: random
+content:
+  - name: posts
+    label: Artykuły
+    type: collection
+    path: content/posts
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - &a1
+        name: id
+        label: ID
+        type: uuid
+        hidden: true
+        options:
+          editable: false
+          generate: false
+      - name: title
+        label: Tytuł
+        type: string
+        required: true
+      - &a2
+        name: slug
+        label: Adres URL
+        type: string
+        required: true
+        description: Małe litery bez polskich znaków, np. wolontariat
+        pattern:
+          regex: ^[a-z0-9]+(-[a-z0-9]+)*$
+          message: Użyj małych liter, cyfr i myślników.
+      - name: category_id
+        label: Kategoria
+        type: reference
+        options:
+          collection: categories
+          search: name
+          value: "{id}"
+          label: "{name}"
+          multiple: false
+      - name: tags
+        label: Tagi
+        type: reference
+        options:
+          collection: tags
+          search: name
+          value: "{id}"
+          label: "{name}"
+          multiple: true
+      - name: scope
+        label: Publikacja
+        type: select
+        default: general
+        options:
+          values:
+            - name: general
+              label: Blog ogólny
+            - name: sosnowiec
+              label: Blog + Z Sosnowca
+      - name: excerpt
+        label: Wprowadzenie
+        type: text
+      - &a3
+        name: body
+        label: Treść
+        type: rich-text
+        required: true
+        options:
+          format: html
+          media: images
+          switcher: true
+      - name: image
+        label: Zdjęcie główne
+        type: image
+        options:
+          media: images
+      - name: image_alt
+        label: Opis alternatywny zdjęcia
+        type: string
+      - name: author
+        label: Autor
+        type: string
+        default: Igor Pabiańczyk
+      - &a4
+        name: status
+        label: Status
+        type: select
+        default: draft
+        options:
+          values:
+            - name: draft
+              label: Szkic
+            - name: published
+              label: Opublikowany
+            - name: scheduled
+              label: Zaplanowany
+            - name: trashed
+              label: Kosz
+      - &a5
+        name: published_at
+        label: Termin publikacji
+        type: date
+        required: true
+        options:
+          time: true
+      - &a6
+        name: updated_at
+        label: Data aktualizacji
+        type: date
+        options:
+          time: true
+      - name: featured
+        label: Wyróżnij na głównej
+        type: boolean
+      - name: toc
+        label: Pokaż spis treści
+        type: boolean
+        default: true
+      - name: sources
+        label: Źródła — po jednym adresie HTTPS w wierszu
+        type: text
+      - &a7
+        name: seo_title
+        label: Tytuł dla Google
+        type: string
+      - &a8
+        name: seo_description
+        label: Opis w wynikach wyszukiwania
+        type: text
+      - &a9
+        name: canonical_url
+        label: Adres kanoniczny (opcjonalnie)
+        type: string
+      - &a10
+        name: noindex
+        label: Nie indeksuj tej treści
+        type: boolean
+        default: false
+    view:
+      primary: title
+      fields:
+        - title
+        - status
+        - category_id
+        - published_at
+      sort:
+        - published_at
+        - title
+      default:
+        sort: published_at
+        order: desc
+  - name: pages
+    label: Podstrony
+    type: collection
+    path: content/pages
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Tytuł
+        type: string
+        required: true
+      - *a2
+      - name: excerpt
+        label: Wprowadzenie
+        type: text
+      - *a3
+      - name: related_category_id
+        label: Powiązana kategoria (opcjonalnie)
+        type: reference
+        options:
+          collection: categories
+          search: name
+          value: "{id}"
+          label: "{name}"
+          multiple: false
+      - *a4
+      - *a5
+      - *a6
+      - name: show_in_nav
+        label: Pokaż w menu głównym
+        type: boolean
+        default: false
+      - name: menu_label
+        label: Krótka nazwa w menu
+        type: string
+      - name: nav_order
+        label: Kolejność w menu (0–100)
+        type: number
+        default: 50
+        options:
+          min: 0
+          max: 100
+      - *a7
+      - *a8
+      - *a9
+      - *a10
+    view:
+      primary: title
+      fields:
+        - title
+        - slug
+        - status
+        - show_in_nav
+  - name: tags
+    label: Tagi
+    type: collection
+    path: content/tags
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa
+        type: string
+        required: true
+      - *a2
+      - name: description
+        label: Opis tagu
+        type: text
+    view:
+      primary: name
+  - name: categories
+    label: Kategorie
+    type: collection
+    path: content/categories
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa
+        type: string
+        required: true
+      - *a2
+      - name: description
+        label: Opis kategorii
+        type: text
+    view:
+      primary: name
+  - name: places
+    label: Pomoc w Sosnowcu
+    type: collection
+    path: content/places
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa
+        type: string
+        required: true
+      - name: section
+        label: Zakładka
+        type: select
+        default: institution
+        options:
+          values:
+            - name: mops
+              label: MOPS i działy
+            - name: institution
+              label: Inne instytucje
+      - name: parent_id
+        label: Dział należy do (główny wpis MOPS)
+        type: reference
+        options:
+          collection: places
+          search: name
+          value: "{id}"
+          label: "{name}"
+          multiple: false
+      - name: description
+        label: Opis
+        type: text
+      - name: address
+        label: Adres
+        type: string
+      - name: phone
+        label: Telefon
+        type: string
+      - name: email
+        label: E-mail
+        type: string
+      - name: website
+        label: Oficjalna strona
+        type: string
+      - name: city
+        label: Miasto
+        type: string
+        default: Sosnowiec
+        readonly: true
+      - name: verified_at
+        label: Data sprawdzenia kontaktu
+        type: string
+      - name: status
+        label: Status
+        type: select
+        default: draft
+        options:
+          values:
+            - name: draft
+              label: Szkic
+            - name: published
+              label: Opublikowany
+    view:
+      primary: name
+  - name: settings
+    label: Google, SEO i ustawienia strony
+    type: file
+    path: content/settings/main.json
+    format: json
+    fields:
+      - name: id
+        label: ID
+        type: string
+        hidden: true
+        default: main
+      - name: title
+        label: Nazwa strony
+        type: string
+        required: true
+      - name: description
+        label: Domyślny opis strony
+        type: text
+      - name: site_url
+        label: Publiczny adres HTTPS
+        type: string
+        required: true
+      - name: repository
+        label: Repozytorium
+        type: string
+        readonly: true
+      - name: branch
+        label: Gałąź publikacji
+        type: string
+        readonly: true
+      - name: author_name
+        label: Autor
+        type: string
+      - name: contact_email
+        label: Publiczny adres e-mail
+        type: string
+      - name: about
+        label: O projekcie
+        type: text
+      - name: default_image
+        label: Domyślny obraz udostępniania
+        type: image
+        options:
+          media: images
+      - name: ga_measurement_id
+        label: Google Analytics 4 — identyfikator G-…
+        type: string
+      - name: google_verification
+        label: Google Search Console — kod weryfikacyjny
+        type: string
+      - name: bing_verification
+        label: Bing Webmaster Tools — kod weryfikacyjny
+        type: string
+      - name: allow_indexing
+        label: Zezwól na indeksowanie publicznej strony
+        type: boolean
+        default: true
+      - name: allow_ai_search
+        label: Publikuj opcjonalny spis llms.txt dla narzędzi AI
+        type: boolean
+        default: true
+      - name: social_profiles
+        label: Oficjalne profile autora / projektu
+        type: string
+        list: true
+      - name: footer_note
+        label: Tekst stopki
+        type: text
+actions:
+  - name: publish
+    label: Zbuduj i opublikuj stronę
+    workflow: pages.yml
+    confirm:
+      title: Opublikować aktualną treść?
+      message: Uruchomi budowanie strony na GitHub Pages.
+      button: Publikuj
