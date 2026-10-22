@@ -42,17 +42,19 @@ const seo = [
 const dates = [
   f("published_at", "Termin publikacji", "date", {
     required: true,
-    options: { time: true },
+    options: { time: true, format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" },
   }),
-  f("updated_at", "Data aktualizacji", "date", { options: { time: true } }),
+  f("updated_at", "Data aktualizacji", "date", {
+    options: { time: true, format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" },
+  }),
 ];
 const reference = (name, label, collection, multiple = false) =>
   f(name, label, "reference", {
     options: {
       collection,
-      search: "name",
+      search: "fields.name",
       value: "{fields.id}",
-      label: "{primary}",
+      label: "{fields.name}",
       multiple,
     },
   });
