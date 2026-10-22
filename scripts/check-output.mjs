@@ -47,6 +47,43 @@ for (const f of [
 assert.ok(!fs.existsSync("dist/api"));
 const map = fs.readFileSync("dist/sitemap.xml", "utf8");
 assert.doesNotMatch(map, /\/admin\//);
+const sitemapURLs = Array.from(
+  map.matchAll(/<loc>([^<]+)<\/loc>/g),
+  (m) => m[1],
+);
+assert.equal(
+  sitemapURLs.length,
+  new Set(sitemapURLs).size,
+  "Powtórzony adres w mapie",
+);
+for (const address of sitemapURLs) {
+  const url = new URL(address);
+  assert.equal(url.origin, new URL(all.settings[0].site_url).origin);
+  assert.equal(url.protocol, "https:");
+  const destination = path.join(
+    "dist",
+    decodeURIComponent(url.pathname),
+    "index.html",
+  );
+  assert.ok(
+    fs.existsSync(destination),
+    `Mapa wskazuje brakującą stronę: ${address}`,
+  );
+  const html = fs.readFileSync(destination, "utf8");
+  assert.ok(
+    html.includes(`<link rel="canonical" href="${address}">`),
+    `Mapa wskazuje inny adres niż canonical: ${address}`,
+  );
+  assert.doesNotMatch(html, /content="noindex/, address);
+}
+assert.ok(
+  !sitemapURLs.some((address) => new URL(address).pathname === "/bez-stygmy/"),
+);
+assert.match(
+  fs.readFileSync("dist/robots.txt", "utf8"),
+  /Sitemap: https:\/\/mostpomocy\.pl\/sitemap\.xml/,
+);
+
 for (const post of all.posts) {
   const exists = fs.existsSync(`dist/artykuly/${post.slug}/index.html`);
   assert.equal(exists, visible(post), post.slug);
