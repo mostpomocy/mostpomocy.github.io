@@ -11,8 +11,8 @@
   "image": "",
   "image_alt": "",
   "featured": true,
-  "seo_title": "",
-  "seo_description": "",
+  "seo_title": "Pomaganie zaczyna się od rozmowy",
+  "seo_description": "Dobra pomoc zaczyna się od wysłuchania. O pracy socjalnej, która dostrzega człowieka i jego własne cele.",
   "sources": "",
   "updated_at": "2026-10-21T18:44:14.591Z",
   "tags": [
@@ -21,5 +21,8 @@
   ],
   "noindex": false,
   "canonical_url": "",
-  "toc": true
+  "toc": true,
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "summary_points": [],
+  "cover_style": "sage"
 }

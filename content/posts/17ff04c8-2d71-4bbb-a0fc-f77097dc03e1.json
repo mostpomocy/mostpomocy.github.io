@@ -1,0 +1,44 @@
+{
+  "id": "17ff04c8-2d71-4bbb-a0fc-f77097dc03e1",
+  "slug": "pierwsza-wizyta-w-mops-pytania",
+  "title": "Pierwsza wizyta w MOPS: pytania zamiast obaw",
+  "excerpt": "Nie musisz znać nazw świadczeń. Przygotuj opis sytuacji, pytania o dokumenty i prostą notatkę z ustaleń po rozmowie.",
+  "body": "<h2>Możesz zacząć od swojej sytuacji</h2><p>„Nie wystarcza mi na codzienne wydatki”, „opiekuję się mamą i nie wiem, co dalej”, „mam pismo, którego nie rozumiem” — każde z tych zdań może otworzyć rozmowę. Nie trzeba wcześniej ustalać nazwy właściwego działu ani samodzielnie wybierać świadczenia. Pierwszy kontakt może pomóc uporządkować potrzeby i wskazać dalszą drogę.</p><h2>Przed rozmową zapisz trzy rzeczy</h2><p>Po pierwsze: co jest teraz najtrudniejsze. Po drugie: co nie może czekać. Po trzecie: w czym konkretnie potrzebujesz pomocy. Wystarczy kilka zdań na kartce. Jeśli nie chcesz opowiadać wszystkiego przy innych osobach, poproś o możliwość rozmowy w spokojniejszym miejscu.</p><h2>Dokumenty ustalaj dla swojej sprawy</h2><p>Nie każda rozmowa wymaga takiego samego kompletu załączników. Zapytaj, jakie dokumenty są potrzebne do konkretnego wniosku, czy możesz je dostarczyć później i w jaki sposób potwierdzić złożenie pisma. Nie zostawiaj oryginałów bez wyjaśnienia, czy są wymagane i jak zostaną zwrócone.</p><h2>Masz prawo pytać o zrozumiałe wyjaśnienie</h2><ul><li>Co oznacza użyty termin?</li><li>Co powinienem zrobić jako następne?</li><li>Czy otrzymam tę informację na piśmie?</li><li>Do kogo mogę wrócić z pytaniem?</li><li>Co zrobić, jeśli nie mogę dostarczyć dokumentu w terminie?</li></ul><p>Jeśli masz trudność z komunikacją, wzrokiem, słuchem lub poruszaniem się, zgłoś potrzebny sposób kontaktu przed wizytą. Bliska osoba może pomóc zapamiętać ustalenia; zasady jej udziału i ewentualnego pełnomocnictwa warto wyjaśnić z jednostką.</p><h2>Po spotkaniu zachowaj plan</h2><p>Zapisz nazwę działu, kolejny krok, termin i sposób kontaktu. Jeśli otrzymasz decyzję, przeczytaj pouczenie o dalszych możliwościach działania. Warunki pomocy i procedury zależą od rodzaju sprawy — nie opieraj się wyłącznie na doświadczeniu sąsiada albo wpisie w internecie.</p>",
+  "category_id": "0534e76f-00b5-5b9e-a794-aad310f5e36f",
+  "local_category_id": "",
+  "tags": [
+    "0ce7f173-32bf-560f-ab48-5955774258a4",
+    "11fe0ce4-62e6-548c-b780-679f08182954"
+  ],
+  "scope": "general",
+  "author": "Igor Pabiańczyk",
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "status": "published",
+  "published_at": "2026-10-22T12:00:00.000Z",
+  "updated_at": "2026-10-22T12:00:00.000Z",
+  "featured": false,
+  "toc": true,
+  "noindex": false,
+  "sources": "https://www.zus.pl/pl/o-zus/o-nas/dzialania-zakladu-ubezpieczen-spolecznych-na-rzecz-osob-z-niepelnosprawnoscia/jak-i-gdzie-zalatwic-wsparcie-wskazowki-ogolne",
+  "seo_title": "Pierwsza wizyta w MOPS: pytania zamiast obaw",
+  "seo_description": "Nie musisz znać nazw świadczeń. Przygotuj opis sytuacji, pytania o dokumenty i prostą notatkę z ustaleń po rozmowie.",
+  "summary_points": [
+    "Zacznij od opisania potrzeby, nie od nazwy świadczenia.",
+    "Zapytaj o dokumenty dotyczące konkretnej sprawy.",
+    "Wyjdź z rozmowy z zapisanym następnym krokiem."
+  ],
+  "tiles": [
+    {
+      "title": "Moja kartka do rozmowy",
+      "text": "Bezpłatny formularz do przygotowania i wydruku. Bez wysyłania notatek do serwera.",
+      "url": "/moja-kartka/"
+    },
+    {
+      "title": "Pomoc w Sosnowcu",
+      "text": "Sprawdź lokalne kontakty i wizytówki jednostek.",
+      "url": "/sosnowiec/"
+    }
+  ],
+  "cover_style": "lilac",
+  "related_place_ids": []
+}

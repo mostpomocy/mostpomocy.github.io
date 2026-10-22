@@ -1,0 +1,97 @@
+---
+import Base from "../layouts/Base.astro";
+import { settings } from "../lib/content";
+const config = settings();
+---
+
+<Base
+  title="Obserwuj MostPomocy — RSS i aplikacja"
+  description="Wybierz, jak wracać po nowe artykuły: kanał RSS, skrót na telefonie i newsletter po uruchomieniu zapisów."
+>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <span class="eyebrow">PO TWOJEMU, BEZ POŚPIECHU</span>
+    <h1>MostPomocy pod ręką.</h1>
+    <p class="lead narrow">
+      Czytaj wtedy, kiedy masz na to przestrzeń. Wybierz wygodny sposób powrotu.
+    </p>
+    <div class="content-tiles">
+      <section class="content-tile">
+        <h2>Nowe artykuły przez RSS</h2>
+        <p>
+          Dodaj kanał do swojego czytnika RSS. Nowe publikacje pojawią się
+          automatycznie, bez podawania nam adresu e-mail.
+        </p>
+        <a href="/feed.xml">Otwórz kanał RSS ↗</a>
+        <p>Adres do skopiowania: https://mostpomocy.pl/feed.xml</p>
+      </section>
+      <section class="content-tile">
+        <h2>Dodaj na telefon</h2>
+        <p>
+          Na iPhonie: otwórz stronę w Safari, wybierz Udostępnij, a potem „Dodaj
+          do ekranu początkowego”. Na Androidzie: w menu przeglądarki wybierz
+          „Zainstaluj aplikację” lub „Dodaj do ekranu głównego”.
+        </p>
+        <button class="button dark" id="install-app" hidden>
+          Zainstaluj MostPomocy
+        </button>
+        <p id="install-status" role="status">
+          Po dodaniu uruchomisz MostPomocy ikoną na ekranie telefonu.
+        </p>
+      </section>
+      <section class="content-tile">
+        <h2>Newsletter e-mail</h2>
+        {config.newsletter_url ? (
+          <>
+            <p>
+              Zapis odbywa się w formularzu dostawcy. Przed wysłaniem sprawdź
+              informację o danych i potwierdzeniu subskrypcji. Możesz się
+              wypisać.
+            </p>
+            <a
+              href={config.newsletter_url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Przejdź do formularza zapisu ↗
+            </a>
+          </>
+        ) : (
+          <p>
+            Zapisy e-mail nie są jeszcze uruchomione. Na razie możesz obserwować
+            wszystkie nowe teksty przez RSS. Nie zbieramy adresów do nieaktywnej
+            listy.
+          </p>
+        )}
+      </section>
+      <section class="content-tile">
+        <h2>Powiadomienia na telefonie</h2>
+        <p>
+          Ta wersja nie wysyła powiadomień push. Dodanie ikony na ekranie nie
+          włącza powiadomień. Gdy uruchomimy tę usługę, będzie można ją włączyć
+          osobnym, dobrowolnym przyciskiem.
+        </p>
+        <a href="/blog/">Zobacz najnowsze artykuły ↗</a>
+      </section>
+    </div>
+  </main>
+</Base>
+<script>
+  let promptEvent: any = null;
+  const button = document.getElementById("install-app") as HTMLButtonElement;
+  window.addEventListener("beforeinstallprompt", (event) => {
+    event.preventDefault();
+    promptEvent = event;
+    button.hidden = false;
+  });
+  button?.addEventListener("click", async () => {
+    if (!promptEvent) return;
+    await promptEvent.prompt();
+    const result = await promptEvent.userChoice;
+    document.getElementById("install-status")!.textContent =
+      result.outcome === "accepted"
+        ? "MostPomocy zostało dodane do urządzenia."
+        : "Możesz wrócić do instalacji później.";
+    promptEvent = null;
+    button.hidden = true;
+  });
+</script>

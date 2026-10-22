@@ -68,6 +68,16 @@ const collection = (name, label, fields, view = {}) => ({
   fields: [id, ...fields],
   view: { primary: "name", ...view },
 });
+const tileField = f("tiles", "Kafelki informacyjne", "object", {
+  description:
+    "Dodaj kafelek, wpisz tytuł, opis i opcjonalny odnośnik. Możesz zmieniać kolejność.",
+  list: { collapsible: { collapsed: true, summary: "{fields.title}" } },
+  fields: [
+    f("title", "Tytuł kafelka", "string", { required: true }),
+    f("text", "Opis", "text"),
+    f("url", "Odnośnik HTTPS lub /adres/"),
+  ],
+});
 const cms = {
   media: [
     {
@@ -105,9 +115,38 @@ const cms = {
         }),
         f("excerpt", "Wprowadzenie", "text"),
         body,
+        f(
+          "summary_points",
+          "Najważniejsze w skrócie — po jednym punkcie",
+          "string",
+          { list: true },
+        ),
+        tileField,
+        f("cover_style", "Kolor kafelka artykułu", "select", {
+          default: "sage",
+          options: {
+            values: [
+              { name: "sage", label: "Szałwia" },
+              { name: "sand", label: "Piasek" },
+              { name: "lilac", label: "Lawenda" },
+              { name: "rose", label: "Brzoskwinia" },
+            ],
+          },
+        }),
+        reference(
+          "related_place_ids",
+          "Powiązane miejsca pomocy",
+          "places",
+          true,
+        ),
         f("image", "Zdjęcie główne", "image", { options: { media: "images" } }),
         f("image_alt", "Opis alternatywny zdjęcia"),
         f("author", "Autor", "string", { default: "Igor Pabiańczyk" }),
+        reference(
+          "author_id",
+          "Profil autora (opcjonalnie, ma pierwszeństwo przed wpisanym nazwiskiem)",
+          "authors",
+        ),
         status,
         ...dates,
         f("featured", "Wyróżnij na głównej", "boolean"),
@@ -179,6 +218,12 @@ const cms = {
     ]),
     collection("places", "Pomoc w Sosnowcu", [
       f("name", "Nazwa", "string", { required: true }),
+      {
+        ...slug,
+        required: false,
+        description:
+          "Adres wizytówki. Dla nowej jednostki wpisz np. zespol-interdyscyplinarny.",
+      },
       f("section", "Zakładka", "select", {
         default: "institution",
         options: {
@@ -188,8 +233,14 @@ const cms = {
           ],
         },
       }),
-      reference("parent_id", "Dział należy do (główny wpis MOPS)", "places"),
+      reference("parent_id", "Jednostka nadrzędna (opcjonalnie)", "places"),
       f("description", "Opis", "text"),
+      tileField,
+      f("opening_hours", "Godziny i sposób umawiania wizyty", "text"),
+      f("accessibility", "Dostępność — tylko potwierdzone informacje", "text"),
+      f("preparation", "Co przygotować przed kontaktem", "string", {
+        list: true,
+      }),
       f("address", "Adres"),
       f("phone", "Telefon"),
       f("email", "E-mail"),
@@ -205,6 +256,13 @@ const cms = {
           ],
         },
       }),
+    ]),
+    collection("authors", "Autorzy — profile i podpisy", [
+      f("name", "Imię i nazwisko", "string", { required: true }),
+      slug,
+      f("role", "Rola / potwierdzone kwalifikacje"),
+      f("bio", "Biogram", "text"),
+      f("website", "Strona autora (opcjonalnie)"),
     ]),
     {
       name: "settings",
@@ -226,6 +284,25 @@ const cms = {
           options: { media: "images" },
         }),
         f("ga_measurement_id", "Google Analytics 4 — identyfikator G-…"),
+        f("ga_property_id", "Numer usługi GA4 — same cyfry (do raportów)"),
+        f(
+          "google_client_id",
+          "Google OAuth Client ID — do prywatnych raportów w panelu",
+          "string",
+          {
+            description:
+              "Publiczny identyfikator klienta aplikacji internetowej. Żadnych kluczy prywatnych. Instrukcja w /admin/.",
+          },
+        ),
+        f(
+          "newsletter_url",
+          "HTTPS do formularza zapisu newslettera",
+          "string",
+          {
+            description:
+              "Wklej formularz dostawcy po założeniu i skonfigurowaniu konta, np. Brevo. Bez tego strona oferuje RSS.",
+          },
+        ),
         f("google_verification", "Google Search Console — kod weryfikacyjny"),
         f("bing_verification", "Bing Webmaster Tools — kod weryfikacyjny"),
         f(

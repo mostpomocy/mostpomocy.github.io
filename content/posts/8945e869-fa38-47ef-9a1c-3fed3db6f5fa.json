@@ -1,0 +1,44 @@
+{
+  "id": "8945e869-fa38-47ef-9a1c-3fed3db6f5fa",
+  "slug": "niepelnosprawnosc-wnioski-online-sow",
+  "title": "Wsparcie przy niepełnosprawności: wnioski online w SOW",
+  "excerpt": "Do czego służy System Obsługi Wsparcia PFRON i o co zapytać, zanim rozpoczniesz składanie wniosku o dofinansowanie.",
+  "body": "<h2>Cyfrowa ścieżka też może wymagać wsparcia</h2><p>Wniosek online bywa wygodny, ale nie usuwa wszystkich barier. Trzeba wiedzieć, jaki program dotyczy swojej potrzeby, znaleźć załączniki i zrozumieć kolejne komunikaty. Jeżeli potrzebujesz pomocy, poproś realizatora programu o wyjaśnienie sposobu złożenia wniosku oraz dostępnych form wsparcia.</p><h2>Do czego służy SOW?</h2><p>System Obsługi Wsparcia umożliwia elektroniczne ubieganie się o wybrane formy wsparcia finansowane przez PFRON i realizowane przez samorządy. Nie jest jednym wnioskiem o wszystkie uprawnienia związane z niepełnosprawnością. Najpierw trzeba sprawdzić właściwy program, warunki oraz to, czy trwa nabór.</p><h2>Sprawdź oficjalny adres</h2><p>PFRON poinformował o przejściu SOW do domeny administracji publicznej: <a href=\"https://sow.pfron.gov.pl/\">sow.pfron.gov.pl</a>. Wchodź do systemu przez oficjalne komunikaty instytucji, szczególnie gdy otrzymasz link w wiadomości. Nie udostępniaj osobie pomagającej hasła ani kodów logowania.</p><h2>Lista przed rozpoczęciem</h2><ul><li>Jaki program odpowiada mojej potrzebie?</li><li>Kto jest realizatorem i gdzie wyjaśnię wątpliwości?</li><li>Czy trwa nabór i kiedy się kończy?</li><li>Jakie dokumenty i formaty załączników są wymagane?</li><li>Jak podpiszę i wyślę wniosek?</li><li>Gdzie zobaczę potwierdzenie oraz prośbę o uzupełnienie?</li></ul><h2>Osoba wspierająca pomaga, nie przejmuje decyzji</h2><p>Możecie wspólnie przeczytać instrukcję i uporządkować dokumenty. Osoba składająca wniosek powinna wiedzieć, co jest wysyłane i jakie oświadczenia składa. Nie wpisuj danych „na próbę”, jeśli nie są zgodne z sytuacją. Przy problemie technicznym zapisz komunikat błędu i etap, na którym wystąpił, unikając pokazywania postronnym osobom danych z dokumentów.</p><h2>Zachowaj potwierdzenie</h2><p>Po wysłaniu sprawdź, czy system rzeczywiście potwierdził złożenie, a nie tylko zapis szkicu. Zapisz numer sprawy i sposób sprawdzania odpowiedzi. Gdy nie rozumiesz wezwania do uzupełnienia, skontaktuj się z realizatorem przed upływem wskazanego terminu.</p>",
+  "category_id": "511cbe84-f174-52b5-b71f-df2f72885187",
+  "local_category_id": "",
+  "tags": [
+    "0ce7f173-32bf-560f-ab48-5955774258a4",
+    "11fe0ce4-62e6-548c-b780-679f08182954"
+  ],
+  "scope": "general",
+  "author": "Igor Pabiańczyk",
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "status": "published",
+  "published_at": "2026-10-22T12:00:00.000Z",
+  "updated_at": "2026-10-22T12:00:00.000Z",
+  "featured": false,
+  "toc": true,
+  "noindex": false,
+  "sources": "https://www.pfron.gov.pl/aktualnosci/szczegoly-aktualnosci/news/system-obslugi-wsparcia-sow-od-15-czerwca-w-nowej-domenie/\nhttps://portal-sow.pfron.org.pl/opencms/export/sites/pfron-sow/sow/info/",
+  "seo_title": "Wsparcie przy niepełnosprawności: wnioski online w SOW",
+  "seo_description": "Do czego służy System Obsługi Wsparcia PFRON i o co zapytać, zanim rozpoczniesz składanie wniosku o dofinansowanie.",
+  "summary_points": [
+    "SOW obsługuje wybrane formy wsparcia — sprawdź program i nabór.",
+    "Oficjalny nowy adres wskazany przez PFRON to sow.pfron.gov.pl.",
+    "Zapis szkicu nie jest tym samym co wysłanie wniosku."
+  ],
+  "tiles": [
+    {
+      "title": "System SOW",
+      "text": "Przejdź do oficjalnego systemu PFRON. Warunki i terminy potwierdź u realizatora.",
+      "url": "https://sow.pfron.gov.pl/"
+    },
+    {
+      "title": "Przygotuj pytania",
+      "text": "Spisz dokumenty, terminy i pytania przed kontaktem z instytucją.",
+      "url": "/moja-kartka/"
+    }
+  ],
+  "cover_style": "lilac",
+  "related_place_ids": []
+}

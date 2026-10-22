@@ -12,6 +12,8 @@ import {
 import { ArticleCard } from "../../components/ui";
 import { ArticleActions } from "../../components/article-actions";
 import { visible } from "../../lib/schema.mjs";
+import ContentTiles from "../../components/ContentTiles.astro";
+import { postAuthor, placePath } from "../../lib/content";
 export function getStaticPaths() {
   return (
     import.meta.env.DEV
@@ -21,6 +23,21 @@ export function getStaticPaths() {
 }
 const { post } = Astro.props;
 const config = settings();
+const authorProfile = postAuthor(post);
+const authorName = authorProfile?.name || post.author;
+const authorUrl = authorProfile
+  ? siteURL("/autorzy/" + authorProfile.slug + "/")
+  : authorName === config.author_name
+    ? siteURL("/o-projekcie/")
+    : undefined;
+const initials = authorName
+  .split(/\s+/)
+  .map((n: string) => n[0])
+  .slice(0, 2)
+  .join("");
+const places = rows("places").filter(
+  (p) => p.status === "published" && post.related_place_ids.includes(p.id),
+);
 const categories = rows("categories");
 const category = categories.find((c) => c.id === post.category_id);
 const tags = rows("tags").filter((t) => post.tags.includes(t.id));
@@ -50,14 +67,16 @@ const structured = {
   dateModified: post.updated_at,
   author: {
     "@type": "Person",
-    name: post.author,
-    url: siteURL("/o-projekcie/"),
+    name: authorName,
+    ...(authorUrl ? { url: authorUrl } : {}),
   },
   publisher: { "@type": "Person", name: config.author_name },
   inLanguage: "pl-PL",
   articleSection: category?.name,
   keywords: tags.map((t) => t.name),
-  ...(post.image ? { image: [new URL(post.image, config.site_url).href] } : {}),
+  image: [
+    new URL(post.image || "/og/" + post.slug + ".png", config.site_url).href,
+  ],
 };
 ---
 
@@ -65,7 +84,7 @@ const structured = {
   title={post.seo_title || post.title}
   description={post.seo_description || post.excerpt}
   canonical={canonical}
-  image={post.image}
+  image={post.image || "/og/" + post.slug + ".png"}
   noindex={post.noindex || !visible(post)}
   kind="article"
   structured={structured}
@@ -92,10 +111,12 @@ const structured = {
       <p class="lead">{post.excerpt}</p>
       <div class="byline">
         <span class="avatar small" aria-hidden="true">
-          IP
+          {initials}
         </span>
         <div>
-          <strong>{post.author}</strong>
+          <strong>
+            {authorUrl ? <a href={authorUrl}>{authorName}</a> : authorName}
+          </strong>
           <span>
             <time datetime={post.published_at || post.updated_at}>
               {date(post.published_at || post.updated_at)}
@@ -113,6 +134,18 @@ const structured = {
     {post.image && (
       <img class="article-image" src={post.image} alt={post.image_alt} />
     )}
+    {post.summary_points.length > 0 && (
+      <section class="summary-box narrow">
+        <h2>Najważniejsze w skrócie</h2>
+        <ul>
+          {post.summary_points.map((point: string) => (
+            <li>{point}</li>
+          ))}
+        </ul>
+      </section>
+    )}
+    <ContentTiles tiles={post.tiles} />
+    {places.length>0 && <section aria-label="Powiązane miejsca pomocy"><h2>Miejsca opisane w artykule</h2><div class="content-tiles">{places.map(place=><a class="editorial-link" href={placePath(place)}><strong>{place.name}</strong><span>Kontakt, kafelki i przygotowanie do wizyty ↗</span></a>)}</div></section>}
     <div class="reading-layout">
       <aside class="reading-aside" aria-label="Nawigacja po artykule">
         {post.toc && toc.length > 1 && (
@@ -153,11 +186,15 @@ const structured = {
         </p>
         <div class="author-box">
           <span class="avatar" aria-hidden="true">
-            IP
+            {initials}
           </span>
           <div>
-            <strong>{post.author}</strong>
-            <p>O pracy socjalnej i szukaniu wsparcia, prostym językiem.</p>
+            <strong>
+              {authorUrl ? <a href={authorUrl}>{authorName}</a> : authorName}
+            </strong>
+            <p>
+              {authorProfile?.bio || "Autor materiału edukacyjnego MostPomocy."}
+            </p>
             <a href="/o-projekcie/">Więcej o autorze i projekcie ↗</a>
           </div>
         </div>

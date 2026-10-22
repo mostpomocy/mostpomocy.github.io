@@ -31,8 +31,21 @@ export function Consent({ measurementId }: { measurementId: string }) {
     script.src = "https://www.googletagmanager.com/gtag/js?id=" + measurementId;
     script.async = true;
     document.head.appendChild(script);
+    const trackClick = (event: MouseEvent) => {
+      const target =
+        event.target instanceof Element ? event.target.closest("a") : null;
+      const href = target?.getAttribute("href") || "";
+      if (href.startsWith("tel:"))
+        w.gtag("event", "contact_click", { contact_method: "phone" });
+      else if (href.startsWith("mailto:"))
+        w.gtag("event", "contact_click", { contact_method: "email" });
+      else if (href === "/feed.xml")
+        w.gtag("event", "subscribe_interest", { method: "rss" });
+    };
+    document.addEventListener("click", trackClick);
     return () => {
       script.remove();
+      document.removeEventListener("click", trackClick);
     };
   }, [choice, measurementId]);
   function choose(value: string) {

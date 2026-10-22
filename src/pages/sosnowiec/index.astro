@@ -1,10 +1,12 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { rows, published, pages, pagePath } from "../../lib/content";
+import { rows, published, pages, pagePath, placePath } from "../../lib/content";
 import { ArticleCard } from "../../components/ui";
 const places = rows("places").filter((p) => p.status === "published");
 const roots = places.filter((p) => p.section === "mops" && !p.parent_id);
-const institutions = places.filter((p) => p.section === "institution");
+const institutions = places.filter(
+  (p) => p.section === "institution" && !p.parent_id,
+);
 const localPages = pages().filter((p) => p.section === "sosnowiec");
 const topics = rows("local_categories");
 const local = published().filter((p) => p.scope === "sosnowiec");
@@ -79,6 +81,9 @@ const local = published().filter((p) => p.scope === "sosnowiec");
           <article class="mops-head">
             <span class="eyebrow">GŁÓWNY KONTAKT</span>
             <h2>{root.name}</h2>
+            <a class="button" href={placePath(root)}>
+              Kafelki i pełna wizytówka ↗
+            </a>
             <p>{root.description}</p>
             <p>{root.address}</p>
             {root.phone && (
@@ -121,6 +126,9 @@ const local = published().filter((p) => p.scope === "sosnowiec");
                   </summary>
                   <div class="contact-details">
                     <p>{p.description}</p>
+                    <a class="text-link" href={placePath(p)}>
+                      Kafelki działu i przygotowanie do wizyty ↗
+                    </a>
                     {p.phone && (
                       <p>
                         Telefon:{" "}
@@ -178,6 +186,9 @@ const local = published().filter((p) => p.scope === "sosnowiec");
             <div>
               <span class="eyebrow">SOSNOWIEC</span>
               <h2>{p.name}</h2>
+              <a class="text-link" href={placePath(p)}>
+                Pełna wizytówka i kafelki ↗
+              </a>
               <div class="contact-details">
                 <p>{p.description}</p>
                 {p.address && <p>{p.address}</p>}

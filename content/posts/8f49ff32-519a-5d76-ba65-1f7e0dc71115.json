@@ -12,8 +12,8 @@
   "image": "",
   "image_alt": "",
   "featured": false,
-  "seo_title": "",
-  "seo_description": "",
+  "seo_title": "Choroba nowotworowa: o jaką pomoc możesz zapytać?",
+  "seo_description": "Rozmowa o wsparciu może dotyczyć emocji, codziennych obowiązków i bliskich. Nie musisz radzić sobie ze wszystkim samodzielnie.",
   "sources": "https://onkologia.pacjent.gov.pl/pl/pacjent/wsparcie-i-pomoc/pomoc-psychologiczna\nhttps://onkologia.pacjent.gov.pl/pl/pacjent/wsparcie-i-pomoc/pomoc-organizacji-pozarzadowych",
   "updated_at": "2026-10-21T19:28:00.481Z",
   "tags": [
@@ -23,5 +23,8 @@
   ],
   "noindex": false,
   "canonical_url": "",
-  "toc": true
+  "toc": true,
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "summary_points": [],
+  "cover_style": "sage"
 }

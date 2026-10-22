@@ -1,0 +1,65 @@
+---
+import Base from "../layouts/Base.astro";
+import ContentTiles from "../components/ContentTiles.astro";
+const tiles = [
+  {
+    title: "Moja kartka do rozmowy",
+    text: "Opisz potrzebę, zapisz pytania i ustalenia. Możesz wydrukować kartkę. Wpisana treść zostaje w tej przeglądarce.",
+    url: "/moja-kartka/",
+  },
+  {
+    title: "Pierwszy krok",
+    text: "Pomoc w wybraniu tematu, kiedy trudno nazwać swoją sytuację.",
+    url: "/od-czego-zaczac/",
+  },
+  {
+    title: "Miejsca pomocy w Sosnowcu",
+    text: "Wizytówki jednostek, kontakty, działy i pytania przed wizytą.",
+    url: "/sosnowiec/",
+  },
+  {
+    title: "SOW — wsparcie PFRON",
+    text: "Oficjalny system składania wniosków. Sprawdź warunki konkretnego programu i aktualny nabór.",
+    url: "https://sow.pfron.gov.pl/",
+  },
+  {
+    title: "Nieodpłatna pomoc prawna",
+    text: "Rządowa wyszukiwarka punktów i zapisów. Dostępność porady potwierdź w wybranym punkcie.",
+    url: "https://zapisy-np.ms.gov.pl/",
+  },
+  {
+    title: "Dostępność czytania",
+    text: "Zwiększenie liter, kontrast, spokojniejszy widok i opcje ułatwiające czytanie znajdziesz w przycisku „Dostępność” u góry strony.",
+    url: "/dostepnosc/",
+  },
+];
+---
+
+<Base
+  title="Przydatne narzędzia do szukania wsparcia"
+  description="Kartka do rozmowy, przygotowanie wizyty, lokalne kontakty i oficjalne narzędzia dla osób szukających wsparcia oraz ich bliskich."
+>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <span class="eyebrow">MNIEJ SZUKANIA, WIĘCEJ KONKRETÓW</span>
+    <h1>Przygotuj następny krok.</h1>
+    <p class="lead narrow">
+      Narzędzia dla osób potrzebujących pomocy, bliskich i osób pracujących
+      społecznie. Wspierają rozmowę i porządkowanie spraw.
+    </p>
+    <ContentTiles tiles={tiles} />
+    <section class="prose">
+      <h2>Gdy pomagasz drugiej osobie</h2>
+      <p>
+        Zapytaj, co jest dla niej najpilniejsze, jak chce się komunikować i czy
+        potrzebuje pomocy w przygotowaniu wizyty. Umawiaj jeden możliwy następny
+        krok oraz termin sprawdzenia, czy udało się go zrobić. Oddzielaj
+        potrzeby osoby od swoich założeń o jej sytuacji.
+      </p>
+      <p>
+        Nie wpisuj do publicznych komentarzy, formularzy kontaktowych ani
+        ogólnodostępnych narzędzi AI danych z dokumentacji klientów. MostPomocy
+        nie jest systemem prowadzenia indywidualnych spraw.
+      </p>
+    </section>
+  </main>
+</Base>

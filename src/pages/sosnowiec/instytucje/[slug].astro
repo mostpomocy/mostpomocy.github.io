@@ -1,0 +1,107 @@
+---
+import Base from "../../../layouts/Base.astro";
+import { rows, published, placePath } from "../../../lib/content";
+import ContentTiles from "../../../components/ContentTiles.astro";
+import { ArticleCard } from "../../../components/ui";
+export function getStaticPaths() {
+  return rows("places")
+    .filter((p) => p.status === "published")
+    .map((place) => ({
+      params: { slug: place.slug || place.id },
+      props: { place },
+    }));
+}
+const { place } = Astro.props;
+const parent = rows("places").find(
+  (p) => p.id === place.parent_id && p.status === "published",
+);
+const children = rows("places").filter(
+  (p) => p.parent_id === place.id && p.status === "published",
+);
+const posts = published().filter((p) => p.related_place_ids.includes(place.id));
+---
+
+<Base title={place.name} description={place.description.slice(0, 180)}>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <nav class="breadcrumbs" aria-label="Okruszki">
+      <a href="/sosnowiec/">Sosnowiec</a> /{" "}
+      {parent && (
+        <>
+          <a href={placePath(parent)}>{parent.name}</a> /{" "}
+        </>
+      )}{" "}
+      Instytucja
+    </nav>
+    <h1>{place.name}</h1>
+    <p class="lead narrow">{place.description}</p>
+    <section class="content-tiles" aria-label="Kontakt i wizyta">
+      <article class="content-tile">
+        <h2>Kontakt</h2>
+        <p>{place.address}</p>
+        {place.phone && (
+          <p>
+            <a href={"tel:" + place.phone.replace(/[^+\d]/g, "")}>
+              {place.phone}
+            </a>
+          </p>
+        )}
+        {place.email && (
+          <p>
+            <a href={"mailto:" + place.email}>{place.email}</a>
+          </p>
+        )}
+        {place.website && (
+          <a href={place.website} target="_blank" rel="noopener noreferrer">
+            Oficjalna strona ↗
+          </a>
+        )}
+        <p>
+          Kontakt sprawdzony:{" "}
+          {place.verified_at || "data niepodana — potwierdź w jednostce"}.
+        </p>
+      </article>
+      <article class="content-tile">
+        <h2>Przed wizytą</h2>
+        <p>
+          {place.opening_hours ||
+            "Przed przyjazdem potwierdź godziny i sposób umówienia rozmowy."}
+        </p>
+        <p>
+          {place.accessibility ||
+            "Zapytaj o dostępne wejście, windę, sposób komunikacji i możliwość obecności osoby wspierającej."}
+        </p>
+        {place.preparation.length > 0 && (
+          <ul>
+            {place.preparation.map((t: string) => (
+              <li>{t}</li>
+            ))}
+          </ul>
+        )}
+      </article>
+    </section>
+    <ContentTiles tiles={place.tiles} />
+    {children.length > 0 && (
+      <section>
+        <h2>Działy i powiązane jednostki</h2>
+        <div class="content-tiles">
+          {children.map((p) => (
+            <a class="editorial-link" href={placePath(p)}>
+              <strong>{p.name}</strong>
+              <span>{p.description}</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+    {posts.length > 0 && (
+      <section class="related">
+        <h2>Artykuły o tej jednostce</h2>
+        <div class="article-grid">
+          {posts.map((p) => (
+            <ArticleCard post={p} categories={rows("categories")} />
+          ))}
+        </div>
+      </section>
+    )}
+  </main>
+</Base>

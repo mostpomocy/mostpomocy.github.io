@@ -30,6 +30,11 @@ export function validate(root = process.cwd()) {
     }
   }
   for (const post of all.posts) {
+    if (post.author_id && !all.authors.some((a) => a.id === post.author_id))
+      throw new Error("Nieznany autor: " + post.title);
+    for (const id of post.related_place_ids)
+      if (!all.places.some((p) => p.id === id))
+        throw new Error("Nieznana jednostka: " + post.title);
     if (
       post.category_id &&
       !all.categories.some((c) => c.id === post.category_id)
@@ -51,15 +56,16 @@ export function validate(root = process.cwd()) {
   for (const place of all.places) {
     if (
       place.parent_id &&
-      !all.places.some(
-        (p) =>
-          p.id === place.parent_id &&
-          p.section === "mops" &&
-          !p.parent_id &&
-          p.id !== place.id,
-      )
+      !all.places.some((p) => p.id === place.parent_id && p.id !== place.id)
     )
-      throw new Error("Nieprawidłowy nadrzędny MOPS: " + place.name);
+      throw new Error("Nieprawidłowa jednostka nadrzędna: " + place.name);
+    const visited = new Set([place.id]);
+    let parent = place.parent_id;
+    while (parent) {
+      if (visited.has(parent)) throw new Error("Cykl jednostek: " + place.name);
+      visited.add(parent);
+      parent = all.places.find((p) => p.id === parent)?.parent_id;
+    }
   }
   console.log(
     "Treści sprawdzone:",

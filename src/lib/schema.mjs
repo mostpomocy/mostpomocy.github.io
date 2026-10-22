@@ -9,6 +9,7 @@ export const resources = [
   "pages",
   "settings",
   "media",
+  "authors",
 ];
 export const reserved = [
   "blog",
@@ -27,6 +28,11 @@ export const reserved = [
   "llms.txt",
   "feed.xml",
   "bez-stygmy",
+  "instytucje",
+  "autorzy",
+  "obserwuj",
+  "narzedzia",
+  "offline",
 ];
 const slug = z
   .string()
@@ -36,6 +42,23 @@ const slug = z
   )
   .max(160);
 const text = z.string();
+const safeLink = z
+  .string()
+  .refine(
+    (v) =>
+      !v || /^https:\/\//.test(v) || /^\/(?!\/)[a-zA-Z0-9/_?#=%.&-]*$/.test(v),
+    "Adres HTTPS lub ścieżka na tej stronie",
+  );
+const tiles = z
+  .array(
+    z.object({
+      title: text.min(2).max(120),
+      text: text.max(600).default(""),
+      url: safeLink.default(""),
+    }),
+  )
+  .max(12)
+  .default([]);
 const url = z
   .string()
   .refine(
@@ -87,6 +110,11 @@ const schemas = {
     tags: z.array(text).max(20).default([]),
     scope: z.enum(["general", "sosnowiec"]).default("general"),
     author: text.max(100).default("Igor Pabiańczyk"),
+    author_id: text.default(""),
+    summary_points: z.array(text.max(300)).max(6).default([]),
+    tiles,
+    cover_style: z.enum(["sage", "sand", "lilac", "rose"]).default("sage"),
+    related_place_ids: z.array(text).max(12).default([]),
     featured: z.boolean().default(false),
     toc: z.boolean().default(true),
     image: url.default(""),
@@ -132,6 +160,11 @@ const schemas = {
   places: z.object({
     ...base,
     name: text.min(3).max(160),
+    slug: slug.optional(),
+    tiles,
+    opening_hours: text.max(1000).default(""),
+    accessibility: text.max(1500).default(""),
+    preparation: z.array(text.max(300)).max(12).default([]),
     description: text.max(2500).default(""),
     address: text.max(250).default(""),
     phone: text.max(80).default(""),
@@ -157,6 +190,14 @@ const schemas = {
     repository: text.regex(/^[\w.-]+\/[\w.-]+$/),
     branch: text.default("main"),
     ga_measurement_id: text.regex(/^(G-[A-Z0-9]+)?$/).default(""),
+    ga_property_id: text.regex(/^\d*$/).default(""),
+    google_client_id: text.regex(/^[a-zA-Z0-9._-]*$/).default(""),
+    newsletter_url: z
+      .string()
+      .url()
+      .refine((v) => v.startsWith("https://"))
+      .or(z.literal(""))
+      .default(""),
     google_verification: text.regex(/^[\w-]*$/).default(""),
     bing_verification: text.regex(/^[\w-]*$/).default(""),
     default_image: url.default(""),
@@ -167,6 +208,14 @@ const schemas = {
     allow_ai_search: z.boolean().default(true),
     social_profiles: z.array(z.string().url()).default([]),
     footer_note: text.default(""),
+  }),
+  authors: z.object({
+    ...base,
+    name: text.min(2).max(100),
+    slug,
+    bio: text.max(1500).default(""),
+    role: text.max(150).default(""),
+    website: safeLink.default(""),
   }),
 };
 export function clean(resource, input) {

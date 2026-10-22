@@ -1,0 +1,19 @@
+---
+const { tiles = [] } = Astro.props;
+---
+
+{tiles.length > 0 && (
+  <section class="content-tiles" aria-label="Przydatne informacje">
+    {tiles.map((tile: { title: string; text: string; url?: string }) => (
+      <article class="content-tile">
+        <h3>{tile.title}</h3>
+        <p>{tile.text}</p>
+        {tile.url && (
+          <a href={tile.url}>
+            Sprawdź szczegóły <span aria-hidden="true">↗</span>
+          </a>
+        )}
+      </article>
+    ))}
+  </section>
+)}

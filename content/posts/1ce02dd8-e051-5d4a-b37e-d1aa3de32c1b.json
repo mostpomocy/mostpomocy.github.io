@@ -12,8 +12,8 @@
   "image": "",
   "image_alt": "",
   "featured": false,
-  "seo_title": "",
-  "seo_description": "",
+  "seo_title": "Sosnowiec: jedna sprawa, kilka miejsc wsparcia",
+  "seo_description": "MOPS, urząd pracy, porady prawne, organizacje społeczne. Sprawdź, od którego kontaktu możesz zacząć — bez znajomości urzędowych nazw.",
   "sources": "https://mopssosnowiec.pl/\nhttps://sosnowiec.praca.gov.pl/urzad/dane-kontaktowe\nhttps://www.sosnowiec.pl/darmowa-pomoc-prawna-i-poradnictwo-obywatelskie/\nhttps://wsparcie.sosnowiec.pl/",
   "updated_at": "2026-10-21T19:28:00.492Z",
   "tags": [
@@ -23,5 +23,8 @@
   "noindex": false,
   "canonical_url": "",
   "toc": true,
-  "local_category_id": "1a073ff2-dcec-5921-89ca-e752a315f680"
+  "local_category_id": "1a073ff2-dcec-5921-89ca-e752a315f680",
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "summary_points": [],
+  "cover_style": "sand"
 }

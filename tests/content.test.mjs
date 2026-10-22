@@ -200,3 +200,48 @@ test("CMS odczytuje i zapisuje daty ISO bez resetowania terminu publikacji", () 
     }
   }
 });
+
+test("kafelki nie przyjmują skryptów ani zewnętrznych adresów bez HTTPS", () => {
+  for (const url of [
+    "javascript:alert(1)",
+    "//example.org",
+    "http://example.org",
+  ])
+    assert.throws(() =>
+      clean("posts", { ...post, tiles: [{ title: "Test", url }] }),
+    );
+  assert.equal(
+    clean("posts", {
+      ...post,
+      tiles: [{ title: "Wizyta", url: "/moja-kartka/" }],
+    }).tiles[0].url,
+    "/moja-kartka/",
+  );
+});
+test("hierarchia instytucji wykrywa cykle i pozwala na działy poza MOPS", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "mostpomocy-units-"));
+  try {
+    for (const r of resources)
+      fs.mkdirSync(path.join(root, "content", r), { recursive: true });
+    const unit = (id, parent_id) => ({
+      id,
+      name: "Jednostka " + id,
+      section: "institution",
+      parent_id,
+      status: "draft",
+    });
+    for (const d of [unit("root", ""), unit("child", "root")])
+      fs.writeFileSync(
+        path.join(root, "content/places", d.id + ".json"),
+        JSON.stringify(d),
+      );
+    assert.doesNotThrow(() => validate(root));
+    fs.writeFileSync(
+      path.join(root, "content/places/root.json"),
+      JSON.stringify(unit("root", "child")),
+    );
+    assert.throws(() => validate(root), /Cykl jednostek/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
