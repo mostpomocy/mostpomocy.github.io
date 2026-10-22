@@ -39,7 +39,7 @@ content:
         type: string
         required: true
         description: Małe litery bez polskich znaków, np. wolontariat
-        pattern:
+        pattern: &a11
           regex: ^[a-z0-9]+(-[a-z0-9]+)*$
           message: Użyj małych liter, cyfr i myślników.
       - name: category_id
@@ -91,6 +91,54 @@ content:
           format: html
           media: images
           switcher: true
+      - name: summary_points
+        label: Najważniejsze w skrócie — po jednym punkcie
+        type: string
+        list: true
+      - &a12
+        name: tiles
+        label: Kafelki informacyjne
+        type: object
+        description: Dodaj kafelek, wpisz tytuł, opis i opcjonalny odnośnik. Możesz
+          zmieniać kolejność.
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.title}"
+        fields:
+          - name: title
+            label: Tytuł kafelka
+            type: string
+            required: true
+          - name: text
+            label: Opis
+            type: text
+          - name: url
+            label: Odnośnik HTTPS lub /adres/
+            type: string
+      - name: cover_style
+        label: Kolor kafelka artykułu
+        type: select
+        default: sage
+        options:
+          values:
+            - name: sage
+              label: Szałwia
+            - name: sand
+              label: Piasek
+            - name: lilac
+              label: Lawenda
+            - name: rose
+              label: Brzoskwinia
+      - name: related_place_ids
+        label: Powiązane miejsca pomocy
+        type: reference
+        options:
+          collection: places
+          search: fields.name
+          value: "{fields.id}"
+          label: "{fields.name}"
+          multiple: true
       - name: image
         label: Zdjęcie główne
         type: image
@@ -103,6 +151,15 @@ content:
         label: Autor
         type: string
         default: Igor Pabiańczyk
+      - name: author_id
+        label: Profil autora (opcjonalnie, ma pierwszeństwo przed wpisanym nazwiskiem)
+        type: reference
+        options:
+          collection: authors
+          search: fields.name
+          value: "{fields.id}"
+          label: "{fields.name}"
+          multiple: false
       - &a4
         name: status
         label: Status
@@ -325,6 +382,13 @@ content:
         label: Nazwa
         type: string
         required: true
+      - name: slug
+        label: Adres URL
+        type: string
+        required: false
+        description: Adres wizytówki. Dla nowej jednostki wpisz np.
+          zespol-interdyscyplinarny.
+        pattern: *a11
       - name: section
         label: Zakładka
         type: select
@@ -336,7 +400,7 @@ content:
             - name: institution
               label: Inne instytucje
       - name: parent_id
-        label: Dział należy do (główny wpis MOPS)
+        label: Jednostka nadrzędna (opcjonalnie)
         type: reference
         options:
           collection: places
@@ -347,6 +411,17 @@ content:
       - name: description
         label: Opis
         type: text
+      - *a12
+      - name: opening_hours
+        label: Godziny i sposób umawiania wizyty
+        type: text
+      - name: accessibility
+        label: Dostępność — tylko potwierdzone informacje
+        type: text
+      - name: preparation
+        label: Co przygotować przed kontaktem
+        type: string
+        list: true
       - name: address
         label: Adres
         type: string
@@ -377,6 +452,32 @@ content:
               label: Szkic
             - name: published
               label: Opublikowany
+    view:
+      primary: name
+  - name: authors
+    label: Autorzy — profile i podpisy
+    type: collection
+    path: content/authors
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Imię i nazwisko
+        type: string
+        required: true
+      - *a2
+      - name: role
+        label: Rola / potwierdzone kwalifikacje
+        type: string
+      - name: bio
+        label: Biogram
+        type: text
+      - name: website
+        label: Strona autora (opcjonalnie)
+        type: string
     view:
       primary: name
   - name: settings
@@ -426,6 +527,19 @@ content:
       - name: ga_measurement_id
         label: Google Analytics 4 — identyfikator G-…
         type: string
+      - name: ga_property_id
+        label: Numer usługi GA4 — same cyfry (do raportów)
+        type: string
+      - name: google_client_id
+        label: Google OAuth Client ID — do prywatnych raportów w panelu
+        type: string
+        description: Publiczny identyfikator klienta aplikacji internetowej. Żadnych
+          kluczy prywatnych. Instrukcja w /admin/.
+      - name: newsletter_url
+        label: HTTPS do formularza zapisu newslettera
+        type: string
+        description: Wklej formularz dostawcy po założeniu i skonfigurowaniu konta, np.
+          Brevo. Bez tego strona oferuje RSS.
       - name: google_verification
         label: Google Search Console — kod weryfikacyjny
         type: string

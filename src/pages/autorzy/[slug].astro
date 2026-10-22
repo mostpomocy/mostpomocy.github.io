@@ -1,0 +1,38 @@
+---
+import Base from "../../layouts/Base.astro";
+import { rows, published } from "../../lib/content";
+import { ArticleCard } from "../../components/ui";
+export function getStaticPaths() {
+  return rows("authors").map((author) => ({
+    params: { slug: author.slug },
+    props: { author },
+  }));
+}
+const { author } = Astro.props;
+const posts = published().filter(
+  (p) =>
+    p.author_id === author.id || (!p.author_id && p.author === author.name),
+);
+---
+
+<Base title={author.name + " — autor"} description={author.bio.slice(0, 180)}>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <span class="eyebrow">AUTOR MOSTPOMOCY</span>
+    <h1>{author.name}</h1>
+    <p class="lead">{author.role}</p>
+    <p class="prose">{author.bio}</p>
+    {author.website && (
+      <a class="text-link" href={author.website}>
+        Więcej o autorze ↗
+      </a>
+    )}
+    <section class="related">
+      <h2>Artykuły autora</h2>
+      <div class="article-grid">
+        {posts.map((p) => (
+          <ArticleCard post={p} categories={rows("categories")} />
+        ))}
+      </div>
+    </section>
+  </main>
+</Base>

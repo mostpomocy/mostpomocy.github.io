@@ -11,5 +11,28 @@
   "city": "Sosnowiec",
   "verified_at": "22.10.2026",
   "status": "published",
-  "updated_at": "2026-10-21T19:28:00.447Z"
+  "updated_at": "2026-10-21T19:28:00.447Z",
+  "slug": "mops-sosnowiec",
+  "tiles": [
+    {
+      "title": "Nie wiem, który dział wybrać",
+      "text": "Zacznij od opisania potrzeby. Zapytaj o właściwy dział i następny krok.",
+      "url": "/artykuly/pierwsza-wizyta-w-mops-pytania/"
+    },
+    {
+      "title": "Pieniądze na codzienne potrzeby",
+      "text": "Przygotuj pytania o swoją sytuację i wymagane dokumenty.",
+      "url": "/sosnowiec/pieniadze-i-codzienne-potrzeby/"
+    },
+    {
+      "title": "Opieka i niepełnosprawność",
+      "text": "Uporządkuj potrzeby osoby wymagającej wsparcia i jej bliskich.",
+      "url": "/sosnowiec/choroba-i-opieka/"
+    }
+  ],
+  "preparation": [
+    "Zapisz najpilniejszą potrzebę.",
+    "Zapytaj o dokumenty i kolejny krok.",
+    "Ustal bezpieczny i dostępny dla Ciebie sposób kontaktu."
+  ]
 }

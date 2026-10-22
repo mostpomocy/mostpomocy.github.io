@@ -48,3 +48,6 @@ export const readingTime = (body: string) =>
 
 export const pagePath = (page: RecordData) =>
   `/${page.section === "sosnowiec" ? "sosnowiec/" : ""}${page.slug}/`;
+
+export const placePath = (place: RecordData) => `/sosnowiec/instytucje/${place.slug || place.id}/`;
+export const postAuthor = (post: RecordData) => rows('authors').find(a => a.id === post.author_id);

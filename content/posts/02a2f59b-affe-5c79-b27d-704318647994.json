@@ -12,8 +12,8 @@
   "image": "",
   "image_alt": "",
   "featured": false,
-  "seo_title": "",
-  "seo_description": "",
+  "seo_title": "Nie musisz wiedzieć, co Ci jest, żeby zapytać o pomoc",
+  "seo_description": "Możesz powiedzieć po prostu: „Ostatnio jest mi ciężko”. Pierwsza rozmowa nie wymaga od Ciebie samodzielnego stawiania diagnozy.",
   "sources": "https://pacjent.gov.pl/artykul/leczenie-ambulatoryjne-doroslych",
   "updated_at": "2026-10-21T19:28:00.487Z",
   "tags": [
@@ -22,5 +22,8 @@
   ],
   "noindex": false,
   "canonical_url": "",
-  "toc": true
+  "toc": true,
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "summary_points": [],
+  "cover_style": "sage"
 }

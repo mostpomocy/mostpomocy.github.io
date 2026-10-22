@@ -1,0 +1,29 @@
+---
+import { settings } from "../lib/content";
+const config = settings();
+---
+
+<section class="follow-box">
+  <span class="eyebrow">WRÓĆ, KIEDY POTRZEBUJESZ</span>
+  <h2>Nowe teksty, spokojnie.</h2>
+  <p>
+    Obserwuj nowe poradniki i informacje z Sosnowca. Bez codziennego zalewania
+    wiadomościami.
+  </p>
+  <a class="button dark" href="/obserwuj/">
+    Wybierz sposób obserwowania
+  </a>
+  {config.newsletter_url && (
+    <a
+      class="button"
+      href={config.newsletter_url}
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      Zapisz się na newsletter ↗
+    </a>
+  )}
+  <a class="text-link" href="/feed.xml">
+    Kanał RSS ↗
+  </a>
+</section>

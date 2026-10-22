@@ -1,4 +1,5 @@
 ---
+import Follow from "../../../components/Follow.astro";
 import Base from "../../../layouts/Base.astro";
 import ArticleList from "../../../components/ArticleList.astro";
 import { published } from "../../../lib/content";
@@ -22,5 +23,6 @@ const posts = published().filter((p) => p.scope === "sosnowiec");
       rozmawiać. Wybierz kategorię albo zacznij od najnowszego tekstu.
     </p>
     <ArticleList posts={posts} local heading="Najnowsze z Sosnowca" />
+    <Follow />
   </main>
 </Base>

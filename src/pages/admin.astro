@@ -1,7 +1,8 @@
 ---
 import Base from "../layouts/Base.astro";
 import Editor from "../components/LocalEditor";
-import { settings } from "../lib/content";
+import GoogleReports from "../components/GoogleReports";
+import { rows, published, settings } from "../lib/content";
 const config = settings();
 const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
 ---
@@ -21,87 +22,158 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
 ) : (
   <Base title="Panel redakcyjny" noindex={true}>
     <main id="main" tabindex="-1" class="container inner-page">
-      <span class="eyebrow">PANEL AUTORA</span>
-      <h1>
-        Twoja <em>redakcja.</em>
-      </h1>
+      <span class="eyebrow">MOSTPOMOCY · CENTRUM REDAKCJI</span>
+      <h1>Co dziś publikujesz?</h1>
       <p class="lead narrow">
-        Artykuły, własne podstrony, tagi, kategorie i zdjęcia edytujesz w Pages
-        CMS. Zmiany zapisują się w repozytorium i uruchamiają budowanie strony.
+        Treści, lokalne jednostki, autorzy i raporty w jednym miejscu. Edycja
+        wymaga zalogowania do Pages CMS.
       </p>
-      <div class="admin-links">
-        <a
-          class="button dark"
-          href={cms}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Otwórz Pages CMS ↗
-        </a>
-        <a
-          class="button"
-          href={"https://github.com/" + config.repository + "/actions"}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Stan publikacji ↗
-        </a>
-        <a
-          class="button"
-          href="https://analytics.google.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Google Analytics ↗
-        </a>
-        <a
-          class="button"
-          href="https://search.google.com/search-console"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Google Search Console ↗
-        </a>
+      <div class="dashboard-stats">
+        <div class="dashboard-stat">
+          <strong>{published().length}</strong>
+          <span>Opublikowane artykuły</span>
+        </div>
+        <div class="dashboard-stat">
+          <strong>{rows("pages").length}</strong>
+          <span>Podstrony w redakcji</span>
+        </div>
+        <div class="dashboard-stat">
+          <strong>{rows("places").length}</strong>
+          <span>Wizytówki jednostek</span>
+        </div>
       </div>
-      <section class="admin-task-grid" aria-label="Szybka edycja">
+      <nav class="admin-links" aria-label="Szybkie działania">
+        <a class="button dark" href={cms + "/collection/posts/new"}>
+          + Nowy artykuł
+        </a>
+        <a class="button" href={cms + "/collection/pages/new"}>
+          + Nowa podstrona
+        </a>
+        <a class="button" href={cms + "/collection/places/new"}>
+          + Jednostka / dział
+        </a>
+      </nav>
+      <section class="admin-task-grid" aria-label="Zarządzanie treścią">
         <a class="editorial-link" href={cms + "/collection/posts"}>
-          <strong>Artykuły</strong>
+          <strong>Artykuły i kafelki</strong>
           <span>
-            Nowy tekst, tagi i kategorie. Dla lokalnego tekstu wybierz Sosnowiec
-            oraz kategorię lokalną.
+            Tytuł, treść, podsumowanie, kafelki, kolor okładki, tagi, autor i
+            SEO.
+          </span>
+        </a>
+        <a class="editorial-link" href={cms + "/collection/places"}>
+          <strong>Jednostki i działy</strong>
+          <span>
+            Wybierz jednostkę nadrzędną, dodaj kafelki, kontakt i wskazówki
+            przed wizytą.
           </span>
         </a>
         <a class="editorial-link" href={cms + "/collection/pages"}>
           <strong>Podstrony</strong>
           <span>
-            Dodawaj i edytuj strony z treścią, ilustracjami i własnym adresem.
+            Wybierz sekcję „Sosnowiec”, aby utworzyć lokalną podstronę. Możesz
+            dodać ją do menu.
+          </span>
+        </a>
+        <a class="editorial-link" href={cms + "/collection/authors"}>
+          <strong>Autorzy</strong>
+          <span>
+            Dodaj imię, nazwisko i biogram. We wpisie wybierz profil albo wpisz
+            samo nazwisko.
+          </span>
+        </a>
+        <a class="editorial-link" href={cms + "/collection/tags"}>
+          <strong>Tagi</strong>
+          <span>
+            Krótkie tematy łączące teksty. W artykułach wybieraj kilka najlepiej
+            pasujących.
+          </span>
+        </a>
+        <a class="editorial-link" href={cms + "/collection/categories"}>
+          <strong>Kategorie bloga</strong>
+          <span>
+            Główne tematy ogólnopolskie. Lokalne kategorie mają osobną kolekcję
+            w panelu.
           </span>
         </a>
         <a class="editorial-link" href={cms + "/collection/local_categories"}>
-          <strong>Sosnowiec — kategorie</strong>
-          <span>Własne działy lokalnego bloga i poradników.</span>
+          <strong>Kategorie Sosnowca</strong>
+          <span>
+            Przemoc, uzależnienia, miejsca wsparcia i lokalne inicjatywy.
+          </span>
+        </a>
+        <a class="editorial-link" href={cms + "/file/settings"}>
+          <strong>Google, newsletter i udostępnianie</strong>
+          <span>
+            Ustawienia GA4, raportów, opisu strony, obrazka i formularza
+            newslettera.
+          </span>
+        </a>
+      </section>
+      <GoogleReports
+        client:load
+        clientId={config.google_client_id}
+        propertyId={config.ga_property_id}
+        siteUrl={config.site_url}
+      />
+      <nav class="admin-links" aria-label="Raporty zewnętrzne">
+        <a
+          class="button"
+          href={config.ga_property_id ? "https://analytics.google.com/analytics/web/#/p"+config.ga_property_id+"/reports/intelligenthome" : "https://analytics.google.com/"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Otwórz Google Analytics ↗
+        </a>
+        <a
+          class="button"
+          href={
+            "https://search.google.com/search-console?resource_id=" +
+            encodeURIComponent(config.site_url + "/")
+          }
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Otwórz Search Console ↗
+        </a>
+        <a
+          class="button"
+          href={"https://github.com/" + config.repository + "/actions"}
+        >
+          Stan publikacji ↗
+        </a>
+      </nav>
+      <section class="info-box">
+        <h2>Dodaj redaktora</h2>
+        <p>
+          W Pages CMS otwórz „Collaborators” i zaproś osobę przez e-mail. Nie
+          potrzebuje konta GitHub. Zaproszenie daje możliwość edycji treści i
+          mediów w repozytorium; nie jest ograniczone do jednego artykułu.
+          Najpierw uzgodnijcie podpis autora i zasadę zapisywania tekstów jako
+          szkiców. Oczekiwanie na Twoją akceptację jest zasadą pracy — ten panel
+          nie narzuca osobnej roli zatwierdzającej.
+        </p>
+        <a class="text-link" href={cms + "/collaborators"}>
+          Zarządzaj redaktorami ↗
         </a>
       </section>
       <section class="info-box">
-        <h2>Pierwsze połączenie</h2>
+        <h2>Przed publikacją</h2>
+        <ol>
+          <li>Sprawdź tytuł, źródła, autora i datę.</li>
+          <li>
+            Wybierz kategorię oraz tagi. Dla tekstu lokalnego wybierz także
+            Sosnowiec i kategorię lokalną.
+          </li>
+          <li>Dodaj podsumowanie i kafelki, jeśli pomagają czytelnikowi.</li>
+          <li>
+            Uzupełnij tytuł i opis SEO. Sprawdź podgląd strony na telefonie.
+          </li>
+          <li>Ustaw „Opublikowany”, zapisz i sprawdź „Stan publikacji”.</li>
+        </ol>
         <p>
-          Zaloguj się przez GitHub w Pages CMS i połącz aplikację tylko z
-          repozytorium <strong>{config.repository}</strong>. Wybierz gałąź{" "}
-          <strong>{config.branch}</strong>.
-        </p>
-        <p>
-          To panel zewnętrzny. Ta strona na GitHub Pages nie zapisuje haseł ani
-          kluczy prywatnych. Uprawnienia do edycji sprawdza GitHub i Pages CMS.
-        </p>
-      </section>
-      <section class="quiet-note">
-        <h2>Jak dodać podstronę?</h2>
-        <p>
-          W Pages CMS wybierz „Podstrony” → nowy wpis, wpisz tytuł i adres,
-          dodaj treść i wybierz sekcję. „Ogólna” tworzy /adres/, a „Sosnowiec”
-          tworzy /sosnowiec/adres/ i dodaje podstronę do lokalnej zakładki.
-          Wybierz status publikacji oraz opcjonalnie „Pokaż w menu”. Po zapisie
-          poczekaj na zakończenie publikacji.
+          Statystyki treści powyżej oznaczają liczbę wpisów, a nie odsłony.
+          Odsłony pobierzesz w sekcji Google po autoryzacji.
         </p>
       </section>
     </main>

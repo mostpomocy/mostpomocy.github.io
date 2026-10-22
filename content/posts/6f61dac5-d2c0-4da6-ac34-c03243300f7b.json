@@ -1,0 +1,39 @@
+{
+  "id": "6f61dac5-d2c0-4da6-ac34-c03243300f7b",
+  "slug": "profilaktyka-w-szkole-rozmowa-bez-straszenia",
+  "title": "Profilaktyka w szkole: o przemocy bez straszenia",
+  "excerpt": "Jak rozmawiać z młodzieżą o przemocy, odpowiedzialności i emocjach, żeby po spotkaniu wiedziała, gdzie szukać pomocy.",
+  "body": "<h2>Co ma zostać po lekcji?</h2><p>Dobra rozmowa profilaktyczna kończy się czymś więcej niż zapamiętaniem grożącej kary. Uczeń powinien wiedzieć, jak rozpoznać krzywdzenie, komu powiedzieć o zagrożeniu i jak pomóc koledze bez narażania siebie. Własną prezentację o bezpieczeństwie młodzieży traktuję jako punkt wyjścia do takiej rozmowy, a nie gotową opinię prawną.</p><h2>Oddziel konflikt od krzywdzenia</h2><p>Poproś klasę o opis zachowania, zamiast o etykietę osoby. „Ktoś codziennie wrzuca zdjęcie koleżanki i zachęca do wyśmiewania” mówi więcej niż „oni się nie lubią”. Nie proś uczniów, aby na forum ujawniali osobiste doświadczenia. Możesz pracować na wymyślonych przykładach, a na końcu wskazać możliwość indywidualnej rozmowy.</p><h2>Ucz reakcji, którą da się wykonać</h2><p>Świadek może nie dokładać komentarza, nie przesyłać upokarzającego nagrania i powiedzieć zaufanej osobie dorosłej. Dziecko potrzebuje konkretnej ścieżki: wychowawca, pedagog, psycholog lub inny wskazany pracownik szkoły. Gdy pojawia się bezpośrednie zagrożenie, najważniejsze są oddalenie się od niego i wezwanie pomocy, a nie samodzielne rozwiązywanie sytuacji.</p><h2>Odpowiedzialność bez automatycznych wyroków</h2><p>Nie przedstawiaj każdej szkolnej sytuacji jako pewnej drogi do więzienia ani nie obiecuj bezkarności. Ocena prawna zależy od okoliczności, wieku oraz rodzaju zachowania. W materiałach dla klasy lepiej podać źródło i możliwość konsultacji niż skrót, który może utrwalić błąd.</p><h2>Emocje i proszenie o wsparcie</h2><p>Zamiast „opanowuj się” zaproponuj zdanie: „Potrzebuję przerwy, bo zaraz stracę kontrolę”. Warto przećwiczyć również reakcję dorosłego: wysłuchanie bez wyśmiewania, sprawdzenie bezpieczeństwa i ustalenie kolejnego kroku. Nie przedstawiaj późniejszego krzywdzenia osoby stosującej przemoc jako zasłużonej kary. Celem interwencji jest przerwanie krzywdzenia wszystkich osób.</p><h2>Sprawdź użyteczność spotkania</h2><ul><li>Czy uczniowie potrafią wskazać dwie osoby do kontaktu?</li><li>Czy wiedzą, jak zgłosić krzywdzącą treść w internecie?</li><li>Czy usłyszeli, że proszenie o pomoc nie wymaga publicznego opowiadania swojej historii?</li></ul><p>Materiał rozwija tematykę autorskiej prezentacji Igora Pabiańczyka. Nie oznacza zatwierdzenia programu przez MOPS ani inną instytucję.</p>",
+  "category_id": "926a409e-b34b-58f5-bf67-b02e791dedc0",
+  "local_category_id": "",
+  "tags": [
+    "0ce7f173-32bf-560f-ab48-5955774258a4",
+    "11fe0ce4-62e6-548c-b780-679f08182954"
+  ],
+  "scope": "general",
+  "author": "Igor Pabiańczyk",
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "status": "published",
+  "published_at": "2026-10-22T12:00:00.000Z",
+  "updated_at": "2026-10-22T12:00:00.000Z",
+  "featured": false,
+  "toc": true,
+  "noindex": false,
+  "sources": "https://www.gov.pl/web/niezagubdzieckawsieci/ofiara-czy-sprawca-cyberprzemoc-rowiesnicza\nhttps://ose.gov.pl/aktualnosci/wpis/europejski-miesiac-cyberbezpieczenstwa-z-ose-cyberprzemoc",
+  "seo_title": "Profilaktyka w szkole: o przemocy bez straszenia",
+  "seo_description": "Jak rozmawiać z młodzieżą o przemocy, odpowiedzialności i emocjach, żeby po spotkaniu wiedziała, gdzie szukać pomocy.",
+  "summary_points": [
+    "Po spotkaniu uczeń ma wiedzieć, do kogo się zwrócić.",
+    "Nie wymagaj publicznego ujawniania osobistych doświadczeń.",
+    "Ćwicz bezpieczną reakcję, nie strasz nieuchronną karą."
+  ],
+  "tiles": [
+    {
+      "title": "Przygotuj rozmowę",
+      "text": "Zapisz pytania i ustal, co chcesz przekazać podczas indywidualnego spotkania.",
+      "url": "/moja-kartka/"
+    }
+  ],
+  "cover_style": "lilac",
+  "related_place_ids": []
+}

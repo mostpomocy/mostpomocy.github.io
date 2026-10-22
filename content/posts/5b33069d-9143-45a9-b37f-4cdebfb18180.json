@@ -1,0 +1,39 @@
+{
+  "id": "5b33069d-9143-45a9-b37f-4cdebfb18180",
+  "slug": "cyberprzemoc-dziecko-jak-reagowac",
+  "title": "Dziecko doświadcza cyberprzemocy. Jak reagować?",
+  "excerpt": "Spokojna rozmowa, zachowanie wiadomości i kontakt ze szkołą. Praktyczna kolejność działań dla rodziców i opiekunów.",
+  "body": "<h2>Najpierw wysłuchaj</h2><p>Gdy dziecko pokazuje krzywdzące wiadomości, łatwo odruchowo zapytać, dlaczego weszło na daną stronę albo po co odpowiadało. Zacznij od zdania: „Dobrze, że mi o tym mówisz. Spróbujemy zadbać o Twoje bezpieczeństwo”. Zapytaj, co się wydarzyło i czego dziecko obawia się najbardziej. Nie obiecuj zachowania wszystkiego w tajemnicy, jeśli sytuacja wymaga pomocy innych dorosłych.</p><h2>Zachowaj materiał, zanim zniknie</h2><p>Rządowy poradnik z udziałem NASK zaleca zachowywanie wiadomości, zdjęć, adresów stron, nazw użytkowników i zrzutów ekranu. Materiał może pomóc wyjaśnić, co się wydarzyło. Zapisuj kontekst i datę, a nie tylko pojedynczą wyrwaną wypowiedź. Nie rozsyłaj materiałów po grupach rodziców ani uczniów.</p><p>Zrzut ekranu nie oznacza automatycznego rozstrzygnięcia sprawy. Nie próbuj na własną rękę ustalać tożsamości użytkownika za pomocą nieznanych usług. Materiały przekaż osobom odpowiedzialnym za wyjaśnienie sytuacji.</p><h2>Ustal drogę zgłoszenia</h2><p>W serwisie lub komunikatorze użyj funkcji zgłaszania naruszeń. Jeżeli sprawa dotyczy relacji szkolnych, skontaktuj się z wychowawcą, pedagogiem lub dyrekcją. Przy groźbach lub podejrzeniu przestępstwa potrzebny może być kontakt z Policją. W bezpośrednim zagrożeniu życia lub zdrowia dzwoń pod 112.</p><h2>Poproś o konkretny plan</h2><p>Na spotkaniu zapytaj: kto zbierze informacje, jak szkoła ochroni dziecko w czasie wyjaśniania sprawy i kiedy wrócicie do oceny sytuacji. Zapisz ustalenia. Dziecko powinno wiedzieć, do kogo może podejść następnego dnia, jeżeli ktoś ponownie je zaczepi.</p><h2>Wracaj do rozmowy</h2><p>Usunięcie wpisu nie zawsze kończy trudność. Zapytaj po kilku dniach, czy dziecko czuje się bezpieczniej, jak wyglądają przerwy w szkole i czy chce wsparcia psychologa. Nie zamieniaj troski w karę polegającą wyłącznie na zabraniu telefonu. Wspólnie ustalcie ustawienia prywatności i sposób reagowania na kolejną wiadomość.</p>",
+  "category_id": "ef6c8a2b-88d2-5d4b-8d93-1ee0abfb6ed9",
+  "local_category_id": "",
+  "tags": [
+    "0ce7f173-32bf-560f-ab48-5955774258a4",
+    "11fe0ce4-62e6-548c-b780-679f08182954"
+  ],
+  "scope": "general",
+  "author": "Igor Pabiańczyk",
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "status": "published",
+  "published_at": "2026-10-22T12:00:00.000Z",
+  "updated_at": "2026-10-22T12:00:00.000Z",
+  "featured": false,
+  "toc": true,
+  "noindex": false,
+  "sources": "https://www.gov.pl/web/niezagubdzieckawsieci/zglaszaj-dowody-cyberprzemocy\nhttps://www.gov.pl/web/niezagubdzieckawsieci/ofiara-czy-sprawca-cyberprzemoc-rowiesnicza",
+  "seo_title": "Dziecko doświadcza cyberprzemocy. Jak reagować?",
+  "seo_description": "Spokojna rozmowa, zachowanie wiadomości i kontakt ze szkołą. Praktyczna kolejność działań dla rodziców i opiekunów.",
+  "summary_points": [
+    "Podziękuj dziecku za powiedzenie o sytuacji.",
+    "Zachowaj kontekst, daty i wiadomości; nie rozsyłaj krzywdzących materiałów.",
+    "Ustal ze szkołą osobę do kontaktu i termin powrotu do sprawy."
+  ],
+  "tiles": [
+    {
+      "title": "Pytania na spotkanie",
+      "text": "Przygotuj krótką notatkę i listę ustaleń do wydrukowania.",
+      "url": "/moja-kartka/"
+    }
+  ],
+  "cover_style": "lilac",
+  "related_place_ids": []
+}

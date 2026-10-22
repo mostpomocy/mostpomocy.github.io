@@ -24,6 +24,18 @@ export function discoverable() {
     })),
     { path: "/od-czego-zaczac/", updated: "" },
     { path: "/dostepnosc/", updated: "" },
+    { path: "/obserwuj/", updated: "" },
+    { path: "/narzedzia/", updated: "" },
+    ...rows("places")
+      .filter((p) => p.status === "published")
+      .map((p) => ({
+        path: `/sosnowiec/instytucje/${p.slug || p.id}/`,
+        updated: "",
+      })),
+    ...rows("authors").map((a) => ({
+      path: `/autorzy/${a.slug}/`,
+      updated: "",
+    })),
     ...posts.map((p) => ({
       path: `/artykuly/${p.slug}/`,
       updated: p.updated_at || p.published_at,

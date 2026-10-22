@@ -107,3 +107,20 @@ for (const page of all.pages) {
   const target = `dist/${page.section === "sosnowiec" ? "sosnowiec/" : ""}${page.slug}/index.html`;
   assert.equal(fs.existsSync(target), visible(page), target);
 }
+
+const manifest = JSON.parse(
+  fs.readFileSync("dist/manifest.webmanifest", "utf8"),
+);
+for (const icon of manifest.icons)
+  assert.ok(fs.existsSync(path.join("dist", icon.src)));
+for (const post of all.posts.filter((p) => visible(p))) {
+  const html = fs.readFileSync(`dist/artykuly/${post.slug}/index.html`, "utf8");
+  assert.ok(post.seo_title && post.seo_description, `Brak SEO: ${post.title}`);
+  assert.match(html, /<meta property="og:image" content="https:\/\//);
+  assert.ok(fs.existsSync(`dist/og/${post.slug}.png`));
+  if (post.tiles.length) assert.match(html, /class="content-tile"/);
+}
+assert.ok(fs.existsSync("dist/sw.js"));
+console.log(
+  "Sprawdzono też SEO, obrazy udostępniania, kafelki i manifest PWA.",
+);

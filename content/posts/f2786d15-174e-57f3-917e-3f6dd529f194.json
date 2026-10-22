@@ -11,8 +11,8 @@
   "image": "",
   "image_alt": "",
   "featured": false,
-  "seo_title": "",
-  "seo_description": "",
+  "seo_title": "Jak rozmawiać o potrzebach osoby starszej?",
+  "seo_description": "Uważność, autonomia i zwykła codzienna rozmowa. Kilka punktów wyjścia dla bliskich i opiekunów.",
   "sources": "",
   "updated_at": "2026-10-21T18:44:14.592Z",
   "tags": [
@@ -21,5 +21,8 @@
   ],
   "noindex": false,
   "canonical_url": "",
-  "toc": true
+  "toc": true,
+  "author_id": "3849e43e-3dfc-401d-ba4a-060b3ee8421f",
+  "summary_points": [],
+  "cover_style": "sage"
 }

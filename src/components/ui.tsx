@@ -87,6 +87,8 @@ export function Footer({ note }: { note?: string }) {
           <a href="/od-czego-zaczac">Od czego zacząć?</a>
           <a href="/moja-kartka">Kartka przed rozmową</a>
           <a href="/feed.xml">Kanał RSS</a>
+          <a href="/obserwuj/">Newsletter i aplikacja</a>
+          <a href="/narzedzia/">Przydatne narzędzia</a>
           <a href="/admin">Panel redakcyjny ↗</a>
         </div>
       </div>
@@ -182,6 +184,7 @@ export function ArticleCard({
         tabIndex={-1}
         aria-hidden="true"
         data-topic={topic}
+        data-style={post.cover_style}
       >
         {post.image ? (
           <img src={post.image} alt="" loading="lazy" />
