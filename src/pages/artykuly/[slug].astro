@@ -74,6 +74,8 @@ const structured = {
   inLanguage: "pl-PL",
   articleSection: category?.name,
   keywords: tags.map((t) => t.name),
+  citation: sources,
+  isAccessibleForFree: true,
   image: [
     new URL(post.image || "/og/" + post.slug + ".png", config.site_url).href,
   ],
