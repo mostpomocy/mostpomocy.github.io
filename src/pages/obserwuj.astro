@@ -1,4 +1,5 @@
 ---
+import PushNotifications from "../components/PushNotifications.astro";
 import Base from "../layouts/Base.astro";
 import { settings } from "../lib/content";
 const config = settings();
@@ -63,15 +64,10 @@ const config = settings();
           </p>
         )}
       </section>
-      <section class="content-tile">
-        <h2>Powiadomienia na telefonie</h2>
-        <p>
-          Ta wersja nie wysyła powiadomień push. Dodanie ikony na ekranie nie
-          włącza powiadomień. Gdy uruchomimy tę usługę, będzie można ją włączyć
-          osobnym, dobrowolnym przyciskiem.
-        </p>
-        <a href="/blog/">Zobacz najnowsze artykuły ↗</a>
-      </section>
+      <PushNotifications
+        appId={config.onesignal_app_id}
+        siteUrl={config.site_url}
+      />
     </div>
   </main>
 </Base>

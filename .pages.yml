@@ -535,6 +535,11 @@ content:
         type: string
         description: Publiczny identyfikator klienta aplikacji internetowej. Żadnych
           kluczy prywatnych. Instrukcja w /admin/.
+      - name: onesignal_app_id
+        label: OneSignal — publiczny App ID (powiadomienia)
+        type: string
+        description: UUID aplikacji Web Push. Nie wklejaj REST API Key. Konfiguracja
+          Custom Code, domena https://mostpomocy.pl. Wysyłka w panelu OneSignal.
       - name: newsletter_url
         label: HTTPS do formularza zapisu newslettera
         type: string
