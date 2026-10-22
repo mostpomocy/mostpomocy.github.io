@@ -52,11 +52,12 @@ export function FirstStep() {
                 Możesz poczytać o sytuacjach podobnych do Twojej albo zacząć od
                 zapisania pytań.
               </p>
-              <a href="/blog?kategoria=kiedy-jest-trudno">
-                Kiedy jest trudno ↗
+              <a href="/kategorie/kiedy-jest-trudno/">Kiedy jest trudno ↗</a>
+              <a href="/zdrowie-psychiczne/">Zdrowie psychiczne ↗</a>
+              <a href="/sosnowiec/przemoc/">
+                Jeśli ktoś Cię krzywdzi — pomoc w Sosnowcu ↗
               </a>
-              <a href="/wsparcie/zdrowie-psychiczne">Zdrowie psychiczne ↗</a>
-              <a href="/wsparcie/onkologia">W chorobie nowotworowej ↗</a>
+              <a href="/wsparcie-onkologiczne/">W chorobie nowotworowej ↗</a>
             </>
           )}
           {selected === "bliska" && (
@@ -67,8 +68,8 @@ export function FirstStep() {
                 lub towarzyszenie podczas rozmowy. Nie musisz mieć gotowego
                 rozwiązania.
               </p>
-              <a href="/blog?kategoria=rodzina-i-dzieci">Rodzina i bliscy ↗</a>
-              <a href="/wsparcie/zdrowie-psychiczne">O zdrowiu psychicznym ↗</a>
+              <a href="/kategorie/rodzina-i-dzieci/">Rodzina i bliscy ↗</a>
+              <a href="/zdrowie-psychiczne/">O zdrowiu psychicznym ↗</a>
               <a href="/moja-kartka">Przygotuj pytania ↗</a>
             </>
           )}
@@ -79,9 +80,9 @@ export function FirstStep() {
                 W MOPS są różne działy. Na stronie znajdziesz także inne
                 instytucje i teksty dotyczące Sosnowca.
               </p>
-              <a href="/sosnowiec?zakladka=mops">MOPS i działy ↗</a>
-              <a href="/sosnowiec?zakladka=instytucje">Inne instytucje ↗</a>
-              <a href="/sosnowiec?zakladka=artykuly">Artykuły z Sosnowca ↗</a>
+              <a href="/sosnowiec/?zakladka=mops">MOPS i działy ↗</a>
+              <a href="/sosnowiec/?zakladka=instytucje">Inne instytucje ↗</a>
+              <a href="/sosnowiec/?zakladka=artykuly">Artykuły z Sosnowca ↗</a>
             </>
           )}
         </div>
