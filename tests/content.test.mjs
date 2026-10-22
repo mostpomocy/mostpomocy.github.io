@@ -99,3 +99,66 @@ test("Pages CMS ma kolekcje podstron i tagów oraz poprawne wartości wyboru", (
     true,
   );
 });
+
+test("podstrony ogólne i lokalne mają osobne adresy, ale nie zajmują tras systemowych", () => {
+  assert.equal(
+    clean("pages", { ...post, section: "sosnowiec", slug: "przemoc" }).section,
+    "sosnowiec",
+  );
+  for (const slug of ["blog", "kategorie", "bez-stygmy"])
+    assert.throws(() =>
+      clean("pages", { ...post, section: "sosnowiec", slug }),
+    );
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "mostpomocy-pages-"));
+  try {
+    for (const r of resources)
+      fs.mkdirSync(path.join(root, "content", r), { recursive: true });
+    for (const [id, section] of [
+      ["root", "general"],
+      ["local", "sosnowiec"],
+    ])
+      fs.writeFileSync(
+        path.join(root, "content/pages", id + ".json"),
+        JSON.stringify(
+          clean("pages", { ...post, id, section, slug: "kontakt" }),
+        ),
+      );
+    assert.doesNotThrow(() => validate(root));
+    fs.writeFileSync(
+      path.join(root, "content/pages/collision.json"),
+      JSON.stringify(
+        clean("pages", {
+          ...post,
+          id: "collision",
+          section: "sosnowiec",
+          slug: "kontakt",
+        }),
+      ),
+    );
+    assert.throws(() => validate(root), /Powtórzony URL/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+test("redakcja zachowuje projekt i obsługuje lokalne podstrony oraz relacje", () => {
+  const all = validate();
+  assert.equal(
+    all.pages.find((p) => p.slug === "sosnowiec-bez-stygmy").noindex,
+    false,
+  );
+  assert.ok(
+    all.pages.some((p) => p.section === "sosnowiec" && p.slug === "przemoc"),
+  );
+  const cms = YAML.parse(fs.readFileSync(".pages.yml", "utf8"));
+  assert.ok(cms.content.some((c) => c.name === "local_categories"));
+  assert.ok(
+    cms.content
+      .find((c) => c.name === "pages")
+      .fields.some((f) => f.name === "section"),
+  );
+  const ref = cms.content
+    .find((c) => c.name === "posts")
+    .fields.find((f) => f.name === "local_category_id");
+  assert.equal(ref.options.value, "{fields.id}");
+  assert.equal(ref.options.label, "{primary}");
+});

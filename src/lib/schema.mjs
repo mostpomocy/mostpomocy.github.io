@@ -3,6 +3,7 @@ import sanitize from "sanitize-html";
 export const resources = [
   "posts",
   "categories",
+  "local_categories",
   "tags",
   "places",
   "pages",
@@ -25,6 +26,7 @@ export const reserved = [
   "sitemap.xml",
   "llms.txt",
   "feed.xml",
+  "bez-stygmy",
 ];
 const slug = z
   .string()
@@ -81,6 +83,7 @@ const schemas = {
     excerpt: text.max(600).default(""),
     body: text.max(200000).default(""),
     category_id: text.default(""),
+    local_category_id: text.default(""),
     tags: z.array(text).max(20).default([]),
     scope: z.enum(["general", "sosnowiec"]).default("general"),
     author: text.max(100).default("Igor Pabiańczyk"),
@@ -94,7 +97,10 @@ const schemas = {
   }),
   pages: z.object({
     ...base,
+    notice: text.max(600).default(""),
     related_category_id: text.default(""),
+    section: z.enum(["general", "sosnowiec"]).default("general"),
+    local_category_id: text.default(""),
     title: text.min(3).max(200),
     slug,
     excerpt: text.max(600).default(""),
@@ -106,6 +112,12 @@ const schemas = {
     ...publication,
   }),
   categories: z.object({
+    ...base,
+    name: text.min(2).max(80),
+    slug,
+    description: text.max(500).default(""),
+  }),
+  local_categories: z.object({
     ...base,
     name: text.min(2).max(80),
     slug,
@@ -206,7 +218,12 @@ export function clean(resource, input) {
       },
     });
   }
-  if (resource === "pages" && reserved.includes(data.slug))
+  if (
+    resource === "pages" &&
+    (reserved.includes(data.slug) ||
+      (data.section === "sosnowiec" &&
+        ["blog", "kategorie"].includes(data.slug)))
+  )
     throw new Error("Ten adres jest zarezerwowany przez serwis");
   if (["posts", "pages"].includes(resource)) {
     if (["published", "scheduled"].includes(data.status) && !data.body.trim())

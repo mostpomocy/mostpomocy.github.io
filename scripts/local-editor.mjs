@@ -213,6 +213,18 @@ export function localEditor() {
                 )
               )
                 throw new Error("Element jest używany przez artykuły");
+              if (
+                resource === "local_categories" &&
+                [...(await read("posts")), ...(await read("pages"))].some(
+                  (p) => p.local_category_id === id,
+                )
+              )
+                throw new Error("Kategoria lokalna jest używana przez treści");
+              if (
+                resource === "categories" &&
+                (await read("pages")).some((p) => p.related_category_id === id)
+              )
+                throw new Error("Kategoria jest używana przez podstrony");
               if (resource === "settings")
                 throw new Error("Ustawień nie można usunąć");
               if (resource === "places" && data.some((p) => p.parent_id === id))
@@ -229,10 +241,23 @@ export function localEditor() {
           });
           if (
             data.some(
-              (r) => r.id !== entry.id && r.slug && r.slug === entry.slug,
+              (r) =>
+                r.id !== entry.id &&
+                r.slug &&
+                r.slug === entry.slug &&
+                (resource !== "pages" ||
+                  (r.section || "general") === entry.section),
             )
           )
             throw new Error("Ten URL już istnieje");
+          if (
+            ["posts", "pages"].includes(resource) &&
+            entry.local_category_id &&
+            !(await read("local_categories")).some(
+              (c) => c.id === entry.local_category_id,
+            )
+          )
+            throw new Error("Nieznana kategoria lokalna");
           if (resource === "posts") {
             if (
               entry.category_id &&

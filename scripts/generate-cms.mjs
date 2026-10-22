@@ -51,8 +51,8 @@ const reference = (name, label, collection, multiple = false) =>
     options: {
       collection,
       search: "name",
-      value: "{id}",
-      label: "{name}",
+      value: "{fields.id}",
+      label: "{primary}",
       multiple,
     },
   });
@@ -85,7 +85,12 @@ const cms = {
       [
         f("title", "Tytuł", "string", { required: true }),
         slug,
-        reference("category_id", "Kategoria", "categories"),
+        reference("category_id", "Kategoria bloga ogólnego", "categories"),
+        reference(
+          "local_category_id",
+          "Kategoria bloga Sosnowiec (dla lokalnych artykułów)",
+          "local_categories",
+        ),
         reference("tags", "Tagi", "tags", true),
         f("scope", "Publikacja", "select", {
           default: "general",
@@ -121,6 +126,21 @@ const cms = {
       [
         f("title", "Tytuł", "string", { required: true }),
         slug,
+        f("notice", "Ważny komunikat / status projektu (opcjonalnie)", "text"),
+        f("section", "Gdzie ma być podstrona?", "select", {
+          default: "general",
+          options: {
+            values: [
+              { name: "general", label: "Strona główna: /twoj-adres/" },
+              { name: "sosnowiec", label: "Sosnowiec: /sosnowiec/twoj-adres/" },
+            ],
+          },
+        }),
+        reference(
+          "local_category_id",
+          "Kategoria lokalnej podstrony (opcjonalnie)",
+          "local_categories",
+        ),
         f("excerpt", "Wprowadzenie", "text"),
         body,
         reference(
@@ -140,6 +160,11 @@ const cms = {
       ],
       { primary: "title", fields: ["title", "slug", "status", "show_in_nav"] },
     ),
+    collection("local_categories", "Sosnowiec — kategorie", [
+      f("name", "Nazwa", "string", { required: true }),
+      slug,
+      f("description", "Opis", "text"),
+    ]),
     collection("tags", "Tagi", [
       f("name", "Nazwa", "string", { required: true }),
       slug,

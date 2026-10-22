@@ -331,7 +331,15 @@ function Preview() {
   return record ? (
     <Button
       component="a"
-      href={(resource === "pages" ? "/" : "/artykuly/") + record.slug + "/"}
+      href={
+        (resource === "pages"
+          ? record.section === "sosnowiec"
+            ? "/sosnowiec/"
+            : "/"
+          : "/artykuly/") +
+        record.slug +
+        "/"
+      }
       target="_blank"
     >
       Podgląd treści ↗
@@ -471,10 +479,22 @@ function MediaPicker() {
     </Box>
   );
 }
+function LocalCategoryInput() {
+  return (
+    <ReferenceInput source="local_category_id" reference="local_categories">
+      <SelectInput
+        optionText="name"
+        label="Kategoria w Sosnowcu"
+        helperText="Dodatkowa kategoria lokalnego bloga lub podstrony."
+      />
+    </ReferenceInput>
+  );
+}
 function PostFields() {
   return [
     <FormTab key="0" label="Treść">
       <TitleInput />
+      <LocalCategoryInput />
       <ReferenceArrayInput source="tags" reference="tags">
         <SelectArrayInput
           optionText="name"
@@ -970,6 +990,22 @@ function PageFields() {
   return [
     <FormTab key="content" label="Treść">
       <TitleInput />
+      <SelectInput
+        source="section"
+        label="Sekcja podstrony"
+        defaultValue="general"
+        choices={[
+          { id: "general", name: "Ogólna — /adres/" },
+          { id: "sosnowiec", name: "Sosnowiec — /sosnowiec/adres/" },
+        ]}
+      />
+      <LocalCategoryInput />
+      <TextInput
+        source="notice"
+        label="Ważny komunikat / status projektu"
+        multiline
+        fullWidth
+      />
       <TextInput
         source="slug"
         label="Adres podstrony"
@@ -1078,6 +1114,7 @@ export default function Editor() {
             <TabbedForm
               defaultValues={{
                 status: "draft",
+                section: "general",
                 show_in_nav: false,
                 nav_order: 50,
                 body: "",
@@ -1123,6 +1160,27 @@ export default function Editor() {
         name="categories"
         recordRepresentation="name"
         options={{ label: "Kategorie" }}
+        icon={CategoryIcon}
+        list={CategoryList}
+        edit={() => (
+          <Edit mutationMode="pessimistic">
+            <SimpleForm>
+              <CategoryFields />
+            </SimpleForm>
+          </Edit>
+        )}
+        create={() => (
+          <Create>
+            <SimpleForm>
+              <CategoryFields />
+            </SimpleForm>
+          </Create>
+        )}
+      />
+      <Resource
+        name="local_categories"
+        recordRepresentation="name"
+        options={{ label: "Sosnowiec — kategorie" }}
         icon={CategoryIcon}
         list={CategoryList}
         edit={() => (

@@ -21,9 +21,12 @@ export function validate(root = process.cwd()) {
       });
     const seen = new Set();
     for (const entry of all[resource]) {
-      if (entry.slug && seen.has(entry.slug))
+      if (
+        entry.slug &&
+        seen.has((entry.section || "general") + ":" + entry.slug)
+      )
         throw new Error("Powtórzony URL: " + entry.slug);
-      seen.add(entry.slug);
+      seen.add((entry.section || "general") + ":" + entry.slug);
     }
   }
   for (const post of all.posts) {
@@ -37,6 +40,13 @@ export function validate(root = process.cwd()) {
         throw new Error("Nieznany tag: " + tag);
     if (post.image && !post.image_alt)
       throw new Error("Dodaj opis alternatywny zdjęcia: " + post.title);
+  }
+  for (const item of [...all.posts, ...all.pages]) {
+    if (
+      item.local_category_id &&
+      !all.local_categories.some((c) => c.id === item.local_category_id)
+    )
+      throw new Error("Nieznana kategoria lokalna: " + item.title);
   }
   for (const place of all.places) {
     if (

@@ -58,3 +58,15 @@ assert.match(
 console.log(
   `Sprawdzono ${files.length} stron HTML, ${links} odnośników lokalnych, dane JSON-LD, mapę i wykluczenie szkiców.`,
 );
+assert.match(map, /https:\/\/mostpomocy\.pl\/sosnowiec-bez-stygmy\//);
+assert.match(map, /https:\/\/mostpomocy\.pl\/sosnowiec\/przemoc\//);
+const archive = fs.readFileSync("dist/sosnowiec-bez-stygmy/index.html", "utf8");
+assert.doesNotMatch(archive, /content="noindex/);
+assert.match(
+  fs.readFileSync("dist/bez-stygmy/index.html", "utf8"),
+  /http-equiv="refresh"/,
+);
+for (const page of all.pages) {
+  const target = `dist/${page.section === "sosnowiec" ? "sosnowiec/" : ""}${page.slug}/index.html`;
+  assert.equal(fs.existsSync(target), visible(page), target);
+}

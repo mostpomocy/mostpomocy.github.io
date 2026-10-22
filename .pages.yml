@@ -43,13 +43,22 @@ content:
           regex: ^[a-z0-9]+(-[a-z0-9]+)*$
           message: Użyj małych liter, cyfr i myślników.
       - name: category_id
-        label: Kategoria
+        label: Kategoria bloga ogólnego
         type: reference
         options:
           collection: categories
           search: name
-          value: "{id}"
-          label: "{name}"
+          value: "{fields.id}"
+          label: "{primary}"
+          multiple: false
+      - name: local_category_id
+        label: Kategoria bloga Sosnowiec (dla lokalnych artykułów)
+        type: reference
+        options:
+          collection: local_categories
+          search: name
+          value: "{fields.id}"
+          label: "{primary}"
           multiple: false
       - name: tags
         label: Tagi
@@ -57,8 +66,8 @@ content:
         options:
           collection: tags
           search: name
-          value: "{id}"
-          label: "{name}"
+          value: "{fields.id}"
+          label: "{primary}"
           multiple: true
       - name: scope
         label: Publikacja
@@ -177,6 +186,28 @@ content:
         type: string
         required: true
       - *a2
+      - name: notice
+        label: Ważny komunikat / status projektu (opcjonalnie)
+        type: text
+      - name: section
+        label: Gdzie ma być podstrona?
+        type: select
+        default: general
+        options:
+          values:
+            - name: general
+              label: "Strona główna: /twoj-adres/"
+            - name: sosnowiec
+              label: "Sosnowiec: /sosnowiec/twoj-adres/"
+      - name: local_category_id
+        label: Kategoria lokalnej podstrony (opcjonalnie)
+        type: reference
+        options:
+          collection: local_categories
+          search: name
+          value: "{fields.id}"
+          label: "{primary}"
+          multiple: false
       - name: excerpt
         label: Wprowadzenie
         type: text
@@ -187,8 +218,8 @@ content:
         options:
           collection: categories
           search: name
-          value: "{id}"
-          label: "{name}"
+          value: "{fields.id}"
+          label: "{primary}"
           multiple: false
       - *a4
       - *a5
@@ -218,6 +249,26 @@ content:
         - slug
         - status
         - show_in_nav
+  - name: local_categories
+    label: Sosnowiec — kategorie
+    type: collection
+    path: content/local_categories
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa
+        type: string
+        required: true
+      - *a2
+      - name: description
+        label: Opis
+        type: text
+    view:
+      primary: name
   - name: tags
     label: Tagi
     type: collection
@@ -288,8 +339,8 @@ content:
         options:
           collection: places
           search: name
-          value: "{id}"
-          label: "{name}"
+          value: "{fields.id}"
+          label: "{primary}"
           multiple: false
       - name: description
         label: Opis

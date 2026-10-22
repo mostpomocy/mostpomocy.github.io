@@ -70,7 +70,7 @@ export function Consent({ measurementId }: { measurementId: string }) {
         </aside>
       )}
       <button className="cookie-settings" onClick={() => setOpen(true)}>
-        Ustawienia cookie
+        Ustawienia prywatności
       </button>
     </>
   );

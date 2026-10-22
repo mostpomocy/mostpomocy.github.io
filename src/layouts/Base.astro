@@ -104,7 +104,7 @@ const data = [
   <body>
     <Header
       navigation={nav.map((p) => ({
-        slug: p.slug,
+        slug: (p.section === "sosnowiec" ? "sosnowiec/" : "") + p.slug,
         title: p.title,
         menu_label: p.menu_label,
       }))}

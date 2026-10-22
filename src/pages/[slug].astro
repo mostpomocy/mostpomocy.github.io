@@ -8,7 +8,9 @@ export function getStaticPaths() {
     import.meta.env.DEV
       ? rows("pages").filter((p) => p.status !== "trashed")
       : pages()
-  ).map((page) => ({ params: { slug: page.slug }, props: { page } }));
+  )
+    .filter((p) => p.section !== "sosnowiec")
+    .map((page) => ({ params: { slug: page.slug }, props: { page } }));
 }
 const { page } = Astro.props;
 const { body } = prepareBody(page.body);
@@ -31,6 +33,12 @@ const related = page.related_category_id
     )}
     <span class="eyebrow">MOSTPOMOCY</span>
     <h1>{page.title}</h1>
+    {page.notice && (
+      <aside class="project-notice">
+        <span class="eyebrow">STATUS PROJEKTU</span>
+        <p>{page.notice}</p>
+      </aside>
+    )}
     {page.excerpt && <p class="lead narrow">{page.excerpt}</p>}
     <article class="prose narrow" set:html={body} />
     {related.length > 0 && (

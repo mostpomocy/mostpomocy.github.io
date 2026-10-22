@@ -1,4 +1,4 @@
-import { published, pages, rows, settings, siteURL } from "./content";
+import { published, pages, rows, settings, siteURL, pagePath } from "./content";
 export const xml = (v: unknown) =>
   String(v ?? "").replace(
     /[<>&"']/g,
@@ -17,6 +17,11 @@ export function discoverable() {
     { path: "/", updated: "" },
     { path: "/blog/", updated: "" },
     { path: "/sosnowiec/", updated: "" },
+    { path: "/sosnowiec/blog/", updated: "" },
+    ...rows("local_categories").map((c) => ({
+      path: `/sosnowiec/kategorie/${c.slug}/`,
+      updated: "",
+    })),
     { path: "/od-czego-zaczac/", updated: "" },
     { path: "/dostepnosc/", updated: "" },
     ...posts.map((p) => ({
@@ -26,7 +31,7 @@ export function discoverable() {
     ...pages()
       .filter((p) => !p.noindex)
       .map((p) => ({
-        path: `/${p.slug}/`,
+        path: pagePath(p),
         updated: p.updated_at || p.published_at,
       })),
     ...rows("categories")
@@ -37,4 +42,4 @@ export function discoverable() {
       .map((t) => ({ path: `/tagi/${t.slug}/`, updated: "" })),
   ];
 }
-export { published, pages, settings, siteURL };
+export { published, pages, settings, siteURL, pagePath };
