@@ -295,6 +295,15 @@ const cms = {
           },
         ),
         f(
+          "onesignal_app_id",
+          "OneSignal — publiczny App ID (powiadomienia)",
+          "string",
+          {
+            description:
+              "UUID aplikacji Web Push. Nie wklejaj REST API Key. Konfiguracja Custom Code, domena https://mostpomocy.pl. Wysyłka w panelu OneSignal.",
+          },
+        ),
+        f(
           "newsletter_url",
           "HTTPS do formularza zapisu newslettera",
           "string",

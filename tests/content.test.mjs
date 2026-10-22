@@ -245,3 +245,26 @@ test("hierarchia instytucji wykrywa cykle i pozwala na działy poza MOPS", () =>
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+test("konfiguracja push przyjmuje publiczny UUID i odrzuca klucz API", () => {
+  const settings = JSON.parse(
+    fs.readFileSync("content/settings/main.json", "utf8"),
+  );
+  assert.equal(
+    clean("settings", { ...settings, onesignal_app_id: "" }).onesignal_app_id,
+    "",
+  );
+  assert.equal(
+    clean("settings", {
+      ...settings,
+      onesignal_app_id: "8c29d915-8c2a-43b7-afbc-455f9b7d9a72",
+    }).onesignal_app_id,
+    "8c29d915-8c2a-43b7-afbc-455f9b7d9a72",
+  );
+  assert.throws(() =>
+    clean("settings", {
+      ...settings,
+      onesignal_app_id: "os_v2_app_private_key",
+    }),
+  );
+});

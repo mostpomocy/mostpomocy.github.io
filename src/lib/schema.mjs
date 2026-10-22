@@ -192,6 +192,7 @@ const schemas = {
     ga_measurement_id: text.regex(/^(G-[A-Z0-9]+)?$/).default(""),
     ga_property_id: text.regex(/^\d*$/).default(""),
     google_client_id: text.regex(/^[a-zA-Z0-9._-]*$/).default(""),
+    onesignal_app_id: text.uuid().or(z.literal("")).default(""),
     newsletter_url: z
       .string()
       .url()
