@@ -54,7 +54,7 @@ export default function GoogleReports({
       const report = await api(
         base,
         {
-          dateRanges: [{ startDate: "28daysAgo", endDate: "today" }],
+          dateRanges: [{ startDate: "27daysAgo", endDate: "today" }],
           metrics: [
             { name: "activeUsers" },
             { name: "sessions" },
@@ -73,7 +73,7 @@ export default function GoogleReports({
       const pages = await api(
         base,
         {
-          dateRanges: [{ startDate: "28daysAgo", endDate: "today" }],
+          dateRanges: [{ startDate: "27daysAgo", endDate: "today" }],
           dimensions: [{ name: "pagePath" }],
           metrics: [{ name: "screenPageViews" }],
           orderBys: [{ metric: { metricName: "screenPageViews" }, desc: true }],
@@ -89,7 +89,7 @@ export default function GoogleReports({
         const end = new Date(Date.now() - 3 * 86400000)
             .toISOString()
             .slice(0, 10),
-          start = new Date(Date.now() - 31 * 86400000)
+          start = new Date(Date.now() - 30 * 86400000)
             .toISOString()
             .slice(0, 10);
         let results: any = null;
@@ -241,6 +241,7 @@ export default function GoogleReports({
       {search.length > 0 && (
         <div className="report-table-wrap">
           <h3>Wyniki Google Search Console</h3>
+            <p>Dane za 28 dni, do trzech dni przed dzisiaj. Nowsze dane Google mogą być jeszcze niekompletne.</p>
           <table className="report-table">
             <thead>
               <tr>
