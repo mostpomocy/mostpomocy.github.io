@@ -1,7 +1,7 @@
 {
   "id": "mops-sosnowiec",
   "name": "Miejski Ośrodek Pomocy Społecznej w Sosnowcu",
-  "description": "Oficjalna strona miejskiego ośrodka. Sprawdź aktualne dane kontaktowe, zasady i dostępne formy wsparcia bezpośrednio w instytucji.",
+  "description": "Pierwszy kontakt w sprawach pomocy społecznej. Zapytaj o dział lub sekcję właściwą dla Twojej sytuacji.",
   "address": "ul. 3 Maja 33, 41-200 Sosnowiec",
   "phone": "32 296 22 01",
   "email": "kancelaria@mopssosnowiec.pl",
@@ -9,7 +9,7 @@
   "section": "mops",
   "parent_id": "",
   "city": "Sosnowiec",
-  "verified_at": "21.10.2026",
+  "verified_at": "22.10.2026",
   "status": "published",
   "updated_at": "2026-10-21T19:28:00.447Z"
 }
