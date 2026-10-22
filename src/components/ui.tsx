@@ -156,6 +156,8 @@ export function ArticleCard({
   post: RecordData;
   categories: RecordData[];
 }) {
+  const topic =
+    categories.find((c) => c.id === post.category_id)?.slug || "poradniki";
   return (
     <article
       className="article-card"
@@ -179,7 +181,7 @@ export function ArticleCard({
         href={"/artykuly/" + post.slug}
         tabIndex={-1}
         aria-hidden="true"
-        data-topic={post.category_id}
+        data-topic={topic}
       >
         {post.image ? (
           <img src={post.image} alt="" loading="lazy" />
@@ -188,7 +190,7 @@ export function ArticleCard({
             <span className="cover-word">
               {categoryName(categories, post.category_id)}
             </span>
-            <TopicMark topic={post.category_id} />
+            <TopicMark topic={topic} />
             <span className="cover-brand">MOSTPOMOCY / CZYTELNIA</span>
           </>
         )}

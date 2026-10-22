@@ -30,7 +30,7 @@ try {
     title: "Próba tagowania",
     slug: "test-post-smoke",
     body: "<p>Próba edycji.</p>",
-    category_id: "poradniki",
+    category_id: "efd21cfb-8b38-53a9-b3d5-dfe8aecfd147",
     tags: [tag.data.id],
     status: "draft",
   });
