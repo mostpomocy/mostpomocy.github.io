@@ -34,8 +34,10 @@ test("istniejące treści przechodzą walidację identyfikatora Pages CMS", () =
   for (const collection of cms.content.filter((c) => c.type === "collection")) {
     assert.equal(collection.fields.find((f) => f.name === "id").type, "uuid");
     for (const entry of all[collection.name]) {
-      assert.doesNotThrow(() => z.string().uuid().parse(entry.id),
-        `${collection.name}: ${entry.title || entry.name}`);
+      assert.doesNotThrow(
+        () => z.string().uuid().parse(entry.id),
+        `${collection.name}: ${entry.title || entry.name}`,
+      );
     }
   }
   const fresh = clean("posts", { ...post, id: undefined });

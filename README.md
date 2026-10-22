@@ -1,6 +1,6 @@
 # MostPomocy — blog na GitHub Pages
 
-Autorski blog o pracy socjalnej i wsparciu. Artykuły ogólnopolskie, katalog instytucji wyłącznie dla Sosnowca. Serwis powstaje z `src/` i `content/`. Zasoby publikowane bez przetwarzania znajdują się w `public/`. Pliki poprzedniej strony usunięto z aktualnej gałęzi; pozostają w historii Git. Podstrona „Sosnowiec bez stygmy” jest zachowana w `content/pages/sosnowiec-bez-stygmy.json`.
+Autorski blog o pracy socjalnej i wsparciu. Artykuły ogólnopolskie, katalog instytucji wyłącznie dla Sosnowca. Serwis powstaje z `src/` i `content/`. Zasoby publikowane bez przetwarzania znajdują się w `public/`. Pliki poprzedniej strony usunięto z aktualnej gałęzi; pozostają w historii Git. Podstrona „Sosnowiec bez stygmy” jest zachowana w `content/pages/ca685fc6-1093-548d-a95c-886a23d28bc9.json`.
 
 ## Uruchomienie
 
@@ -46,3 +46,5 @@ Aktualny plik XML jest publikowany automatycznie pod [mostpomocy.pl/sitemap.xml]
 Mapa zawiera pełne adresy HTTPS opublikowanych stron, artykułów, kategorii i tagów, w tym Sosnowca oraz projektu „Sosnowiec bez stygmy”. Pomija panel, szkice, kosz, treści noindex i krótkie adresy przekierowujące. Daty lastmod pochodzą z dat treści, a nie z daty kompilacji. `robots.txt` podaje adres mapy.
 
 W Google Search Console wybierz usługę `https://mostpomocy.pl/`, przejdź do „Mapy witryn”, wpisz `sitemap.xml` i prześlij. Ten sam adres mapy można zgłosić w Bing Webmaster Tools. To adres aktualizowany automatycznie; pobrana kopia XML jest tylko stanem z dnia jej utworzenia.
+
+Identyfikatory wpisów i nazwy plików treści są UUID zgodnymi z Pages CMS. Pole `slug` określa publiczny adres i jest od nich niezależne. Identyfikatorów nie należy zmieniać podczas edycji — łączą artykuły z kategoriami, tagami i instytucjami.
