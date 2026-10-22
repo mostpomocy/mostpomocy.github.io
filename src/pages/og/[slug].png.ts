@@ -44,7 +44,7 @@ export async function GET({
       "",
     )}<line x1="70" y1="535" x2="1130" y2="535" stroke="#bdcabc"/><text x="70" y="585" fill="#163f35" font-family="sans-serif" font-weight="bold" font-size="26">mostpomocy.pl</text><text x="1130" y="585" text-anchor="end" fill="#496b55" font-family="sans-serif" font-size="25">${xml(settings().author_name)}</text></svg>`;
   return new Response(
-    new Uint8Array(await sharp(Buffer.from(svg)).png().toBuffer()),
+    new Uint8Array(await sharp(new TextEncoder().encode(svg)).png().toBuffer()),
     { headers: { "Content-Type": "image/png" } },
   );
 }
