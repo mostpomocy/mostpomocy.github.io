@@ -3,20 +3,7 @@
   "name": "Miejski Zespół Interdyscyplinarny ds. Przeciwdziałania Przemocy Domowej",
   "slug": "zespol-interdyscyplinarny",
   "section": "institution",
-  "parent_id": "",
-  "city": "Sosnowiec",
   "description": "Koordynuje lokalne działania przeciw przemocy domowej. Możesz zapytać o procedurę „Niebieskie Karty” i właściwe miejsce wsparcia. W bezpośrednim zagrożeniu dzwoń pod 112.",
-  "address": "ul. Szpitalna 1, II piętro, pokoje 1–6, 41-219 Sosnowiec",
-  "phone": "669 783 012",
-  "email": "zppwr@mopssosnowiec.pl",
-  "website": "https://mops-sosnowiec.bip.info.pl/dokument_druk.php?iddok=1102&idmp=72&r=o",
-  "verified_at": "2026-10-22",
-  "status": "published",
-  "preparation": [
-    "Opisz krótko, co się dzieje i czego potrzebujesz teraz.",
-    "Powiedz, w jaki sposób można się z Tobą bezpiecznie skontaktować.",
-    "Zapytaj, kto poprowadzi dalszy kontakt i kiedy możesz oczekiwać odpowiedzi."
-  ],
   "tiles": [
     {
       "title": "Niebieskie Karty",
@@ -28,5 +15,18 @@
       "text": "Przy bezpośrednim zagrożeniu życia lub zdrowia skontaktuj się z numerem 112. Zespół nie zastępuje służb alarmowych.",
       "url": "/sosnowiec/przemoc/"
     }
-  ]
+  ],
+  "opening_hours": "Przed wizytą potwierdź telefonicznie godziny i sposób umówienia rozmowy.",
+  "preparation": [
+    "Opisz krótko, co się dzieje i czego potrzebujesz teraz.",
+    "Powiedz, w jaki sposób można się z Tobą bezpiecznie skontaktować.",
+    "Zapytaj, kto poprowadzi dalszy kontakt i kiedy możesz oczekiwać odpowiedzi."
+  ],
+  "address": "ul. Szpitalna 1, II piętro, pokoje 1–6, 41-219 Sosnowiec",
+  "phone": "669 783 012",
+  "email": "zppwr@mopssosnowiec.pl",
+  "website": "https://mops-sosnowiec.bip.info.pl/dokument_druk.php?iddok=1102&idmp=72&r=o",
+  "city": "Sosnowiec",
+  "verified_at": "2026-10-22",
+  "status": "published"
 }
