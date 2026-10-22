@@ -76,7 +76,9 @@ for (const address of sitemapURLs) {
   );
   assert.doesNotMatch(html, /content="noindex/, address);
 }
-assert.ok(!sitemapURLs.includes("https://mostpomocy.pl/bez-stygmy/"));
+assert.ok(
+  !sitemapURLs.some((address) => new URL(address).pathname === "/bez-stygmy/"),
+);
 assert.match(
   fs.readFileSync("dist/robots.txt", "utf8"),
   /Sitemap: https:\/\/mostpomocy\.pl\/sitemap\.xml/,
