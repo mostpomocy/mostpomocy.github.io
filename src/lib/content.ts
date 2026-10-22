@@ -28,7 +28,7 @@ export function prepareBody(html: string) {
   const toc: { id: string; title: string }[] = [];
   const body = html.replace(/<h([23])>(.*?)<\/h\1>/g, (_, level, title) => {
     const id = "sekcja-" + ++index;
-    toc.push({ id, title: title.replace(/<[^>]*>/g, "") });
+    toc.push({ id, title: title.replace(/<[^>]*>/g, " ") });
     return `<h${level} id="${id}">${title}</h${level}>`;
   });
   return { body, toc };
@@ -43,5 +43,5 @@ export const date = (value: string) =>
 export const readingTime = (body: string) =>
   Math.max(
     1,
-    Math.ceil(body.replace(/<[^>]*>/g, "").split(/\s+/).length / 200),
+    Math.ceil(body.replace(/<[^>]*>/g, " ").split(/\s+/).length / 200),
   );
