@@ -178,7 +178,7 @@ export function clean(resource, input) {
     ]),
   );
   const data = schemas[resource].parse(normalized);
-  data.id = data.id || data.slug || crypto.randomUUID();
+  data.id = data.id || crypto.randomUUID();
   if (data.body !== undefined) {
     data.body = sanitize(data.body, {
       allowedTags: [

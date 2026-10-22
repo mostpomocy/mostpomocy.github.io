@@ -8,7 +8,7 @@ const categories = rows("categories");
 const guides = pages();
 const paths = [
   {
-    id: "pieniadze-i-codzienne-potrzeby",
+    id: "4fef2246-b096-5d04-b9ec-542640dcb2cd",
     title: "Brakuje mi pieniędzy",
     description: "Jedzenie, rachunki i codzienne wydatki.",
   },
@@ -19,22 +19,22 @@ const paths = [
     description: "Gorszy czas, samotność, niepokój. Nie musisz tego nazywać.",
   },
   {
-    id: "niepelnosprawnosc-i-samodzielnosc",
+    id: "0c167bee-8fef-5b46-890f-67c7830135a6",
     title: "Niepełnosprawność",
     description: "Orzeczenie, dofinansowanie i codzienna samodzielność.",
   },
   {
-    id: "rodzina-i-dzieci",
+    id: "639879aa-103e-55ed-8a43-8d28a6415a39",
     title: "Rodzina i dzieci",
     description: "Rodzicielstwo, świadczenia i wsparcie bliskich.",
   },
   {
-    id: "choroba-i-opieka",
+    id: "a9e66d47-ff17-591c-b885-4eb21d317546",
     title: "Choroba i opieka",
     description: "Pomoc na co dzień — dla chorej osoby i opiekuna.",
   },
   {
-    id: "mieszkanie-i-schronienie",
+    id: "fd201bbb-cf04-5e38-9c21-c643cadc6372",
     title: "Mieszkanie i schronienie",
     description: "Opłaty za lokal albo brak bezpiecznego miejsca na noc.",
   },
@@ -49,9 +49,9 @@ const paths = [
   }))
   .filter((p) => p.href);
 const contacts = [
-  "mops-sosnowiec",
-  "porady-prawne-sosnowiec",
-  "informator-zdrowie-psychiczne-sosnowiec",
+  "34c283a4-7fbf-5dfa-88d4-f5aeeafadacc",
+  "4ee69169-ddfb-5337-a702-1f7cb92142b4",
+  "3db0472f-bada-5142-af27-ed83f6bb27d8",
 ]
   .map((id) =>
     rows("places").find((p) => p.id === id && p.status === "published"),

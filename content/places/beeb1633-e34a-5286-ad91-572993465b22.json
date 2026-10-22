@@ -1,0 +1,15 @@
+{
+  "id": "beeb1633-e34a-5286-ad91-572993465b22",
+  "name": "Dział Dodatków Mieszkaniowych",
+  "description": "Pytania dotyczące dodatków mieszkaniowych. Przed złożeniem dokumentów potwierdź aktualny sposób obsługi.",
+  "address": "",
+  "phone": "32 296 22 64",
+  "email": "ddm@mopssosnowiec.pl",
+  "website": "https://mopssosnowiec.pl/o-osrodku/dzial-dodatkow-mieszkaniowych.html",
+  "section": "mops",
+  "parent_id": "34c283a4-7fbf-5dfa-88d4-f5aeeafadacc",
+  "city": "Sosnowiec",
+  "verified_at": "21.10.2026",
+  "status": "published",
+  "updated_at": "2026-10-21T19:28:00.512Z"
+}

@@ -1,0 +1,15 @@
+{
+  "id": "fbacee03-643b-5728-95e9-d5a11f9ee142",
+  "name": "Powiatowy Urząd Pracy w Sosnowcu",
+  "description": "Informacje o rejestracji, poszukiwaniu pracy i rozwoju zawodowym. Oficjalna książka kontaktów pomaga wybrać numer do swojej sprawy.",
+  "address": "",
+  "phone": "",
+  "email": "",
+  "website": "https://sosnowiec.praca.gov.pl/urzad/dane-kontaktowe",
+  "section": "institution",
+  "parent_id": "",
+  "city": "Sosnowiec",
+  "verified_at": "21.10.2026",
+  "status": "published",
+  "updated_at": "2026-10-21T19:28:00.521Z"
+}
