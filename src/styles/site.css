@@ -338,10 +338,10 @@ p {
 .card-cover[data-topic="niepelnosprawnosc"] {
   background: #d9e5e4;
 }
-.card-cover[data-topic="rodzina"] {
+.card-cover[data-topic="rodzina-i-dzieci"] {
   background: #ead6ca;
 }
-.card-cover[data-topic="kryzys"] {
+.card-cover[data-topic="kiedy-jest-trudno"] {
   background: #e5dfb9;
 }
 .card-cover[data-topic="poradniki"] {

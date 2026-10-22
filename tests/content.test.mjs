@@ -6,7 +6,9 @@ import path from "node:path";
 import { clean, resources, visible } from "../src/lib/schema.mjs";
 import { validate } from "../scripts/validate.mjs";
 import YAML from "yaml";
+import { z } from "zod";
 const post = {
+  id: "probny-artykul",
   title: "Próbny artykuł",
   slug: "probny-artykul",
   body: "<h2>Rozmowa</h2><p>Treść</p>",
@@ -24,6 +26,22 @@ test("publikacja uwzględnia szkice, kosz i przyszły termin", () => {
   );
   assert.equal(visible({ ...post, status: "scheduled" }, now), true);
   assert.equal(visible(post, now), true);
+});
+
+test("istniejące treści przechodzą walidację identyfikatora Pages CMS", () => {
+  const cms = YAML.parse(fs.readFileSync(".pages.yml", "utf8"));
+  const all = validate();
+  for (const collection of cms.content.filter((c) => c.type === "collection")) {
+    assert.equal(collection.fields.find((f) => f.name === "id").type, "uuid");
+    for (const entry of all[collection.name]) {
+      assert.doesNotThrow(
+        () => z.string().uuid().parse(entry.id),
+        `${collection.name}: ${entry.title || entry.name}`,
+      );
+    }
+  }
+  const fresh = clean("posts", { ...post, id: undefined });
+  assert.doesNotThrow(() => z.string().uuid().parse(fresh.id));
 });
 test("treść usuwa skrypty, obsługę zdarzeń i niebezpieczne adresy", () => {
   const p = clean("posts", {

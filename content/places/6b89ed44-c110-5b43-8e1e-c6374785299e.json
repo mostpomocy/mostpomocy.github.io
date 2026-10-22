@@ -1,0 +1,15 @@
+{
+  "id": "6b89ed44-c110-5b43-8e1e-c6374785299e",
+  "name": "Dział Pomocy Środowiskowej",
+  "description": "Kontakt w sprawach pomocy środowiskowej. Opisz swoją sytuację i zapytaj o właściwy punkt pierwszego kontaktu.",
+  "address": "",
+  "phone": "32 296 22 30",
+  "email": "dps@mopssosnowiec.pl",
+  "website": "https://mopssosnowiec.pl/",
+  "section": "mops",
+  "parent_id": "34c283a4-7fbf-5dfa-88d4-f5aeeafadacc",
+  "city": "Sosnowiec",
+  "verified_at": "21.10.2026",
+  "status": "published",
+  "updated_at": "2026-10-21T19:28:00.502Z"
+}
