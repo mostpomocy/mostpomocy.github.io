@@ -1,0 +1,15 @@
+{
+  "id": "scop-sosnowiec",
+  "name": "Sosnowieckie Centrum Organizacji Pozarządowych",
+  "description": "Baza lokalnych fundacji i stowarzyszeń oraz informacje o inicjatywach społecznych i wolontariacie.",
+  "address": "",
+  "phone": "",
+  "email": "",
+  "website": "https://wsparcie.sosnowiec.pl/",
+  "section": "institution",
+  "parent_id": "",
+  "city": "Sosnowiec",
+  "verified_at": "21.10.2026",
+  "status": "published",
+  "updated_at": "2026-10-21T19:28:00.528Z"
+}

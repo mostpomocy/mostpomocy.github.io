@@ -1,0 +1,157 @@
+---
+import Base from "../layouts/Base.astro";
+import { published, rows, settings } from "../lib/content";
+import { ArticleCard, Bridge } from "../components/ui";
+const config = settings();
+const all = published();
+const categories = rows("categories");
+const featured = all.find((p) => p.featured) || all[0];
+---
+
+<Base>
+  <main id="main" tabindex="-1">
+    <div class="container">
+      <div class="eyebrow intro-label">
+        NIE MUSISZ WIEDZIEĆ WSZYSTKIEGO, ŻEBY ZACZĄĆ.
+      </div>
+      <section class="intro">
+        <h1>
+          O pomaganiu.
+          <br />
+          <em>Po ludzku.</em>
+        </h1>
+        <div>
+          <p>
+            Praca socjalna, codzienne wyzwania i drogi do wsparcia. Wiedza,
+            która pomaga lepiej zrozumieć siebie i innych.
+          </p>
+          <a class="text-link" href="/od-czego-zaczac/">
+            Nie wiem, od czego zacząć ↘
+          </a>
+        </div>
+      </section>
+      {featured && (
+        <a class="hero" href={"/artykuly/" + featured.slug + "/"}>
+          <div class="hero-copy">
+            <span class="eyebrow">WARTO ZACZĄĆ TUTAJ</span>
+            <h2>{featured.title}</h2>
+            <p>{featured.excerpt}</p>
+            <div class="hero-bottom">
+              <span>Przeczytaj artykuł</span>
+              <span class="circle-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </div>
+          </div>
+          <div class="hero-art">
+            <Bridge />
+            <span class="art-caption">Każda rozmowa może być początkiem.</span>
+          </div>
+        </a>
+      )}
+      <section class="topics" aria-label="Kategorie">
+        <div class="section-kicker">BLIŻEJ TEMATU</div>
+        <div class="topic-grid">
+          {categories.map((c, i) => (
+            <a class="topic" href={"/kategorie/" + c.slug + "/"}>
+              <span class="topic-number">{String(i + 1).padStart(2, "0")}</span>
+              <strong>{c.name}</strong>
+              <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+      <section class="care-paths" aria-label="Wsparcie w chorobie">
+        <a href="/wsparcie-onkologiczne/">
+          <span class="eyebrow">DLA CIEBIE I BLISKICH</span>
+          <h2>
+            W chorobie
+            <br />
+            nowotworowej.
+          </h2>
+          <p>
+            Nie tylko leczenie. Także codzienność, emocje i pomoc w organizacji
+            dnia.
+          </p>
+          <span class="text-link">Zobacz, gdzie zacząć ↗</span>
+        </a>
+        <a href="/zdrowie-psychiczne/">
+          <span class="eyebrow">BEZ ETYKIET I OCENIANIA</span>
+          <h2>
+            Gdy trudno
+            <br />o spokój w głowie.
+          </h2>
+          <p>
+            Wsparcie dla osób z trudnościami psychicznymi, z rozpoznaniem
+            choroby i bez niego.
+          </p>
+          <span class="text-link">Zdrowie psychiczne ↗</span>
+        </a>
+      </section>
+      <section id="artykuly" class="articles">
+        <div class="section-top">
+          <div>
+            <div class="eyebrow">Z BLOGA</div>
+            <h2>Dobre miejsce na pierwszy krok</h2>
+          </div>
+          <a class="text-link" href="/blog/">
+            Cały blog i wszystkie tematy ↗
+          </a>
+        </div>
+        <div class="article-grid">
+          {all.slice(0, 6).map((p) => (
+            <ArticleCard post={p} categories={categories} />
+          ))}
+        </div>
+      </section>
+      <section class="local-banner">
+        <div>
+          <span class="eyebrow">BLISKO CIEBIE</span>
+          <h2>
+            Sosnowiec.
+            <br />
+            Tu szukamy wsparcia.
+          </h2>
+          <p>
+            MOPS i jego działy, inne instytucje oraz artykuły o tym, co dzieje
+            się blisko nas.
+          </p>
+          <a class="button dark" href="/sosnowiec/">
+            Pomoc w Sosnowcu ↗
+          </a>
+        </div>
+        <div class="local-mark" aria-hidden="true">
+          S
+          <span>
+            50°17′ N<br />
+            19°08′ E
+          </span>
+        </div>
+      </section>
+      <section class="quiet-note">
+        <span class="eyebrow">MAŁY KROK NA DZIŚ</span>
+        <h2>Nie musisz mieć gotowej odpowiedzi.</h2>
+        <p>
+          Możesz przygotować własną kartkę do rozmowy — bez wysyłania prywatnych
+          informacji.
+        </p>
+        <a class="text-link" href="/moja-kartka/">
+          Przygotuj i wydrukuj swoją kartkę ↗
+        </a>
+      </section>
+      <section class="author-note">
+        <span class="avatar" aria-hidden="true">
+          IP
+        </span>
+        <div>
+          <div class="eyebrow">ZA MOSTEM STOI CZŁOWIEK</div>
+          <h2>Cześć, jestem Igor.</h2>
+          <p>{config.about}</p>
+          <a href="/o-projekcie/" class="text-link">
+            Poznaj projekt ↗
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+</Base>

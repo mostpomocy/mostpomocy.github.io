@@ -1,0 +1,176 @@
+---
+import Base from "../../layouts/Base.astro";
+import {
+  published,
+  rows,
+  settings,
+  prepareBody,
+  date,
+  readingTime,
+  siteURL,
+} from "../../lib/content";
+import { ArticleCard } from "../../components/ui";
+import { ArticleActions } from "../../components/article-actions";
+import { visible } from "../../lib/schema.mjs";
+export function getStaticPaths() {
+  return (
+    import.meta.env.DEV
+      ? rows("posts").filter((p) => p.status !== "trashed")
+      : published()
+  ).map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+const { post } = Astro.props;
+const config = settings();
+const categories = rows("categories");
+const category = categories.find((c) => c.id === post.category_id);
+const tags = rows("tags").filter((t) => post.tags.includes(t.id));
+const { body, toc } = prepareBody(post.body);
+const related = published()
+  .filter((p) => p.id !== post.id)
+  .map((p) => ({
+    post: p,
+    score:
+      (p.category_id === post.category_id ? 3 : 0) +
+      p.tags.filter((id: string) => post.tags.includes(id)).length,
+  }))
+  .sort((a, b) => b.score - a.score)
+  .slice(0, 3);
+const sources = post.sources
+  .split("\n")
+  .filter((s: string) => /^https:\/\//.test(s));
+const canonical = post.canonical_url || siteURL("/artykuly/" + post.slug + "/");
+const structured = {
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  headline: post.title,
+  description: post.excerpt,
+  mainEntityOfPage: canonical,
+  url: canonical,
+  datePublished: post.published_at || post.updated_at,
+  dateModified: post.updated_at,
+  author: {
+    "@type": "Person",
+    name: post.author,
+    url: siteURL("/o-projekcie/"),
+  },
+  publisher: { "@type": "Person", name: config.author_name },
+  inLanguage: "pl-PL",
+  articleSection: category?.name,
+  keywords: tags.map((t) => t.name),
+  ...(post.image ? { image: [new URL(post.image, config.site_url).href] } : {}),
+};
+---
+
+<Base
+  title={post.seo_title || post.title}
+  description={post.seo_description || post.excerpt}
+  canonical={canonical}
+  image={post.image}
+  noindex={post.noindex || !visible(post)}
+  kind="article"
+  structured={structured}
+>
+  <main id="main" tabindex="-1" class="container article-page">
+    {!visible(post) && (
+      <p class="preview-notice">
+        Podgląd lokalny szkicu. Ten tekst nie trafi do publicznego wydania
+        strony.
+      </p>
+    )}
+    <nav class="breadcrumbs" aria-label="Okruszki">
+      <a href="/blog/">Blog</a> /{" "}
+      <a href={"/kategorie/" + category?.slug + "/"}>{category?.name}</a>
+    </nav>
+    <header class="article-heading">
+      {post.scope === "sosnowiec" && (
+        <a class="local-badge" href="/sosnowiec/?zakladka=artykuly">
+          Z Sosnowca ↗
+        </a>
+      )}
+      <span class="eyebrow">{category?.name}</span>
+      <h1>{post.title}</h1>
+      <p class="lead">{post.excerpt}</p>
+      <div class="byline">
+        <span class="avatar small" aria-hidden="true">
+          IP
+        </span>
+        <div>
+          <strong>{post.author}</strong>
+          <span>
+            <time datetime={post.published_at || post.updated_at}>
+              {date(post.published_at || post.updated_at)}
+            </time>{" "}
+            · {readingTime(post.body)} min czytania
+          </span>
+        </div>
+      </div>
+      <nav class="article-tags" aria-label="Tagi artykułu">
+        {tags.map((t) => (
+          <a href={"/tagi/" + t.slug + "/"}>#{t.name}</a>
+        ))}
+      </nav>
+    </header>
+    {post.image && (
+      <img class="article-image" src={post.image} alt={post.image_alt} />
+    )}
+    <div class="reading-layout">
+      <aside class="reading-aside" aria-label="Nawigacja po artykule">
+        {post.toc && toc.length > 1 && (
+          <nav class="article-toc" aria-label="Spis treści">
+            <span class="eyebrow">W TYM TEKŚCIE</span>
+            <ol>
+              {toc.map((t) => (
+                <li>
+                  <a href={"#" + t.id}>{t.title}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
+        <ArticleActions client:load />
+      </aside>
+      <article class="prose">
+        <div set:html={body} />
+        {sources.length > 0 && (
+          <section class="sources">
+            <h2>Źródła i dalsza lektura</h2>
+            <ul>
+              {sources.map((s: string) => (
+                <li>
+                  <a href={s} target="_blank" rel="noopener noreferrer">
+                    {s}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+        <p class="article-update">
+          Aktualizacja:{" "}
+          <time datetime={post.updated_at}>{date(post.updated_at)}</time>.
+          Materiał edukacyjny. Konkretne warunki pomocy potwierdź w odpowiedniej
+          instytucji.
+        </p>
+        <div class="author-box">
+          <span class="avatar" aria-hidden="true">
+            IP
+          </span>
+          <div>
+            <strong>{post.author}</strong>
+            <p>O pracy socjalnej i szukaniu wsparcia, prostym językiem.</p>
+            <a href="/o-projekcie/">Więcej o autorze i projekcie ↗</a>
+          </div>
+        </div>
+      </article>
+    </div>
+    <section class="related">
+      <span class="eyebrow">POŁĄCZONE TEMATY</span>
+      <h2>Może zainteresuje Cię również</h2>
+      <div class="article-grid">
+        {related.map((r) => (
+          <ArticleCard post={r.post} categories={categories} />
+        ))}
+      </div>
+    </section>
+  </main>
+</Base>

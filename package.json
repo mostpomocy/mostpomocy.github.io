@@ -1,0 +1,35 @@
+{
+  "name": "mostpomocy-github-pages",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --ignore-lock --host 127.0.0.1 --port 5174",
+    "build": "node scripts/validate.mjs && astro build",
+    "preview": "astro preview --host 127.0.0.1 --port 5174",
+    "check": "astro check",
+    "test": "node --test tests/*.test.mjs",
+    "test:output": "node scripts/check-output.mjs"
+  },
+  "dependencies": {
+    "@astrojs/react": "^7.1.1",
+    "astro": "^7.4.2",
+    "ra-input-rich-text": "^5.15.5",
+    "react": "19.2.6",
+    "react-admin": "^5.15.5",
+    "react-dom": "19.2.6",
+    "sanitize-html": "^2.17.0",
+    "yaml": "^2.8.1",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@astrojs/check": "latest",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@types/sanitize-html": "^2.16.0",
+    "axe-core": "^4.11.1",
+    "prettier": "^3.9.10",
+    "prettier-plugin-astro": "^1.1.1",
+    "typescript": "^5.9.3"
+  }
+}

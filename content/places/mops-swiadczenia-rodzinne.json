@@ -1,0 +1,15 @@
+{
+  "id": "mops-swiadczenia-rodzinne",
+  "name": "Dział Świadczeń Rodzinnych i Alimentacyjnych",
+  "description": "Pytania dotyczące świadczeń rodzinnych i alimentacyjnych. Szczegóły dokumentów i właściwość sprawdź bezpośrednio w dziale.",
+  "address": "",
+  "phone": "695 140 219",
+  "email": "dsr@mopssosnowiec.pl",
+  "website": "https://mopssosnowiec.pl/o-osrodku/dzial-swiadczen-rodzinnych-i-alimentacyjnych.html",
+  "section": "mops",
+  "parent_id": "mops-sosnowiec",
+  "city": "Sosnowiec",
+  "verified_at": "21.10.2026",
+  "status": "published",
+  "updated_at": "2026-10-21T19:28:00.507Z"
+}

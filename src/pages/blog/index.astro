@@ -1,0 +1,32 @@
+---
+import Base from "../../layouts/Base.astro";
+import ArticleList from "../../components/ArticleList.astro";
+import { rows, published } from "../../lib/content";
+const tags = rows("tags");
+const all = published();
+---
+
+<Base title="Blog — artykuły i poradniki">
+  <main id="main" tabindex="-1" class="container inner-page blog-page">
+    <span class="eyebrow">CZYTELNIA MOSTPOMOCY</span>
+    <h1>
+      Wiedza na <em>Twoją chwilę.</em>
+    </h1>
+    <p class="lead narrow">
+      Wybierz temat, tag albo po prostu sprawdź, co Cię zaciekawi. Wszystkie
+      teksty dostępne są również bez wyszukiwania.
+    </p>
+    <ArticleList />
+    <section class="tag-cloud" aria-label="Przeglądaj tagi">
+      <h2>Połącz tematy po swojemu</h2>
+      <div>
+        {tags.map((t) => (
+          <a href={"/tagi/" + t.slug + "/"}>
+            #{t.name}
+            <span>{all.filter((p) => p.tags?.includes(t.id)).length}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+  </main>
+</Base>

@@ -1,0 +1,174 @@
+---
+import { ArticleCard } from "./ui";
+import { published, rows } from "../lib/content";
+const {
+  posts = published(),
+  heading = "Artykuły i poradniki",
+  category = "",
+  tag = "",
+  local = false,
+} = Astro.props;
+const categories = rows("categories");
+const tags = rows("tags");
+---
+
+<section class="blog-explorer" data-explorer>
+  <nav class="category-chips" aria-label="Kategorie bloga">
+    <a href="/blog/">Wszystkie tematy</a>
+    {categories.map((c) => (
+      <a
+        class={category === c.id ? "active" : ""}
+        href={"/kategorie/" + c.slug + "/"}
+      >
+        {c.name}
+        <span>{published().filter((p) => p.category_id === c.id).length}</span>
+      </a>
+    ))}
+  </nav>
+  <form class="blog-filters advanced-filters" action="/blog/" method="get">
+    <label for="blog-search">
+      Szukaj w artykułach
+      <input
+        id="blog-search"
+        name="q"
+        placeholder="Temat, pytanie, słowo…"
+        type="search"
+      />
+    </label>
+    <label for="blog-category">
+      Kategoria
+      <select id="blog-category" name="kategoria">
+        <option value="">Wszystkie kategorie</option>
+        {categories.map((c) => (
+          <option value={c.id} selected={c.id === category}>
+            {c.name}
+          </option>
+        ))}
+      </select>
+    </label>
+    <label for="blog-tag">
+      Tag
+      <select id="blog-tag" name="tag">
+        <option value="">Wszystkie tagi</option>
+        {tags.map((t) => (
+          <option value={t.id} selected={t.id === tag}>
+            {t.name}
+          </option>
+        ))}
+      </select>
+    </label>
+    <label for="blog-order">
+      Kolejność
+      <select id="blog-order" name="sort">
+        <option value="newest">Od najnowszych</option>
+        <option value="oldest">Od najstarszych</option>
+        <option value="title">Według tytułu</option>
+      </select>
+    </label>
+    {local && <input type="hidden" name="lokalne" value="1" />}
+    <button class="button dark" type="submit">
+      Pokaż artykuły ↗
+    </button>
+    <a href="/blog/" class="text-link">
+      Wyczyść filtry
+    </a>
+  </form>
+  <div class="results-heading">
+    <h2>{heading}</h2>
+    <p class="muted" role="status" data-result-count>
+      Liczba artykułów: {posts.length}
+    </p>
+  </div>
+  <div class="article-grid" data-cards>
+    {posts.map((p: import("../lib/content").RecordData) => (
+      <ArticleCard post={p} categories={categories} />
+    ))}
+  </div>
+  <div class="empty" data-no-results hidden>
+    <h3>Nie znaleźliśmy pasującego tekstu.</h3>
+    <p>
+      Wybierz inny temat albo wyczyść filtry. Nie musisz znać fachowej nazwy
+      swojej sytuacji.
+    </p>
+    <a class="text-link" href="/od-czego-zaczac/">
+      Pomóż mi znaleźć pierwszy krok ↗
+    </a>
+  </div>
+  <noscript>
+    <p>
+      Wyszukiwanie wymaga JavaScript. Wszystkie artykuły są dostępne poniżej, a
+      kategorie i tagi mają osobne strony.
+    </p>
+  </noscript>
+</section>
+<script>
+  for (const section of document.querySelectorAll<HTMLElement>(
+    "[data-explorer]",
+  )) {
+    const form = section.querySelector<HTMLFormElement>("form")!;
+    const grid = section.querySelector<HTMLElement>("[data-cards]")!;
+    const cards = Array.from(grid.querySelectorAll<HTMLElement>("[data-post]"));
+    const params = new URLSearchParams(location.search);
+    const category = form.elements.namedItem("kategoria") as HTMLSelectElement;
+    const tag = form.elements.namedItem("tag") as HTMLSelectElement;
+    const search = form.elements.namedItem("q") as HTMLInputElement;
+    const order = form.elements.namedItem("sort") as HTMLSelectElement;
+    for (const [name, field] of [
+      ["kategoria", category],
+      ["tag", tag],
+      ["q", search],
+      ["sort", order],
+    ] as const)
+      if (params.has(name)) field.value = params.get(name) || "";
+    function filter(update = false) {
+      const text = search.value.trim().toLocaleLowerCase("pl");
+      const locally =
+        params.get("lokalne") === "1" || !!form.elements.namedItem("lokalne");
+      let count = 0;
+      cards.sort((a, b) =>
+        order.value === "title"
+          ? (a.dataset.title || "").localeCompare(b.dataset.title || "", "pl")
+          : (Date.parse(a.dataset.date || "") -
+              Date.parse(b.dataset.date || "")) *
+            (order.value === "oldest" ? 1 : -1),
+      );
+      for (const card of cards) {
+        const matches =
+          (!category.value || card.dataset.category === category.value) &&
+          (!tag.value ||
+            JSON.parse(card.dataset.tags || "[]").includes(tag.value)) &&
+          (!text || card.dataset.search?.includes(text)) &&
+          (!locally || card.dataset.scope === "sosnowiec");
+        card.hidden = !matches;
+        if (matches) count++;
+        grid.append(card);
+      }
+      section.querySelector("[data-result-count]")!.textContent =
+        "Liczba artykułów: " + count;
+      (section.querySelector("[data-no-results]") as HTMLElement).hidden =
+        count !== 0;
+      if (update) {
+        const next = new URL(location.href);
+        next.search = "";
+        for (const [key, value] of new FormData(form).entries())
+          if (value) next.searchParams.set(key, String(value));
+        history.replaceState(null, "", next);
+      }
+    }
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (
+        location.pathname.startsWith("/kategorie/") ||
+        location.pathname.startsWith("/tagi/")
+      ) {
+        const query = new URLSearchParams();
+        for (const [key, value] of new FormData(form).entries())
+          if (value) query.set(key, String(value));
+        location.href = "/blog/?" + query;
+        return;
+      }
+      filter(true);
+    });
+    filter();
+  }
+</script>

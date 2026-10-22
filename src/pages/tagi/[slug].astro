@@ -1,0 +1,29 @@
+---
+import Base from "../../layouts/Base.astro";
+import ArticleList from "../../components/ArticleList.astro";
+import { rows, published } from "../../lib/content";
+export function getStaticPaths() {
+  return rows("tags").map((tag) => ({
+    params: { slug: tag.slug },
+    props: { tag },
+  }));
+}
+const { tag } = Astro.props;
+const posts = published().filter((p) => p.tags?.includes(tag.id));
+---
+
+<Base
+  title={"#" + tag.name}
+  description={tag.description}
+  noindex={!posts.length}
+>
+  <main id="main" tabindex="-1" class="container inner-page blog-page">
+    <div class="breadcrumbs">
+      <a href="/blog/">Blog</a> / Tagi
+    </div>
+    <span class="eyebrow">POWIĄZANE TEMATY</span>
+    <h1>#{tag.name}</h1>
+    <p class="lead narrow">{tag.description}</p>
+    <ArticleList posts={posts} heading={"Artykuły: " + tag.name} tag={tag.id} />
+  </main>
+</Base>

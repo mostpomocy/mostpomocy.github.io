@@ -1,0 +1,87 @@
+---
+import Base from "../layouts/Base.astro";
+import Editor from "../components/LocalEditor";
+import { settings } from "../lib/content";
+const config = settings();
+---
+
+{import.meta.env.DEV ? (
+  <html lang="pl">
+    <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width,initial-scale=1" />
+      <meta name="robots" content="noindex,nofollow" />
+      <title>Redakcja MostPomocy</title>
+    </head>
+    <body style="margin:0">
+      <Editor client:only="react" />
+    </body>
+  </html>
+) : (
+  <Base title="Panel redakcyjny" noindex={true}>
+    <main id="main" tabindex="-1" class="container inner-page">
+      <span class="eyebrow">PANEL AUTORA</span>
+      <h1>
+        Twoja <em>redakcja.</em>
+      </h1>
+      <p class="lead narrow">
+        Artykuły, własne podstrony, tagi, kategorie i zdjęcia edytujesz w Pages
+        CMS. Zmiany zapisują się w repozytorium i uruchamiają budowanie strony.
+      </p>
+      <div class="admin-links">
+        <a
+          class="button dark"
+          href="https://app.pagescms.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Otwórz Pages CMS ↗
+        </a>
+        <a
+          class="button"
+          href={"https://github.com/" + config.repository + "/actions"}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Stan publikacji ↗
+        </a>
+        <a
+          class="button"
+          href="https://analytics.google.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Google Analytics ↗
+        </a>
+        <a
+          class="button"
+          href="https://search.google.com/search-console"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Google Search Console ↗
+        </a>
+      </div>
+      <section class="info-box">
+        <h2>Pierwsze połączenie</h2>
+        <p>
+          Zaloguj się przez GitHub w Pages CMS i połącz aplikację tylko z
+          repozytorium <strong>{config.repository}</strong>. Wybierz gałąź{" "}
+          <strong>{config.branch}</strong>.
+        </p>
+        <p>
+          To panel zewnętrzny. Ta strona na GitHub Pages nie zapisuje haseł ani
+          kluczy prywatnych. Uprawnienia do edycji sprawdza GitHub i Pages CMS.
+        </p>
+      </section>
+      <section class="quiet-note">
+        <h2>Jak dodać podstronę?</h2>
+        <p>
+          W Pages CMS wybierz „Podstrony” → nowy wpis, wpisz tytuł i adres,
+          dodaj treść, wybierz status publikacji oraz opcjonalnie „Pokaż w
+          menu”. Po zapisie poczekaj na zakończenie publikacji.
+        </p>
+      </section>
+    </main>
+  </Base>
+)}

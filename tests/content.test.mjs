@@ -1,0 +1,101 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import { clean, resources, visible } from "../src/lib/schema.mjs";
+import { validate } from "../scripts/validate.mjs";
+import YAML from "yaml";
+const post = {
+  title: "Próbny artykuł",
+  slug: "probny-artykul",
+  body: "<h2>Rozmowa</h2><p>Treść</p>",
+  category_id: "poradniki",
+  status: "published",
+  published_at: "2026-01-01T12:00:00Z",
+};
+test("publikacja uwzględnia szkice, kosz i przyszły termin", () => {
+  const now = Date.parse("2026-02-01");
+  assert.equal(visible({ ...post, status: "draft" }, now), false);
+  assert.equal(visible({ ...post, status: "trashed" }, now), false);
+  assert.equal(
+    visible({ ...post, status: "scheduled", published_at: "2027-01-01" }, now),
+    false,
+  );
+  assert.equal(visible({ ...post, status: "scheduled" }, now), true);
+  assert.equal(visible(post, now), true);
+});
+test("treść usuwa skrypty, obsługę zdarzeń i niebezpieczne adresy", () => {
+  const p = clean("posts", {
+    ...post,
+    body: '<script>alert(1)</script><p onclick="alert(1)">Tekst <a href="javascript:alert(1)">link</a></p><img src="https://example.org/a.jpg" onerror="x()" alt="Opis"/>',
+  });
+  assert.doesNotMatch(p.body, /script|onclick|onerror/);
+  assert.match(p.body, /alt="Opis"/);
+});
+test("podstrona nie może zająć adresu bloga lub panelu", () => {
+  for (const slug of ["admin", "blog", "sosnowiec", "dostepnosc"])
+    assert.throws(() => clean("pages", { ...post, slug }));
+});
+test("publikacja wymaga treści, kategorii i stabilnej daty", () => {
+  for (const patch of [
+    { body: "" },
+    { category_id: "" },
+    { published_at: null },
+    { published_at: "nie-data" },
+  ])
+    assert.throws(() => clean("posts", { ...post, ...patch }));
+  assert.throws(() =>
+    clean("posts", { ...post, status: "scheduled", published_at: null }),
+  );
+  assert.equal(
+    clean("posts", { ...post, status: "draft", body: "", published_at: null })
+      .status,
+    "draft",
+  );
+});
+test("walidator wykrywa zerwane relacje i powtarzające się adresy", () => {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), "mostpomocy-test-"));
+  try {
+    for (const r of resources)
+      fs.mkdirSync(path.join(root, "content", r), { recursive: true });
+    fs.writeFileSync(
+      path.join(root, "content/posts/probny-artykul.json"),
+      JSON.stringify(clean("posts", post)),
+    );
+    assert.throws(() => validate(root), /Nieznana kategoria/);
+    fs.writeFileSync(
+      path.join(root, "content/categories/poradniki.json"),
+      JSON.stringify({ id: "poradniki", name: "Poradniki", slug: "poradniki" }),
+    );
+    assert.doesNotThrow(() => validate(root));
+    fs.writeFileSync(
+      path.join(root, "content/categories/drugi.json"),
+      JSON.stringify({ id: "drugi", name: "Drugie", slug: "poradniki" }),
+    );
+    assert.throws(() => validate(root), /Powtórzony URL/);
+  } finally {
+    fs.rmSync(root, { recursive: true, force: true });
+  }
+});
+test("cała aktualna zawartość jest poprawna", () => {
+  const all = validate();
+  assert.equal(all.settings[0].repository, "mostpomocy/mostpomocy.github.io");
+  assert.ok(all.tags.length >= 8);
+  assert.ok(all.pages.length >= 4);
+});
+test("Pages CMS ma kolekcje podstron i tagów oraz poprawne wartości wyboru", () => {
+  const cms = YAML.parse(fs.readFileSync(".pages.yml", "utf8"));
+  for (const name of ["posts", "pages", "tags", "categories", "places"])
+    assert.ok(cms.content.find((c) => c.name === name));
+  for (const c of cms.content)
+    for (const f of c.fields)
+      if (f.type === "select")
+        for (const v of f.options.values) assert.ok(v.name && v.label);
+  assert.equal(
+    cms.content
+      .find((c) => c.name === "posts")
+      .fields.find((f) => f.name === "tags").options.multiple,
+    true,
+  );
+});

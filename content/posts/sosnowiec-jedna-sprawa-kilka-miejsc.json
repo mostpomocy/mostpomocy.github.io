@@ -1,0 +1,26 @@
+{
+  "id": "sosnowiec-jedna-sprawa-kilka-miejsc",
+  "title": "Sosnowiec: jedna sprawa, kilka miejsc wsparcia",
+  "slug": "sosnowiec-jedna-sprawa-kilka-miejsc",
+  "excerpt": "MOPS, urząd pracy, porady prawne, organizacje społeczne. Sprawdź, od którego kontaktu możesz zacząć — bez znajomości urzędowych nazw.",
+  "body": "<h2>Zacznij od pytania, nie od nazwy wydziału</h2><p>Możesz krótko opisać sytuację i zapytać, czy rozmawiasz z właściwym miejscem. Jeśli nie, poproś o wskazanie kolejnego kontaktu.</p><h2>W MOPS są różne działy</h2><p>Miejski ośrodek publikuje osobne kontakty do spraw pomocy środowiskowej, dodatków mieszkaniowych, świadczeń rodzinnych i spraw rodzin. W zakładce MOPS w MostPomocy możesz rozwinąć każdy kontakt osobno.</p><h2>Nie każda sprawa prowadzi do MOPS</h2><p>Przy pytaniach o zatrudnienie sprawdź Powiatowy Urząd Pracy. Miasto publikuje informacje o zapisach na nieodpłatne porady prawne. Sosnowieckie Centrum Organizacji Pozarządowych prowadzi bazę organizacji, w której można poznać lokalne inicjatywy.</p><h2>Przed telefonem</h2><p>Zapisz dwa pytania i sprawdź aktualne dane na oficjalnej stronie. Nie przesyłaj dokumentów ani danych o zdrowiu na przypadkowe adresy. Kontakty w naszym katalogu są punktem wyjścia do rozmowy.</p>",
+  "category_id": "poradniki",
+  "scope": "sosnowiec",
+  "author": "Igor Pabiańczyk",
+  "status": "published",
+  "published_at": "2026-10-21T19:28:00.335Z",
+  "image": "",
+  "image_alt": "",
+  "featured": false,
+  "seo_title": "",
+  "seo_description": "",
+  "sources": "https://mopssosnowiec.pl/\nhttps://sosnowiec.praca.gov.pl/urzad/dane-kontaktowe\nhttps://www.sosnowiec.pl/darmowa-pomoc-prawna-i-poradnictwo-obywatelskie/\nhttps://wsparcie.sosnowiec.pl/",
+  "updated_at": "2026-10-21T19:28:00.492Z",
+  "tags": [
+    "sosnowiec",
+    "instytucje"
+  ],
+  "noindex": false,
+  "canonical_url": "",
+  "toc": true
+}

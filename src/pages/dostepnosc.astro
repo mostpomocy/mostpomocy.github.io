@@ -1,0 +1,71 @@
+---
+import Base from "../layouts/Base.astro";
+import { settings } from "../lib/content";
+const config = settings();
+---
+
+<Base title="Dostępność i wygodne czytanie">
+  <main id="main" tabindex="-1" class="container page-shell">
+    <span class="eyebrow">PO SWOJEMU</span>
+    <h1>Strona, którą możesz dostosować</h1>
+    <div class="prose">
+      <p>
+        W menu „Dostępność” możesz powiększyć tekst do 200%, zmienić kontrast i
+        krój pisma, zwiększyć odstępy, podkreślić linki, ograniczyć animacje i
+        ukryć ilustracje. Tryb skupienia upraszcza widok artykułu, a linia
+        czytania pomaga utrzymać miejsce w tekście.
+      </p>
+      <h2>Klawiatura i czytniki ekranu</h2>
+      <p>
+        Używaj Tab i Shift+Tab, aby przechodzić pomiędzy elementami. Enter
+        otwiera linki, a spacja przełącza pola wyboru. Menu dostępności
+        zamkniesz klawiszem Escape. Pierwszy link na stronie pozwala przejść do
+        treści. Formularze mają etykiety, artykuły nagłówki i spis treści, a
+        wyniki wyszukiwania informują o liczbie tekstów.
+      </p>
+      <h2>Odsłuchiwanie i powiększenie</h2>
+      <p>
+        Jeżeli przeglądarka obsługuje syntezę mowy, możesz odsłuchać zaznaczony
+        fragment albo treść artykułu. Dostępność polskiego głosu i sposób
+        przetwarzania mowy zależą od systemu oraz przeglądarki. Strona działa
+        również z powiększeniem przeglądarki i systemowymi narzędziami
+        dostępności.
+      </p>
+      <h2>Twoje ustawienia</h2>
+      <p>
+        Preferencje czytania są zapisywane w tej przeglądarce. Możesz je w
+        każdej chwili wyzerować. Zawartość „Mojej kartki” pozostaje w pamięci
+        otwartej karty i nie jest wysyłana na serwer.
+      </p>
+      <h2>Stan i ograniczenia</h2>
+      <p>
+        Projekt uwzględnia semantyczny HTML, obsługę klawiatury, widoczny fokus,
+        ograniczenie ruchu i układ dostosowany do małych ekranów. To nie jest
+        deklaracja pełnej zgodności z WCAG ani wynik niezależnego audytu. Nowe
+        treści i materiały zewnętrzne wymagają osobnej kontroli, w tym
+        poprawnych opisów zdjęć. Panel Pages CMS jest osobną usługą i ma własną
+        dostępność.
+      </p>
+      <h2>Zgłoś przeszkodę</h2>
+      <p>
+        Opisz adres podstrony, napotkany problem i używaną przeglądarkę.
+        {config.contact_email ? (
+          <>
+            {" "}
+            Napisz na{" "}
+            <a href={"mailto:" + config.contact_email}>
+              {config.contact_email}
+            </a>
+            .
+          </>
+        ) : (
+          <>
+            {" "}
+            Publiczny adres kontaktowy zostanie podany po uzupełnieniu ustawień
+            przez autora.
+          </>
+        )}
+      </p>
+    </div>
+  </main>
+</Base>

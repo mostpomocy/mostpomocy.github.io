@@ -1,0 +1,26 @@
+---
+import Base from "../layouts/Base.astro";
+import { ConversationSheet } from "../components/ConversationSheet";
+---
+
+<Base title="Moja kartka przed rozmową" noindex={true}>
+  <main id="main" tabindex="-1" class="container inner-page sheet-page">
+    <span class="eyebrow">TYLE, ILE CHCESZ POWIEDZIEĆ</span>
+    <h1>
+      Moja kartka
+      <br />
+      <em>przed rozmową.</em>
+    </h1>
+    <p class="lead narrow">
+      Możesz wpisać kilka zdań lub wydrukować pustą kartkę. Notatki nie są
+      wysyłane ani zapisywane trwale.
+    </p>
+    <ConversationSheet client:load />
+    <noscript>
+      <p>
+        Wydrukuj tę stronę i zapisz swoje pytania ręcznie. Interaktywne pola i
+        przycisk druku wymagają JavaScript.
+      </p>
+    </noscript>
+  </main>
+</Base>

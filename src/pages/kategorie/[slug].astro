@@ -1,0 +1,29 @@
+---
+import Base from "../../layouts/Base.astro";
+import ArticleList from "../../components/ArticleList.astro";
+import { rows, published } from "../../lib/content";
+export function getStaticPaths() {
+  return rows("categories").map((category) => ({
+    params: { slug: category.slug },
+    props: { category },
+  }));
+}
+const { category } = Astro.props;
+const posts = published().filter((p) => p.category_id === category.id);
+---
+
+<Base
+  title={category.name}
+  description={category.description}
+  noindex={!posts.length}
+>
+  <main id="main" tabindex="-1" class="container inner-page blog-page">
+    <div class="breadcrumbs">
+      <a href="/blog/">Blog</a> / Kategorie
+    </div>
+    <span class="eyebrow">TEMAT</span>
+    <h1>{category.name}</h1>
+    <p class="lead narrow">{category.description}</p>
+    <ArticleList posts={posts} heading={category.name} category={category.id} />
+  </main>
+</Base>

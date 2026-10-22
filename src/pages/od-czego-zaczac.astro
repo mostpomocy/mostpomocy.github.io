@@ -1,0 +1,35 @@
+---
+import Base from "../layouts/Base.astro";
+import { FirstStep } from "../components/FirstStep";
+---
+
+<Base title="Od czego zacząć?">
+  <main id="main" tabindex="-1" class="container inner-page">
+    <span class="eyebrow">NIE MUSISZ NAZYWAĆ SWOJEJ SYTUACJI</span>
+    <h1>
+      Zacznij tam,
+      <br />
+      <em>gdzie jesteś.</em>
+    </h1>
+    <p class="lead narrow">
+      Nie ma tu testu ani oceny. Wybierz zdanie, które jest Ci teraz najbliższe.
+    </p>
+    <FirstStep client:load />
+    <noscript>
+      <p>
+        <a href="/blog/">Przejdź do artykułów</a> lub{" "}
+        <a href="/sosnowiec/">sprawdź kontakty w Sosnowcu</a>.
+      </p>
+    </noscript>
+    <aside class="quiet-note">
+      <h2>Możesz zacząć od jednego zdania.</h2>
+      <p>
+        Jeśli trudno Ci mówić, możesz przygotować kartkę i zabrać ją na
+        spotkanie.
+      </p>
+      <a class="text-link" href="/moja-kartka/">
+        Moja kartka przed rozmową ↗
+      </a>
+    </aside>
+  </main>
+</Base>

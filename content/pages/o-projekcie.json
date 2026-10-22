@@ -1,0 +1,16 @@
+{
+  "id": "o-projekcie",
+  "slug": "o-projekcie",
+  "title": "O projekcie",
+  "body": "<h2>Cześć, jestem Igor.</h2><p>MostPomocy to autorski blog Igora Pabiańczyka, studenta pracy socjalnej. Piszę o pomaganiu, codziennych potrzebach i szukaniu wsparcia. Artykuły są dla czytelników z całej Polski. Lokalne miejsca pomocy opisuję wyłącznie dla Sosnowca.</p><h2>Jak powstają materiały?</h2><p>Przystępny język, uważność na potrzeby i odnośniki do źródeł. Teksty mają charakter edukacyjny. Lokalne kontakty opisuję dla Sosnowca.</p>",
+  "menu_label": "O projekcie",
+  "show_in_nav": true,
+  "nav_order": 40,
+  "status": "published",
+  "excerpt": "",
+  "seo_title": "",
+  "seo_description": "",
+  "noindex": false,
+  "updated_at": "2026-10-21T19:00:00.000Z",
+  "published_at": "2026-10-21T19:00:00.000Z"
+}

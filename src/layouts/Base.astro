@@ -1,0 +1,130 @@
+---
+import "../styles/site.css";
+import { Header, Footer } from "../components/ui";
+import { Consent } from "../components/consent";
+import { pages, settings } from "../lib/content";
+interface Props {
+  title?: string;
+  description?: string;
+  noindex?: boolean;
+  canonical?: string;
+  image?: string;
+  kind?: string;
+  structured?: any;
+}
+const {
+  title,
+  description,
+  noindex = false,
+  canonical,
+  image,
+  kind = "website",
+  structured,
+} = Astro.props;
+const config = settings();
+const url = canonical || new URL(Astro.url.pathname, config.site_url).href;
+const fullTitle = title
+  ? title + " | " + config.title
+  : config.title + " — o pomaganiu, po ludzku";
+const desc = description || config.description;
+const robots =
+  noindex || !config.allow_indexing
+    ? "noindex,follow"
+    : "index,follow,max-image-preview:large";
+const nav = pages()
+  .filter((p) => p.show_in_nav)
+  .sort((a, b) => a.nav_order - b.nav_order);
+const ogImage = image || config.default_image;
+const data = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": config.site_url + "/#website",
+    name: config.title,
+    url: config.site_url,
+    inLanguage: "pl-PL",
+    publisher: {
+      "@type": "Person",
+      "@id": config.site_url + "/#author",
+      name: config.author_name,
+      url: config.site_url + "/o-projekcie/",
+      sameAs: config.social_profiles,
+    },
+  },
+  ...(structured ? [structured] : []),
+];
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <meta name="robots" content={robots} />
+    <link rel="canonical" href={url} />
+    <link rel="icon" href="/favicon.svg" />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title="MostPomocy — nowe artykuły"
+      href="/feed.xml"
+    />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <meta property="og:url" content={url} />
+    <meta property="og:type" content={kind} />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:site_name" content={config.title} />
+    {ogImage && (
+      <meta
+        property="og:image"
+        content={new URL(ogImage, config.site_url).href}
+      />
+    )}
+    <meta
+      name="twitter:card"
+      content={ogImage ? "summary_large_image" : "summary"}
+    />
+    {config.google_verification && (
+      <meta
+        name="google-site-verification"
+        content={config.google_verification}
+      />
+    )}
+    {config.bing_verification && (
+      <meta name="msvalidate.01" content={config.bing_verification} />
+    )}
+    <script
+      type="application/ld+json"
+      set:html={JSON.stringify(data).replace(/</g, "\u003c")}
+    ></script>
+  </head>
+  <body>
+    <Header
+      navigation={nav.map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        menu_label: p.menu_label,
+      }))}
+      client:load
+    />
+    <slot />
+    <Footer note={config.footer_note} />
+    <Consent measurementId={config.ga_measurement_id} client:load />
+    <script>
+      document.addEventListener("click", (event) => {
+        const link = (event.target as Element)?.closest('a[href^="#"]');
+        if (!link) return;
+        const target = document.getElementById(
+          link.getAttribute("href")!.slice(1),
+        );
+        if (target && link.classList.contains("skip")) {
+          target.setAttribute("tabindex", "-1");
+          target.focus();
+        }
+      });
+    </script>
+  </body>
+</html>
