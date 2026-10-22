@@ -1,6 +1,6 @@
 # MostPomocy — blog na GitHub Pages
 
-Autorski blog o pracy socjalnej i wsparciu. Artykuły ogólnopolskie, katalog instytucji wyłącznie dla Sosnowca. Nowy serwis powstaje z `src/` i `content/`; stare pliki w katalogu głównym pozostają archiwum i nie trafiają do kompilacji.
+Autorski blog o pracy socjalnej i wsparciu. Artykuły ogólnopolskie, katalog instytucji wyłącznie dla Sosnowca. Serwis powstaje z `src/` i `content/`. Zasoby publikowane bez przetwarzania znajdują się w `public/`. Pliki poprzedniej strony usunięto z aktualnej gałęzi; pozostają w historii Git. Podstrona „Sosnowiec bez stygmy” jest zachowana w `content/pages/sosnowiec-bez-stygmy.json`.
 
 ## Uruchomienie
 
@@ -9,7 +9,7 @@ Node.js 24, `npm ci`, `npm run dev`. Podgląd: http://127.0.0.1:5174, lokalna re
 ## Publikacja na mostpomocy.pl
 
 1. Po przejrzeniu zmian połącz PR z gałęzią `main`.
-2. Repozytorium → Settings → Pages → Build and deployment → Source: **GitHub Actions**. Dotychczasowa publikacja wskazuje gałąź `back`; jest zachowana jako możliwość powrotu.
+2. Repozytorium → Settings → Pages → Build and deployment → Source: **GitHub Actions**. Aktywna publikacja korzysta z GitHub Actions. Gałąź `back` zachowuje poprzednią wersję.
 3. Uruchom workflow „Build and publish MostPomocy”. Po sukcesie sprawdź domenę i HTTPS. `public/CNAME` zawiera `mostpomocy.pl`; DNS istniejącej domeny nie jest zmieniany przez projekt.
 4. W [Pages CMS](https://app.pagescms.org) zaloguj się przez GitHub i zainstaluj aplikację z dostępem wyłącznie do `mostpomocy/mostpomocy.github.io`. Wybierz `main`. Uprawnienia zatwierdza właściciel konta; nie są zapisane w kodzie.
 
@@ -38,3 +38,11 @@ Opcje czytania: tekst 100–200%, kontrast, ciemne i ciepłe tło, prosty font, 
 `content/*.json` to źródło treści; `.pages.yml` to konfiguracja Pages CMS. Nie kasuj używanych kategorii/tagów bez poprawienia odniesień: build wykrywa zerwane relacje. Zdjęcia trafiają do `public/uploads/`; opis alternatywny obrazu głównego jest wymagany przez walidację. Pola „źródła” przyjmują po jednym adresie HTTPS w wierszu.
 
 Lokalne `/api/admin` i upload istnieją tylko w serwerze developerskim na loopback, z kontrolą Host/Origin. W `dist` nie ma zapisującego API. Nie udostępniaj serwera developerskiego publicznie. Edycję zdalną autoryzuje Pages CMS/GitHub.
+
+## Mapa strony dla wyszukiwarek
+
+Aktualny plik XML jest publikowany automatycznie pod [mostpomocy.pl/sitemap.xml](https://mostpomocy.pl/sitemap.xml). Generator to `src/pages/sitemap.xml.ts`, a lista adresów pochodzi z aktualnej zawartości serwisu. Po dodaniu lub edycji opublikowanego artykułu albo podstrony przez Pages CMS kolejna udana publikacja aktualizuje mapę. Nie dodawaj ręcznej kopii do `public/`, ponieważ zasłoniłaby generator.
+
+Mapa zawiera pełne adresy HTTPS opublikowanych stron, artykułów, kategorii i tagów, w tym Sosnowca oraz projektu „Sosnowiec bez stygmy”. Pomija panel, szkice, kosz, treści noindex i krótkie adresy przekierowujące. Daty lastmod pochodzą z dat treści, a nie z daty kompilacji. `robots.txt` podaje adres mapy.
+
+W Google Search Console wybierz usługę `https://mostpomocy.pl/`, przejdź do „Mapy witryn”, wpisz `sitemap.xml` i prześlij. Ten sam adres mapy można zgłosić w Bing Webmaster Tools. To adres aktualizowany automatycznie; pobrana kopia XML jest tylko stanem z dnia jej utworzenia.
