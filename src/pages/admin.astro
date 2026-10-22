@@ -119,7 +119,7 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
       <nav class="admin-links" aria-label="Raporty zewnętrzne">
         <a
           class="button"
-          href="https://analytics.google.com/"
+          href={config.ga_property_id ? "https://analytics.google.com/analytics/web/#/p"+config.ga_property_id+"/reports/intelligenthome" : "https://analytics.google.com/"}
           target="_blank"
           rel="noopener noreferrer"
         >
