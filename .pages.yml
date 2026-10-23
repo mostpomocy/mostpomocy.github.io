@@ -25,10 +25,10 @@ media:
       - webp
     rename: random
 content:
-  - name: events
-    label: Wydarzenia
+  - name: posts
+    label: Artykuły
     type: collection
-    path: content/events
+    path: content/posts
     format: json
     filename:
       template: "{fields.id}.json"
@@ -43,7 +43,7 @@ content:
           editable: false
           generate: false
       - name: title
-        label: Nazwa wydarzenia
+        label: Tytuł
         type: string
         required: true
       - &a2
@@ -55,237 +55,6 @@ content:
         pattern: &a11
           regex: ^[a-z0-9]+(-[a-z0-9]+)*$
           message: Użyj małych liter, cyfr i myślników.
-      - name: excerpt
-        label: Krótki opis
-        type: text
-      - &a10
-        name: body
-        label: Treść
-        type: rich-text
-        required: true
-        options:
-          format: html
-          media: images
-          switcher: true
-      - name: starts_at
-        label: Początek
-        type: date
-        required: true
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-      - name: ends_at
-        label: Koniec (opcjonalnie)
-        type: date
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-      - name: location
-        label: Miejsce lub informacja o wydarzeniu online
-        type: string
-      - name: organizer
-        label: Organizator
-        type: string
-      - name: scope
-        label: Zasięg
-        type: select
-        options:
-          values:
-            - name: general
-              label: Ogólnopolskie
-            - name: sosnowiec
-              label: Sosnowiec
-        default: sosnowiec
-      - name: registration_url
-        label: Oficjalny adres zapisów HTTPS (opcjonalnie)
-        type: string
-      - name: accessibility
-        label: Informacje o dostępności
-        type: text
-      - &a3
-        name: status
-        label: Status
-        type: select
-        default: draft
-        options:
-          values:
-            - name: draft
-              label: Szkic
-            - name: published
-              label: Opublikowany
-            - name: scheduled
-              label: Zaplanowany
-            - name: trashed
-              label: Kosz
-      - &a4
-        name: published_at
-        label: Termin publikacji
-        type: date
-        required: true
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-      - &a5
-        name: updated_at
-        label: Data aktualizacji
-        type: date
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-      - &a6
-        name: seo_title
-        label: Tytuł dla Google
-        type: string
-      - &a7
-        name: seo_description
-        label: Opis w wynikach wyszukiwania
-        type: text
-      - &a8
-        name: canonical_url
-        label: Adres kanoniczny (opcjonalnie)
-        type: string
-      - &a9
-        name: noindex
-        label: Nie indeksuj tej treści
-        type: boolean
-        default: false
-    view:
-      primary: title
-  - name: galleries
-    label: Galerie zdjęć
-    type: collection
-    path: content/galleries
-    format: json
-    filename:
-      template: "{fields.id}.json"
-      field: false
-    fields:
-      - *a1
-      - name: title
-        label: Tytuł
-        type: string
-        required: true
-      - *a2
-      - name: excerpt
-        label: Opis
-        type: text
-      - name: images
-        label: Zdjęcia
-        type: object
-        list:
-          collapsible:
-            collapsed: true
-            summary: "{fields.alt}"
-        fields:
-          - name: src
-            label: Zdjęcie
-            type: image
-            required: true
-            options:
-              media: images
-          - name: alt
-            label: Opis alternatywny
-            type: string
-            required: true
-          - name: caption
-            label: Podpis
-            type: text
-          - name: credit
-            label: Autor / źródło i prawa do zdjęcia
-            type: string
-      - *a3
-      - *a4
-      - *a5
-      - *a6
-      - *a7
-      - *a8
-      - *a9
-    view:
-      primary: title
-  - name: downloads
-    label: Pliki do pobrania
-    type: collection
-    path: content/downloads
-    format: json
-    filename:
-      template: "{fields.id}.json"
-      field: false
-    fields:
-      - *a1
-      - name: title
-        label: Nazwa pliku
-        type: string
-        required: true
-      - name: description
-        label: Opis
-        type: text
-      - name: file
-        label: Plik
-        type: file
-        required: true
-        options:
-          media: files
-      - name: format
-        label: Format, np. PDF
-        type: string
-      - name: accessibility
-        label: Dostępność dokumentu lub alternatywa tekstowa
-        type: text
-      - *a3
-      - *a4
-      - *a5
-    view:
-      primary: title
-  - name: banners
-    label: Komunikaty i banery
-    type: collection
-    path: content/banners
-    format: json
-    filename:
-      template: "{fields.id}.json"
-      field: false
-    fields:
-      - *a1
-      - name: title
-        label: Tytuł
-        type: string
-        required: true
-      - name: description
-        label: Treść
-        type: text
-      - name: url
-        label: Odnośnik /adres/ lub HTTPS
-        type: string
-      - name: scope
-        label: Gdzie pokazać
-        type: select
-        default: all
-        options:
-          values:
-            - name: all
-              label: Cała strona
-            - name: sosnowiec
-              label: Tylko Sosnowiec
-      - *a3
-      - *a4
-      - *a5
-    view:
-      primary: title
-  - name: posts
-    label: Artykuły
-    type: collection
-    path: content/posts
-    format: json
-    filename:
-      template: "{fields.id}.json"
-      field: false
-    fields:
-      - *a1
-      - name: title
-        label: Tytuł
-        type: string
-        required: true
-      - *a2
       - name: category_id
         label: Kategoria bloga ogólnego
         type: reference
@@ -326,7 +95,15 @@ content:
       - name: excerpt
         label: Wprowadzenie
         type: text
-      - *a10
+      - &a3
+        name: body
+        label: Treść
+        type: rich-text
+        required: true
+        options:
+          format: html
+          media: images
+          switcher: true
       - name: summary_points
         label: Najważniejsze w skrócie — po jednym punkcie
         type: string
@@ -396,9 +173,36 @@ content:
           value: "{fields.id}"
           label: "{fields.name}"
           multiple: false
-      - *a3
-      - *a4
-      - *a5
+      - &a4
+        name: status
+        label: Status
+        type: select
+        default: draft
+        options:
+          values:
+            - name: draft
+              label: Szkic
+            - name: published
+              label: Opublikowany
+            - name: scheduled
+              label: Zaplanowany
+            - name: trashed
+              label: Kosz
+      - &a5
+        name: published_at
+        label: Termin publikacji
+        type: date
+        required: true
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - &a6
+        name: updated_at
+        label: Data aktualizacji
+        type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
       - name: featured
         label: Wyróżnij na głównej
         type: boolean
@@ -409,10 +213,23 @@ content:
       - name: sources
         label: Źródła — po jednym adresie HTTPS w wierszu
         type: text
-      - *a6
-      - *a7
-      - *a8
-      - *a9
+      - &a7
+        name: seo_title
+        label: Tytuł dla Google
+        type: string
+      - &a8
+        name: seo_description
+        label: Opis w wynikach wyszukiwania
+        type: text
+      - &a9
+        name: canonical_url
+        label: Adres kanoniczny (opcjonalnie)
+        type: string
+      - &a10
+        name: noindex
+        label: Nie indeksuj tej treści
+        type: boolean
+        default: false
     view:
       primary: title
       fields:
@@ -466,7 +283,7 @@ content:
       - name: excerpt
         label: Wprowadzenie
         type: text
-      - *a10
+      - *a3
       - name: related_category_id
         label: Powiązana kategoria (opcjonalnie)
         type: reference
@@ -476,9 +293,9 @@ content:
           value: "{fields.id}"
           label: "{fields.name}"
           multiple: false
-      - *a3
       - *a4
       - *a5
+      - *a6
       - name: show_in_nav
         label: Pokaż w menu głównym
         type: boolean
@@ -493,10 +310,10 @@ content:
         options:
           min: 0
           max: 100
-      - *a6
       - *a7
       - *a8
       - *a9
+      - *a10
     view:
       primary: title
       fields:
@@ -504,66 +321,6 @@ content:
         - slug
         - status
         - show_in_nav
-  - name: local_categories
-    label: Sosnowiec — kategorie
-    type: collection
-    path: content/local_categories
-    format: json
-    filename:
-      template: "{fields.id}.json"
-      field: false
-    fields:
-      - *a1
-      - name: name
-        label: Nazwa
-        type: string
-        required: true
-      - *a2
-      - name: description
-        label: Opis
-        type: text
-    view:
-      primary: name
-  - name: tags
-    label: Tagi
-    type: collection
-    path: content/tags
-    format: json
-    filename:
-      template: "{fields.id}.json"
-      field: false
-    fields:
-      - *a1
-      - name: name
-        label: Nazwa
-        type: string
-        required: true
-      - *a2
-      - name: description
-        label: Opis tagu
-        type: text
-    view:
-      primary: name
-  - name: categories
-    label: Kategorie
-    type: collection
-    path: content/categories
-    format: json
-    filename:
-      template: "{fields.id}.json"
-      field: false
-    fields:
-      - *a1
-      - name: name
-        label: Nazwa
-        type: string
-        required: true
-      - *a2
-      - name: description
-        label: Opis kategorii
-        type: text
-    view:
-      primary: name
   - name: places
     label: Pomoc w Sosnowcu
     type: collection
@@ -650,6 +407,10 @@ content:
               label: Opublikowany
     view:
       primary: name
+      fields:
+        - name
+        - section
+        - status
   - name: authors
     label: Autorzy — profile i podpisy
     type: collection
@@ -676,6 +437,278 @@ content:
         type: string
     view:
       primary: name
+      fields:
+        - name
+        - role
+  - name: categories
+    label: Kategorie
+    type: collection
+    path: content/categories
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa
+        type: string
+        required: true
+      - *a2
+      - name: description
+        label: Opis kategorii
+        type: text
+    view:
+      primary: name
+      fields:
+        - name
+        - slug
+  - name: local_categories
+    label: Sosnowiec — kategorie
+    type: collection
+    path: content/local_categories
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa
+        type: string
+        required: true
+      - *a2
+      - name: description
+        label: Opis
+        type: text
+    view:
+      primary: name
+      fields:
+        - name
+        - slug
+  - name: tags
+    label: Tagi
+    type: collection
+    path: content/tags
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa
+        type: string
+        required: true
+      - *a2
+      - name: description
+        label: Opis tagu
+        type: text
+    view:
+      primary: name
+      fields:
+        - name
+        - slug
+  - name: events
+    label: Wydarzenia
+    type: collection
+    path: content/events
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Nazwa wydarzenia
+        type: string
+        required: true
+      - *a2
+      - name: excerpt
+        label: Krótki opis
+        type: text
+      - *a3
+      - name: starts_at
+        label: Początek
+        type: date
+        required: true
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - name: ends_at
+        label: Koniec (opcjonalnie)
+        type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - name: location
+        label: Miejsce lub informacja o wydarzeniu online
+        type: string
+      - name: organizer
+        label: Organizator
+        type: string
+      - name: scope
+        label: Zasięg
+        type: select
+        options:
+          values:
+            - name: general
+              label: Ogólnopolskie
+            - name: sosnowiec
+              label: Sosnowiec
+        default: sosnowiec
+      - name: registration_url
+        label: Oficjalny adres zapisów HTTPS (opcjonalnie)
+        type: string
+      - name: accessibility
+        label: Informacje o dostępności
+        type: text
+      - *a4
+      - *a5
+      - *a6
+      - *a7
+      - *a8
+      - *a9
+      - *a10
+    view:
+      primary: title
+      fields:
+        - title
+        - starts_at
+        - scope
+        - status
+  - name: galleries
+    label: Galerie zdjęć
+    type: collection
+    path: content/galleries
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Tytuł
+        type: string
+        required: true
+      - *a2
+      - name: excerpt
+        label: Opis
+        type: text
+      - name: images
+        label: Zdjęcia
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.alt}"
+        fields:
+          - name: src
+            label: Zdjęcie
+            type: image
+            required: true
+            options:
+              media: images
+          - name: alt
+            label: Opis alternatywny
+            type: string
+            required: true
+          - name: caption
+            label: Podpis
+            type: text
+          - name: credit
+            label: Autor / źródło i prawa do zdjęcia
+            type: string
+      - *a4
+      - *a5
+      - *a6
+      - *a7
+      - *a8
+      - *a9
+      - *a10
+    view:
+      primary: title
+      fields:
+        - title
+        - status
+        - published_at
+  - name: downloads
+    label: Pliki do pobrania
+    type: collection
+    path: content/downloads
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Nazwa pliku
+        type: string
+        required: true
+      - name: description
+        label: Opis
+        type: text
+      - name: file
+        label: Plik
+        type: file
+        required: true
+        options:
+          media: files
+      - name: format
+        label: Format, np. PDF
+        type: string
+      - name: accessibility
+        label: Dostępność dokumentu lub alternatywa tekstowa
+        type: text
+      - *a4
+      - *a5
+      - *a6
+    view:
+      primary: title
+      fields:
+        - title
+        - format
+        - status
+  - name: banners
+    label: Komunikaty i banery
+    type: collection
+    path: content/banners
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Tytuł
+        type: string
+        required: true
+      - name: description
+        label: Treść
+        type: text
+      - name: url
+        label: Odnośnik /adres/ lub HTTPS
+        type: string
+      - name: scope
+        label: Gdzie pokazać
+        type: select
+        default: all
+        options:
+          values:
+            - name: all
+              label: Cała strona
+            - name: sosnowiec
+              label: Tylko Sosnowiec
+      - *a4
+      - *a5
+      - *a6
+    view:
+      primary: title
+      fields:
+        - title
+        - scope
+        - status
   - name: settings
     label: Google, SEO i ustawienia strony
     type: file
