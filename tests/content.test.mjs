@@ -287,3 +287,14 @@ test("kalendarz zachowuje polskie znaki i nie pozwala wstrzyknąć pól ICS", as
   assert.ok(ics.includes("a\\,b\\;c"));
   assert.equal(ics.match(/\r\nBEGIN:/g).length, 1);
 });
+
+test("podsumowanie artykułu zachowuje więcej niż sześć punktów z CMS", () => {
+  const summary_points = Array.from({ length: 8 }, (_, i) => `Punkt ${i + 1}`);
+  assert.deepEqual(
+    clean("posts", { ...post, summary_points }).summary_points,
+    summary_points,
+  );
+  assert.throws(() =>
+    clean("posts", { ...post, summary_points: ["x".repeat(301)] }),
+  );
+});

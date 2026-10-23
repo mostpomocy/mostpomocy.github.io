@@ -122,7 +122,7 @@ const schemas = {
     scope: z.enum(["general", "sosnowiec"]).default("general"),
     author: text.max(100).default("Igor Pabiańczyk"),
     author_id: text.default(""),
-    summary_points: z.array(text.max(300)).max(6).default([]),
+    summary_points: z.array(text.max(300)).default([]),
     tiles,
     cover_style: z.enum(["sage", "sand", "lilac", "rose"]).default("sage"),
     related_place_ids: z.array(text).max(12).default([]),
