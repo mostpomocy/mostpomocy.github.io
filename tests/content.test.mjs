@@ -246,25 +246,44 @@ test("hierarchia instytucji wykrywa cykle i pozwala na działy poza MOPS", () =>
   }
 });
 
-test("konfiguracja push przyjmuje publiczny UUID i odrzuca klucz API", () => {
-  const settings = JSON.parse(
-    fs.readFileSync("content/settings/main.json", "utf8"),
+test("daty wydarzeń i ścieżki plików są sprawdzane", () => {
+  const event = {
+    title: "Spotkanie",
+    slug: "spotkanie",
+    starts_at: "2026-11-01T10:00:00+01:00",
+  };
+  assert.throws(() =>
+    clean("events", { ...event, ends_at: "2026-11-01T09:00:00+01:00" }),
   );
-  assert.equal(
-    clean("settings", { ...settings, onesignal_app_id: "" }).onesignal_app_id,
-    "",
-  );
-  assert.equal(
-    clean("settings", {
-      ...settings,
-      onesignal_app_id: "8c29d915-8c2a-43b7-afbc-455f9b7d9a72",
-    }).onesignal_app_id,
-    "8c29d915-8c2a-43b7-afbc-455f9b7d9a72",
+  assert.doesNotThrow(() =>
+    clean("events", { ...event, ends_at: "2026-11-01T11:00:00+01:00" }),
   );
   assert.throws(() =>
-    clean("settings", {
-      ...settings,
-      onesignal_app_id: "os_v2_app_private_key",
+    clean("downloads", {
+      title: "Dokument",
+      file: "https://obca-strona.pl/formularz.pdf",
     }),
   );
+  assert.throws(() =>
+    clean("galleries", {
+      title: "Album",
+      slug: "album",
+      images: [{ src: "/uploads/1.jpg", alt: "" }],
+    }),
+  );
+});
+
+test("kalendarz zachowuje polskie znaki i nie pozwala wstrzyknąć pól ICS", async () => {
+  const { eventCalendar } = await import("../src/lib/calendar.mjs");
+  const ics = eventCalendar({
+    id: "test",
+    starts_at: "2026-11-01T10:00:00+01:00",
+    title: "Zażółć\nBEGIN:BAD",
+    excerpt: "a,b;c",
+    location: "Sosnowiec",
+  });
+  assert.match(ics, /DTSTART:20261101T090000Z/);
+  assert.ok(ics.includes("Zażółć\\nBEGIN:BAD"));
+  assert.ok(ics.includes("a\\,b\\;c"));
+  assert.equal(ics.match(/\r\nBEGIN:/g).length, 1);
 });

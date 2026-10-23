@@ -1,0 +1,59 @@
+---
+import Base from "../../layouts/Base.astro";
+import { rows } from "../../lib/content";
+import { visible } from "../../lib/schema.mjs";
+export function getStaticPaths() {
+  return rows("galleries")
+    .filter((p) => visible(p))
+    .map((album) => ({ params: { slug: album.slug }, props: { album } }));
+}
+const { album: a } = Astro.props;
+---
+
+<Base
+  title={a.seo_title || a.title}
+  description={a.seo_description || a.excerpt}
+  noindex={a.noindex}
+>
+  <main id="main" class="container inner-page" tabindex="-1">
+    <a href="/galeria/">← Wszystkie galerie</a>
+    <h1>{a.title}</h1>
+    <p class="lead">{a.excerpt}</p>
+    <div class="gallery-grid">
+      {a.images.map((im: any) => (
+        <figure>
+          <a href={im.src} data-enlarge>
+            <img src={im.src} alt={im.alt} loading="lazy" />
+          </a>
+          <figcaption>
+            {im.caption}
+            {im.credit && <small>Autor / źródło: {im.credit}</small>}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+    <dialog id="gallery-view">
+      <form method="dialog">
+        <button class="button">Zamknij zdjęcie</button>
+      </form>
+      <img alt="" />
+      <p></p>
+    </dialog>
+  </main>
+</Base>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>("#gallery-view");
+  document.querySelectorAll<HTMLAnchorElement>("[data-enlarge]").forEach((a) =>
+    a.addEventListener("click", (e) => {
+      if (!dialog) return;
+      e.preventDefault();
+      const source = a.querySelector("img")!,
+        img = dialog.querySelector("img")!;
+      img.src = a.href;
+      img.alt = source.alt;
+      dialog.querySelector("p")!.textContent =
+        a.closest("figure")?.querySelector("figcaption")?.textContent || "";
+      dialog.showModal();
+    }),
+  );
+</script>

@@ -3,7 +3,12 @@ import type { RecordData } from "../lib/content";
 export function Header({
   navigation = [],
 }: {
-  navigation?: { slug: string; title: string; menu_label?: string }[];
+  navigation?: {
+    slug: string;
+    title: string;
+    menu_label?: string;
+    url?: string;
+  }[];
 }) {
   return (
     <>
@@ -44,15 +49,15 @@ export function Header({
           <a href="/sosnowiec/">Sosnowiec</a>
           <a href="/od-czego-zaczac">Pierwszy krok</a>
           {navigation.map((p) => (
-            <a key={p.slug} href={"/" + p.slug + "/"}>
+            <a key={p.slug} href={p.url || "/" + p.slug + "/"}>
               {p.menu_label || p.title}
             </a>
           ))}
         </nav>
         <a
           className="header-search"
-          href="/blog#blog-search"
-          aria-label="Szukaj artykułów"
+          href="/szukaj/"
+          aria-label="Szukaj w całej stronie"
         >
           ⌕
         </a>
@@ -86,8 +91,12 @@ export function Footer({ note }: { note?: string }) {
           <a href="/dostepnosc/">Dostępność strony</a>
           <a href="/od-czego-zaczac">Od czego zacząć?</a>
           <a href="/moja-kartka">Kartka przed rozmową</a>
+          <a href="/aplikacja/">Aplikacja MostPomocy</a>
+          <a href="/wydarzenia/">Wydarzenia</a>
+          <a href="/galeria/">Galerie</a>
+          <a href="/do-pobrania/">Pliki do pobrania</a>
           <a href="/feed.xml">Kanał RSS</a>
-          <a href="/obserwuj/">Newsletter i aplikacja</a>
+          <a href="/obserwuj/">Aplikacja i RSS</a>
           <a href="/narzedzia/">Przydatne narzędzia</a>
           <a href="/admin">Panel redakcyjny ↗</a>
         </div>

@@ -1,0 +1,129 @@
+---
+import { visible } from "../lib/schema.mjs";
+import { published, pages, rows, pagePath, placePath } from "../lib/content";
+const entries = [
+  ...published().map((p) => ({
+    title: p.title,
+    url: `/artykuly/${p.slug}/`,
+    type: "Artykuł",
+    text: p.excerpt + " " + p.body.replace(/<[^>]*>/g, " "),
+  })),
+  ...pages().map((p) => ({
+    title: p.title,
+    url: pagePath(p),
+    type: "Podstrona",
+    text: p.excerpt + " " + p.body.replace(/<[^>]*>/g, " "),
+  })),
+  ...rows("places")
+    .filter((p) => p.status === "published")
+    .map((p) => ({
+      title: p.name,
+      url: placePath(p),
+      type: "Miejsce pomocy",
+      text:
+        (p.section === "mops" ? "MOPS " : "") +
+        p.description +
+        " " +
+        p.address +
+        " " +
+        p.phone,
+    })),
+  ...rows("events")
+    .filter((e) => visible(e))
+    .map((e) => ({
+      title: e.title,
+      url: `/wydarzenia/${e.slug}/`,
+      type: "Wydarzenie",
+      text: e.excerpt + " " + e.location,
+    })),
+  ...rows("galleries")
+    .filter((e) => visible(e))
+    .map((e) => ({
+      title: e.title,
+      url: `/galeria/${e.slug}/`,
+      type: "Galeria",
+      text: e.excerpt,
+    })),
+];
+---
+
+<form class="site-search" role="search">
+  <label for="all-search">Czego szukasz?</label>
+  <div class="search-row">
+    <input
+      id="all-search"
+      name="q"
+      type="search"
+      placeholder="Np. pomoc dla bliskiej osoby, MOPS…"
+    />
+    <button class="button dark" type="submit">
+      Szukaj
+    </button>
+  </div>
+  <p role="status" data-search-status>
+    Wyszukiwanie działa na tym urządzeniu. Treść pytania nie jest wysyłana do
+    wyszukiwarki.
+  </p>
+  <div class="content-tiles" data-results></div>
+</form>
+<script
+  type="application/json"
+  id="search-data"
+  set:html={JSON.stringify(entries).replace(/</g, "\\u003c")}
+/>
+<noscript>
+  <a href="/blog/">Przeglądaj artykuły</a> lub{" "}
+  <a href="/sosnowiec/">miejsca pomocy w Sosnowcu</a>.
+</noscript>
+<script>
+  const form = document.querySelector<HTMLFormElement>(".site-search");
+  if (form) {
+    const data = JSON.parse(
+      document.getElementById("search-data")!.textContent!,
+    );
+    const input = form.querySelector<HTMLInputElement>("input")!,
+      results = form.querySelector<HTMLElement>("[data-results]")!,
+      status = form.querySelector<HTMLElement>("[data-search-status]")!;
+    const norm = (v: string) =>
+      v
+        .toLocaleLowerCase("pl")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/ł/g, "l");
+    function search() {
+      const words = norm(input.value.trim()).split(/\s+/).filter(Boolean);
+      results.replaceChildren();
+      if (!words.length) {
+        status.textContent = "Wpisz temat, nazwę miejsca lub fragment tytułu.";
+        return;
+      }
+      const found = data
+        .filter((p: any) =>
+          words.every((w) => norm(p.title + " " + p.text).includes(w)),
+        )
+        .sort(
+          (a: any, b: any) =>
+            Number(norm(b.title).includes(words.join(" "))) -
+            Number(norm(a.title).includes(words.join(" "))),
+        );
+      status.textContent = `Wyniki: ${found.length}.`;
+      for (const p of found.slice(0, 40)) {
+        const a = document.createElement("a");
+        a.className = "editorial-link";
+        a.href = p.url;
+        const title = document.createElement("strong");
+        title.textContent = p.title;
+        const span = document.createElement("span");
+        span.textContent =
+          p.type + " · " + p.text.replace(/\s+/g, " ").slice(0, 150);
+        a.append(title, span);
+        results.append(a);
+      }
+    }
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      search();
+    });
+    input.addEventListener("input", search);
+  }
+</script>

@@ -1,13 +1,10 @@
 ---
-import PushNotifications from "../components/PushNotifications.astro";
 import Base from "../layouts/Base.astro";
-import { settings } from "../lib/content";
-const config = settings();
 ---
 
 <Base
   title="Obserwuj MostPomocy — RSS i aplikacja"
-  description="Wybierz, jak wracać po nowe artykuły: kanał RSS, skrót na telefonie i newsletter po uruchomieniu zapisów."
+  description="Wybierz, jak wracać po nowe artykuły: kanał RSS, skrót na telefonie i nowości w aplikacji."
 >
   <main id="main" tabindex="-1" class="container inner-page">
     <span class="eyebrow">PO TWOJEMU, BEZ POŚPIECHU</span>
@@ -40,34 +37,21 @@ const config = settings();
         </p>
       </section>
       <section class="content-tile">
-        <h2>Newsletter e-mail</h2>
-        {config.newsletter_url ? (
-          <>
-            <p>
-              Zapis odbywa się w formularzu dostawcy. Przed wysłaniem sprawdź
-              informację o danych i potwierdzeniu subskrypcji. Możesz się
-              wypisać.
-            </p>
-            <a
-              href={config.newsletter_url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Przejdź do formularza zapisu ↗
-            </a>
-          </>
-        ) : (
-          <p>
-            Zapisy e-mail nie są jeszcze uruchomione. Na razie możesz obserwować
-            wszystkie nowe teksty przez RSS. Nie zbieramy adresów do nieaktywnej
-            listy.
-          </p>
-        )}
+        <h2>Materiały bez internetu</h2>
+        <p>
+          Wybrane artykuły zapiszesz do własnej teczki na tym urządzeniu. Zapis
+          jest dobrowolny, bez konta.
+        </p>
+        <a href="/zapisane/">Otwórz zapisane materiały →</a>
       </section>
-      <PushNotifications
-        appId={config.onesignal_app_id}
-        siteUrl={config.site_url}
-      />
+      <section class="content-tile">
+        <h2>Nowości w aplikacji</h2>
+        <p>
+          Zobacz nowe artykuły po otwarciu MostPomocy. Bez zewnętrznego dostawcy
+          powiadomień.
+        </p>
+        <a href="/nowosci/">Otwórz centrum nowości →</a>
+      </section>
     </div>
   </main>
 </Base>

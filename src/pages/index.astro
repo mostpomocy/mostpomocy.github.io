@@ -287,3 +287,7 @@ const featured = all.find((p) => p.featured) || all[0];
     <Follow />
   </main>
 </Base>
+
+<script>
+if (location.pathname==='/' && (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone)) location.replace('/aplikacja/');
+</script>

@@ -1,0 +1,36 @@
+---
+import Base from "../layouts/Base.astro";
+import { rows } from "../lib/content";
+import { visible } from "../lib/schema.mjs";
+const files = rows("downloads").filter((p) => visible(p));
+---
+
+<Base title="Materiały do pobrania">
+  <main id="main" class="container inner-page" tabindex="-1">
+    <span class="eyebrow">ZABIERZ ZE SOBĄ</span>
+    <h1>Do pobrania.</h1>
+    <div class="content-tiles">
+      {files.map((f) => (
+        <article class="content-tile">
+          <h2>{f.title}</h2>
+          <p>{f.description}</p>
+          <p>
+            {f.accessibility ||
+              "Informacje o dostępności dokumentu nie zostały podane."}
+          </p>
+          <a class="button" href={f.file} download>
+            Pobierz {f.format || "plik"}
+          </a>
+        </article>
+      ))}
+    </div>
+    <section class="info-box">
+      <h2>Kartka przed rozmową</h2>
+      <p>
+        Wypełnij ją na urządzeniu i wydrukuj albo zapisz jako PDF w oknie
+        drukowania. Notatki nie są wysyłane na serwer.
+      </p>
+      <a href="/moja-kartka/">Przygotuj kartkę →</a>
+    </section>
+  </main>
+</Base>

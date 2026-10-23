@@ -81,6 +81,15 @@ const tileField = f("tiles", "Kafelki informacyjne", "object", {
 const cms = {
   media: [
     {
+      name: "files",
+      label: "Dokumenty",
+      input: "public/uploads/files",
+      output: "/uploads/files",
+      extensions: ["pdf", "docx", "xlsx", "pptx", "txt", "csv", "ics"],
+      rename: "random",
+    },
+
+    {
       name: "images",
       label: "Zdjęcia",
       input: "public/uploads",
@@ -91,6 +100,108 @@ const cms = {
     },
   ],
   content: [
+    collection(
+      "events",
+      "Wydarzenia",
+      [
+        f("title", "Nazwa wydarzenia", "string", { required: true }),
+        slug,
+        f("excerpt", "Krótki opis", "text"),
+        body,
+        f("starts_at", "Początek", "date", {
+          required: true,
+          options: { time: true, format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" },
+        }),
+        f("ends_at", "Koniec (opcjonalnie)", "date", {
+          options: { time: true, format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" },
+        }),
+        f("location", "Miejsce lub informacja o wydarzeniu online"),
+        f("organizer", "Organizator"),
+        f("scope", "Zasięg", "select", {
+          options: {
+            values: [
+              { name: "general", label: "Ogólnopolskie" },
+              { name: "sosnowiec", label: "Sosnowiec" },
+            ],
+          },
+          default: "sosnowiec",
+        }),
+        f("registration_url", "Oficjalny adres zapisów HTTPS (opcjonalnie)"),
+        f("accessibility", "Informacje o dostępności", "text"),
+        status,
+        ...dates,
+        ...seo,
+      ],
+      { primary: "title" },
+    ),
+    collection(
+      "galleries",
+      "Galerie zdjęć",
+      [
+        f("title", "Tytuł", "string", { required: true }),
+        slug,
+        f("excerpt", "Opis", "text"),
+        f("images", "Zdjęcia", "object", {
+          list: { collapsible: { collapsed: true, summary: "{fields.alt}" } },
+          fields: [
+            f("src", "Zdjęcie", "image", {
+              required: true,
+              options: { media: "images" },
+            }),
+            f("alt", "Opis alternatywny", "string", { required: true }),
+            f("caption", "Podpis", "text"),
+            f("credit", "Autor / źródło i prawa do zdjęcia"),
+          ],
+        }),
+        status,
+        ...dates,
+        ...seo,
+      ],
+      { primary: "title" },
+    ),
+    collection(
+      "downloads",
+      "Pliki do pobrania",
+      [
+        f("title", "Nazwa pliku", "string", { required: true }),
+        f("description", "Opis", "text"),
+        f("file", "Plik", "file", {
+          required: true,
+          options: { media: "files" },
+        }),
+        f("format", "Format, np. PDF"),
+        f(
+          "accessibility",
+          "Dostępność dokumentu lub alternatywa tekstowa",
+          "text",
+        ),
+        status,
+        ...dates,
+      ],
+      { primary: "title" },
+    ),
+    collection(
+      "banners",
+      "Komunikaty i banery",
+      [
+        f("title", "Tytuł", "string", { required: true }),
+        f("description", "Treść", "text"),
+        f("url", "Odnośnik /adres/ lub HTTPS"),
+        f("scope", "Gdzie pokazać", "select", {
+          default: "all",
+          options: {
+            values: [
+              { name: "all", label: "Cała strona" },
+              { name: "sosnowiec", label: "Tylko Sosnowiec" },
+            ],
+          },
+        }),
+        status,
+        ...dates,
+      ],
+      { primary: "title" },
+    ),
+
     collection(
       "posts",
       "Artykuły",
@@ -294,24 +405,15 @@ const cms = {
               "Publiczny identyfikator klienta aplikacji internetowej. Żadnych kluczy prywatnych. Instrukcja w /admin/.",
           },
         ),
-        f(
-          "onesignal_app_id",
-          "OneSignal — publiczny App ID (powiadomienia)",
-          "string",
-          {
-            description:
-              "UUID aplikacji Web Push. Nie wklejaj REST API Key. Konfiguracja Custom Code, domena https://mostpomocy.pl. Wysyłka w panelu OneSignal.",
-          },
-        ),
-        f(
-          "newsletter_url",
-          "HTTPS do formularza zapisu newslettera",
-          "string",
-          {
-            description:
-              "Wklej formularz dostawcy po założeniu i skonfigurowaniu konta, np. Brevo. Bez tego strona oferuje RSS.",
-          },
-        ),
+        f("navigation", "Dodatkowe linki menu", "object", {
+          list: true,
+          fields: [
+            f("label", "Nazwa", "string", { required: true }),
+            f("url", "Adres na stronie, np. /wydarzenia/", "string", {
+              required: true,
+            }),
+          ],
+        }),
         f("google_verification", "Google Search Console — kod weryfikacyjny"),
         f("bing_verification", "Bing Webmaster Tools — kod weryfikacyjny"),
         f(
@@ -334,6 +436,12 @@ const cms = {
     },
   ],
   actions: [
+    {
+      name: "check-content",
+      label: "Sprawdź treści i odnośniki",
+      workflow: "check-content.yml",
+      confirm: false,
+    },
     {
       name: "publish",
       label: "Zbuduj i opublikuj stronę",

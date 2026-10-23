@@ -1,0 +1,31 @@
+---
+import Base from "../../layouts/Base.astro";
+import { rows } from "../../lib/content";
+import { visible } from "../../lib/schema.mjs";
+const albums = rows("galleries").filter((p) => visible(p));
+---
+
+<Base title="Galerie zdjęć">
+  <main id="main" class="container inner-page" tabindex="-1">
+    <span class="eyebrow">PROJEKTY I DZIAŁANIA</span>
+    <h1>Galerie.</h1>
+    <div class="content-tiles">
+      {albums.map((a) => (
+        <a class="editorial-link" href={`/galeria/${a.slug}/`}>
+          {a.images[0] && (
+            <img src={a.images[0].src} alt={a.images[0].alt} loading="lazy" />
+          )}
+          <strong>{a.title}</strong>
+          <span>{a.excerpt}</span>
+        </a>
+      ))}
+    </div>
+    {!albums.length && (
+      <p class="info-box">
+        Pierwsze albumy pojawią się po opublikowaniu zdjęć w redakcji. Historię
+        inicjatywy znajdziesz na stronie{" "}
+        <a href="/sosnowiec-bez-stygmy/">Sosnowiec bez stygmy</a>.
+      </p>
+    )}
+  </main>
+</Base>

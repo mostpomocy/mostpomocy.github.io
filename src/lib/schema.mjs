@@ -10,6 +10,10 @@ export const resources = [
   "settings",
   "media",
   "authors",
+  "events",
+  "galleries",
+  "downloads",
+  "banners",
 ];
 export const reserved = [
   "blog",
@@ -33,6 +37,13 @@ export const reserved = [
   "obserwuj",
   "narzedzia",
   "offline",
+  "aplikacja",
+  "szukaj",
+  "wydarzenia",
+  "galeria",
+  "do-pobrania",
+  "zapisane",
+  "nowosci",
 ];
 const slug = z
   .string()
@@ -192,7 +203,15 @@ const schemas = {
     ga_measurement_id: text.regex(/^(G-[A-Z0-9]+)?$/).default(""),
     ga_property_id: text.regex(/^\d*$/).default(""),
     google_client_id: text.regex(/^[a-zA-Z0-9._-]*$/).default(""),
-    onesignal_app_id: text.uuid().or(z.literal("")).default(""),
+    navigation: z
+      .array(
+        z.object({
+          label: text.min(2).max(40),
+          url: text.regex(/^\/(?!\/)[a-zA-Z0-9/_#?-]*$/),
+        }),
+      )
+      .max(10)
+      .default([]),
     newsletter_url: z
       .string()
       .url()
@@ -209,6 +228,62 @@ const schemas = {
     allow_ai_search: z.boolean().default(true),
     social_profiles: z.array(z.string().url()).default([]),
     footer_note: text.default(""),
+  }),
+  events: z.object({
+    ...base,
+    title: text.min(3).max(200),
+    slug,
+    excerpt: text.max(600).default(""),
+    body: text.max(50000).default(""),
+    starts_at: text.datetime({ offset: true }),
+    ends_at: text.datetime({ offset: true }).or(z.literal("")).default(""),
+    location: text.max(300).default(""),
+    organizer: text.max(160).default(""),
+    scope: z.enum(["general", "sosnowiec"]).default("sosnowiec"),
+    registration_url: safeLink.default(""),
+    accessibility: text.max(1000).default(""),
+    ...seo,
+    ...publication,
+  }),
+  galleries: z.object({
+    ...base,
+    title: text.min(3).max(200),
+    slug,
+    excerpt: text.max(600).default(""),
+    images: z
+      .array(
+        z.object({
+          src: text.regex(
+            /^\/uploads\/[a-zA-Z0-9._/-]+\.(png|jpg|jpeg|webp)$/i,
+          ),
+          alt: text.min(3).max(300),
+          caption: text.max(500).default(""),
+          credit: text.max(300).default(""),
+        }),
+      )
+      .max(60)
+      .default([]),
+    ...seo,
+    ...publication,
+  }),
+  downloads: z.object({
+    ...base,
+    title: text.min(3).max(200),
+    description: text.max(1500).default(""),
+    file: text.regex(
+      /^\/uploads\/files\/[a-zA-Z0-9._/-]+\.(pdf|docx|xlsx|pptx|txt|csv|ics)$/i,
+    ),
+    format: text.max(30).default(""),
+    accessibility: text.max(600).default(""),
+    ...publication,
+  }),
+  banners: z.object({
+    ...base,
+    title: text.min(3).max(120),
+    description: text.max(500).default(""),
+    url: safeLink.default(""),
+    scope: z.enum(["all", "sosnowiec"]).default("all"),
+    ...publication,
   }),
   authors: z.object({
     ...base,
@@ -229,6 +304,12 @@ export function clean(resource, input) {
   );
   const data = schemas[resource].parse(normalized);
   data.id = data.id || crypto.randomUUID();
+  if (
+    resource === "events" &&
+    data.ends_at &&
+    Date.parse(data.ends_at) <= Date.parse(data.starts_at)
+  )
+    throw new Error("Koniec wydarzenia musi być późniejszy niż początek");
   if (data.body !== undefined) {
     data.body = sanitize(data.body, {
       allowedTags: [
@@ -294,6 +375,14 @@ export function clean(resource, input) {
       throw new Error("Nieprawidłowa data aktualizacji");
     data.updated_at =
       data.updated_at || data.published_at || "1970-01-01T00:00:00Z";
+  }
+  if (["events", "galleries", "downloads", "banners"].includes(resource)) {
+    if (data.published_at && Number.isNaN(Date.parse(data.published_at)))
+      throw new Error("Nieprawidłowa data publikacji");
+    if (["published", "scheduled"].includes(data.status) && !data.published_at)
+      throw new Error("Podaj datę publikacji");
+    if (data.updated_at && Number.isNaN(Date.parse(data.updated_at)))
+      throw new Error("Nieprawidłowa data aktualizacji");
   }
   return data;
 }

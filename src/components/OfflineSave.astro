@@ -1,0 +1,38 @@
+---
+const { url, title } = Astro.props;
+---
+
+<div class="offline-save" data-url={url} data-title={title}>
+  <button class="button" data-save-offline>
+    Zapisz artykuł offline
+  </button>
+  <p role="status" data-save-status>
+    Treść zapiszesz na tym urządzeniu, bez konta. Na wspólnym urządzeniu
+    pamiętaj o jej usunięciu.
+  </p>
+  <a href="/zapisane/">Moja teczka →</a>
+</div>
+<script>
+  import { saveArticle, savedPages } from "../lib/offline";
+  document.querySelectorAll<HTMLElement>(".offline-save").forEach((root) => {
+    const button = root.querySelector<HTMLButtonElement>("button")!,
+      status = root.querySelector<HTMLElement>("[data-save-status]")!;
+    if (savedPages().some((p) => p.url === root.dataset.url))
+      button.textContent = "Odśwież kopię offline";
+    button.addEventListener("click", async () => {
+      button.disabled = true;
+      status.textContent = "Pobieram artykuł i zasoby…";
+      try {
+        await saveArticle(root.dataset.url!, root.dataset.title!);
+        button.textContent = "Odśwież kopię offline";
+        status.textContent =
+          "Zapisano artykuł. Znajdziesz go w Mojej teczce, także bez internetu.";
+      } catch (e) {
+        status.textContent =
+          e instanceof Error ? e.message : "Nie udało się zapisać.";
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>

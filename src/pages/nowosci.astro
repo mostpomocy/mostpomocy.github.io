@@ -1,0 +1,65 @@
+---
+import Base from "../layouts/Base.astro";
+import { published } from "../lib/content";
+const all = published();
+---
+
+<Base title="Nowości w aplikacji">
+  <main id="main" class="container inner-page" tabindex="-1">
+    <span class="eyebrow">CZYTAJ W SWOIM TEMPIE</span>
+    <h1>Co nowego?</h1>
+    <p class="lead">
+      Nowe publikacje zobaczysz po otwarciu aplikacji i połączeniu z internetem.
+      Bez powiadomień na ekranie blokady i bez zewnętrznego dostawcy.
+    </p>
+    <p role="status" id="news-status"></p>
+    <button class="button" id="mark-news">
+      Oznacz obecne nowości jako przejrzane
+    </button>
+    <div class="content-tiles" id="news-list">
+      {all.map((p) => (
+        <article class="content-tile" data-published={p.published_at}>
+          <span class="eyebrow">
+            {p.scope === "sosnowiec" ? "Sosnowiec" : "Poradnik"}
+          </span>
+          <h2>
+            <a href={`/artykuly/${p.slug}/`}>{p.title}</a>
+          </h2>
+          <p>{p.excerpt}</p>
+          <span data-new-badge hidden>
+            Nowe od ostatniej wizyty
+          </span>
+        </article>
+      ))}
+    </div>
+  </main>
+</Base>
+<script>
+  let seen = 0;
+  try {
+    seen = Number(localStorage.getItem("mp-news-seen-v1")) || 0;
+  } catch {}
+  const rows = [...document.querySelectorAll<HTMLElement>("[data-published]")];
+  function draw() {
+    let n = 0;
+    rows.forEach((row) => {
+      const fresh = seen > 0 && Date.parse(row.dataset.published!) > seen;
+      row.querySelector<HTMLElement>("[data-new-badge]")!.hidden = !fresh;
+      if (fresh) n++;
+    });
+    document.getElementById("news-status")!.textContent = seen
+      ? `Nowe od ostatniego oznaczenia: ${n}.`
+      : "To centrum wszystkich ostatnich publikacji. Możesz oznaczyć obecne materiały jako przejrzane.";
+  }
+  document.getElementById("mark-news")?.addEventListener("click", () => {
+    seen = Date.now();
+    try {
+      localStorage.setItem("mp-news-seen-v1", String(seen));
+      draw();
+    } catch {
+      document.getElementById("news-status")!.textContent =
+        "Przeglądarka zablokowała zapisywanie preferencji.";
+    }
+  });
+  draw();
+</script>
