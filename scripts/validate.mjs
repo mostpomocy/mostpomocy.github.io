@@ -7,12 +7,25 @@ export function validate(root = process.cwd()) {
       .readdirSync(`${root}/content/${resource}`)
       .filter((n) => n.endsWith(".json"))
       .map((name) => {
-        const entry = clean(
-          resource,
-          JSON.parse(
-            fs.readFileSync(`${root}/content/${resource}/${name}`, "utf8"),
-          ),
-        );
+        let entry;
+        try {
+          entry = clean(
+            resource,
+            JSON.parse(
+              fs.readFileSync(`${root}/content/${resource}/${name}`, "utf8"),
+            ),
+          );
+        } catch (error) {
+          const details = error.issues
+            ? error.issues
+                .map((issue) => `${issue.path.join(".")}: ${issue.message}`)
+                .join("; ")
+            : error.message;
+          throw new Error(
+            `Błąd treści w content/${resource}/${name}: ${details}`,
+            { cause: error },
+          );
+        }
         if (name !== entry.id + ".json")
           throw new Error(
             `Nazwa pliku musi odpowiadać ID: ${resource}/${name}`,
