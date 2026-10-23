@@ -1,4 +1,5 @@
 ---
+import Questions from "../components/Questions.astro";
 import Base from "../layouts/Base.astro";
 import { pages, rows, published, prepareBody, siteURL } from "../lib/content";
 import { ArticleCard } from "../components/ui";
@@ -51,5 +52,6 @@ const related = page.related_category_id
         </div>
       </section>
     )}
+    <Questions items={page.faq} />
   </main>
 </Base>

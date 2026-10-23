@@ -33,10 +33,30 @@ const status = f("status", "Status", "select", {
     ],
   },
 });
+const faqField = f("faq", "Pytania i odpowiedzi", "object", {
+  list: { collapsible: { collapsed: true, summary: "{fields.question}" } },
+  description:
+    "Dodaj prawdziwe pytania czytelników i krótkie, rzeczowe odpowiedzi. Będą widoczne na stronie; nie gwarantuje to specjalnego wyniku Google.",
+  fields: [
+    f("question", "Pytanie", "string", { required: true }),
+    f("answer", "Odpowiedź", "text", { required: true }),
+  ],
+});
 const seo = [
   f("seo_title", "Tytuł dla Google"),
-  f("seo_description", "Opis w wynikach wyszukiwania", "text"),
-  f("canonical_url", "Adres kanoniczny (opcjonalnie)"),
+  f("seo_description", "Opis w wynikach wyszukiwania", "text", {
+    description:
+      "Krótko opisz zawartość i korzyść dla czytelnika. Puste pole korzysta z wprowadzenia; Google może wybrać własny fragment.",
+  }),
+  f(
+    "canonical_url",
+    "Adres kanoniczny — automatyczny, zostaw puste",
+    "string",
+    {
+      description:
+        "Wypełnij tylko przy świadomym wskazaniu oryginału przedruku. Dla własnych tekstów adres wylicza się automatycznie.",
+    },
+  ),
   f("noindex", "Nie indeksuj tej treści", "boolean", { default: false }),
 ];
 const dates = [
@@ -241,6 +261,7 @@ const cms = {
         }),
         f("excerpt", "Wprowadzenie", "text"),
         body,
+        faqField,
         f(
           "summary_points",
           "Najważniejsze w skrócie — po jednym punkcie",
@@ -310,6 +331,7 @@ const cms = {
         ),
         f("excerpt", "Wprowadzenie", "text"),
         body,
+        faqField,
         reference(
           "related_category_id",
           "Powiązana kategoria (opcjonalnie)",
@@ -397,6 +419,7 @@ const cms = {
       path: "content/settings/main.json",
       format: "json",
       fields: [
+        faqField,
         f("id", "ID", "string", { hidden: true, default: "main" }),
         f("title", "Nazwa strony", "string", { required: true }),
         f("description", "Domyślny opis strony", "text"),

@@ -1,5 +1,6 @@
 ---
 import "../styles/site.css";
+import { canonicalURL, searchDescription } from "../lib/seo.mjs";
 import { Header, Footer } from "../components/ui";
 import { Consent } from "../components/consent";
 import { pages, settings, rows } from "../lib/content";
@@ -22,15 +23,15 @@ const {
   structured,
 } = Astro.props;
 const config = settings();
-const url = canonical || new URL(Astro.url.pathname, config.site_url).href;
+const url = canonicalURL(Astro.url.pathname, config.site_url, canonical);
 const fullTitle = title
   ? title + " | " + config.title + " · " + config.author_name
   : config.title + " — " + config.author_name + " | Pomoc i praca socjalna";
-const desc = description || config.description;
+const desc = searchDescription(description, config.description);
 const robots =
   noindex || !config.allow_indexing
     ? "noindex,follow"
-    : "index,follow,max-image-preview:large";
+    : "index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1";
 const nav = pages()
   .filter((p) => p.show_in_nav)
   .sort((a, b) => a.nav_order - b.nav_order);
@@ -41,6 +42,8 @@ const data = [
     "@type": "WebSite",
     "@id": config.site_url + "/#website",
     name: config.title,
+    alternateName: "MostPomocy.pl",
+    description: config.description,
     url: config.site_url,
     inLanguage: "pl-PL",
     publisher: {
@@ -64,7 +67,8 @@ const data = [
     <meta name="description" content={desc} />
     <meta name="robots" content={robots} />
     <link rel="canonical" href={url} />
-    <link rel="icon" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="96x96" href="/favicon.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="apple-touch-icon" href="/icons/app-192.png" />
     <meta name="theme-color" content="#174d3e" />
