@@ -1,0 +1,104 @@
+---
+import Base from "../layouts/Base.astro";
+---
+
+<Base title="Moja teczka — zapisane artykuły" noindex={true}>
+  <main id="main" class="container inner-page" tabindex="-1">
+    <span class="eyebrow">TYLKO NA TYM URZĄDZENIU</span>
+    <h1>Moja teczka.</h1>
+    <p class="lead">
+      Wybrane artykuły dostępne bez internetu. Przed skorzystaniem z kontaktów i
+      warunków wsparcia sprawdź, czy dane nadal są aktualne.
+    </p>
+    <p>
+      Przeglądarka może usunąć zapisane dane, np. przy braku miejsca. Teczka nie
+      jest kopią zapasową i nie służy do przechowywania prywatnych dokumentów.
+    </p>
+    <p role="status" id="saved-status">
+      Wczytuję listę z tego urządzenia…
+    </p>
+    <div id="saved-list" class="content-tiles"></div>
+    <button class="button" id="clear-saved">
+      Usuń całą teczkę z tego urządzenia
+    </button>
+    <a class="button dark" href="/blog/">
+      Wybierz artykuł do zapisania
+    </a>
+    <noscript>Odczyt zapisanych materiałów wymaga JavaScript.</noscript>
+  </main>
+</Base>
+<script>
+  import {
+    savedPages,
+    SAVED_KEY,
+    OFFLINE_CACHE,
+    saveArticle,
+  } from "../lib/offline";
+  const list = document.getElementById("saved-list")!,
+    status = document.getElementById("saved-status")!,
+    clear = document.getElementById("clear-saved") as HTMLButtonElement;
+  async function draw() {
+    list.replaceChildren();
+    const rows = savedPages();
+    status.textContent = rows.length
+      ? `Zapisane artykuły: ${rows.length}.`
+      : "Nie zapisano jeszcze artykułów na tym urządzeniu.";
+    clear.hidden = !rows.length;
+    for (const p of rows) {
+      const box = document.createElement("article");
+      box.className = "content-tile";
+      const a = document.createElement("a");
+      a.href = p.url;
+      a.textContent = p.title;
+      const h = document.createElement("h2");
+      h.append(a);
+      const date = document.createElement("p");
+      date.textContent =
+        "Kopia pobrana: " + new Date(p.savedAt).toLocaleString("pl-PL");
+      const refresh = document.createElement("button");
+      refresh.className = "button";
+      refresh.textContent = "Odśwież kopię";
+      refresh.onclick = async () => {
+        refresh.disabled = true;
+        try {
+          await saveArticle(p.url, p.title);
+          await draw();
+        } catch (e) {
+          status.textContent =
+            e instanceof Error ? e.message : "Nie udało się odświeżyć.";
+        } finally {
+          refresh.disabled = false;
+        }
+      };
+      const remove = document.createElement("button");
+      remove.className = "button";
+      remove.textContent = "Usuń z teczki";
+      remove.onclick = async () => {
+        try {
+          const cache = await caches.open(OFFLINE_CACHE);
+          await cache.delete(p.url);
+          localStorage.setItem(
+            SAVED_KEY,
+            JSON.stringify(savedPages().filter((x) => x.url !== p.url)),
+          );
+          await draw();
+        } catch {
+          status.textContent =
+            "Nie udało się usunąć. Sprawdź ustawienia pamięci przeglądarki.";
+        }
+      };
+      box.append(h, date, refresh, remove);
+      list.append(box);
+    }
+  }
+  clear.addEventListener("click", async () => {
+    try {
+      await caches.delete(OFFLINE_CACHE);
+      localStorage.removeItem(SAVED_KEY);
+      await draw();
+    } catch {
+      status.textContent = "Nie udało się wyczyścić pamięci.";
+    }
+  });
+  void draw();
+</script>

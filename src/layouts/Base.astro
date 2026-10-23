@@ -2,7 +2,7 @@
 import "../styles/site.css";
 import { Header, Footer } from "../components/ui";
 import { Consent } from "../components/consent";
-import { pages, settings } from "../lib/content";
+import { pages, settings, rows } from "../lib/content";
 interface Props {
   title?: string;
   description?: string;
@@ -80,9 +80,22 @@ const data = [
     <meta property="og:type" content={kind} />
     <meta property="og:locale" content="pl_PL" />
     <meta property="og:site_name" content={config.title} />
-    <meta name="author" content={structured?.author?.name || config.author_name} />
-    {kind === 'article' && structured?.datePublished && <meta property="article:published_time" content={structured.datePublished}/>}
-    {kind === 'article' && structured?.dateModified && <meta property="article:modified_time" content={structured.dateModified}/>}
+    <meta
+      name="author"
+      content={structured?.author?.name || config.author_name}
+    />
+    {kind === "article" && structured?.datePublished && (
+      <meta
+        property="article:published_time"
+        content={structured.datePublished}
+      />
+    )}
+    {kind === "article" && structured?.dateModified && (
+      <meta
+        property="article:modified_time"
+        content={structured.dateModified}
+      />
+    )}
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={desc} />
     <meta
@@ -125,15 +138,44 @@ const data = [
   </head>
   <body>
     <Header
-      navigation={nav.map((p) => ({
-        slug: (p.section === "sosnowiec" ? "sosnowiec/" : "") + p.slug,
-        title: p.title,
-        menu_label: p.menu_label,
-      }))}
+      navigation={[
+        ...nav.map((p) => ({
+          slug: (p.section === "sosnowiec" ? "sosnowiec/" : "") + p.slug,
+          title: p.title,
+          menu_label: p.menu_label,
+        })),
+        ...config.navigation.map((n: any) => ({
+          slug: n.url,
+          title: n.label,
+          url: n.url,
+        })),
+      ]}
       client:load
     />
+    {!Astro.url.pathname.startsWith("/admin") &&
+      rows("banners")
+        .filter(
+          (b) =>
+            ["published", "scheduled"].includes(b.status) &&
+            (!b.published_at || Date.parse(b.published_at) <= Date.now()) &&
+            (b.scope === "all" || Astro.url.pathname.startsWith("/sosnowiec")),
+        )
+        .slice(0, 3)
+        .map((b) => (
+          <aside class="container site-notice" aria-label="Komunikat">
+            <strong>{b.title}</strong>
+            <p>{b.description}</p>
+            {b.url && <a href={b.url}>Dowiedz się więcej →</a>}
+          </aside>
+        ))}
     <slot />
     <Footer note={config.footer_note} />
+    <nav class="app-bottom" aria-label="Nawigacja aplikacji">
+      <a href="/aplikacja/">Start</a>
+      <a href="/szukaj/">Szukaj</a>
+      <a href="/zapisane/">Teczka</a>
+      <a href="/nowosci/">Nowości</a>
+    </nav>
     <Consent measurementId={config.ga_measurement_id} client:load />
     <script>
       if (

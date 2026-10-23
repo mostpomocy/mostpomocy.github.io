@@ -1,0 +1,51 @@
+---
+import Base from "../../layouts/Base.astro";
+import { rows, date } from "../../lib/content";
+import { visible } from "../../lib/schema.mjs";
+const events = rows("events")
+  .filter((p) => visible(p))
+  .sort((a, b) => Date.parse(a.starts_at) - Date.parse(b.starts_at));
+---
+
+<Base title="Wydarzenia — Sosnowiec i online">
+  <main id="main" class="container inner-page" tabindex="-1">
+    <span class="eyebrow">SPOTKANIA I INICJATYWY</span>
+    <h1>Wydarzenia.</h1>
+    <p class="lead">
+      Spotkania w Sosnowcu i wydarzenia ogólnopolskie. Szczegóły zapisów i
+      dostępności znajdziesz przy wydarzeniu.
+    </p>
+    <div class="content-tiles">
+      {events.map((e) => (
+        <article class="content-tile">
+          <span class="eyebrow">
+            {e.scope === "sosnowiec" ? "Sosnowiec" : "Ogólnopolskie / online"}
+            {Date.parse(e.ends_at || e.starts_at) < Date.now()
+              ? " · Archiwum"
+              : ""}
+          </span>
+          <h2>
+            <a href={`/wydarzenia/${e.slug}/`}>{e.title}</a>
+          </h2>
+          <p>
+            {date(e.starts_at)} ·{" "}
+            {new Intl.DateTimeFormat("pl-PL", {
+              hour: "2-digit",
+              minute: "2-digit",
+              timeZone: "Europe/Warsaw",
+            }).format(new Date(e.starts_at))}
+          </p>
+          <p>{e.location}</p>
+          <p>{e.excerpt}</p>
+        </article>
+      ))}
+    </div>
+    {!events.length && (
+      <p class="info-box">
+        Nie ma jeszcze opublikowanych wydarzeń. Sprawdź{" "}
+        <a href="/sosnowiec/blog/">lokalne artykuły</a> i wróć po kolejne
+        informacje.
+      </p>
+    )}
+  </main>
+</Base>

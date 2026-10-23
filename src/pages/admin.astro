@@ -103,11 +103,8 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
           </span>
         </a>
         <a class="editorial-link" href={cms + "/file/settings"}>
-          <strong>Google, newsletter i udostępnianie</strong>
-          <span>
-            Ustawienia GA4, raportów, opisu strony, obrazka i formularza
-            newslettera.
-          </span>
+          <strong>Google, menu i udostępnianie</strong>
+          <span>Ustawienia GA4, raportów, opisu strony, obrazka i menu.</span>
         </a>
       </section>
       <GoogleReports
@@ -150,29 +147,30 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
         </a>
       </nav>
       <section class="info-box">
-        <h2>Powiadomienia dla czytelników</h2>
+        <h2>Więcej treści w CMS</h2>
+        <div class="content-tiles">
+          <a class="editorial-link" href={cms + "/collection/events"}>
+            <strong>Wydarzenia</strong>
+            <span>Termin, miejsce, dostępność i plik do kalendarza.</span>
+          </a>
+          <a class="editorial-link" href={cms + "/collection/galleries"}>
+            <strong>Galerie</strong>
+            <span>Albumy, podpisy i opisy alternatywne zdjęć.</span>
+          </a>
+          <a class="editorial-link" href={cms + "/collection/downloads"}>
+            <strong>Pliki do pobrania</strong>
+            <span>Dokument, opis i informacja o dostępności.</span>
+          </a>
+          <a class="editorial-link" href={cms + "/collection/banners"}>
+            <strong>Komunikaty</strong>
+            <span>Baner na całej stronie lub tylko w Sosnowcu.</span>
+          </a>
+        </div>
         <p>
-          W OneSignal przygotuj wiadomość i wybierz właściwą grupę: „Nowe
-          poradniki” albo „Sosnowiec”. Nie wysyłaj do wszystkich subskrybentów,
-          jeśli materiał dotyczy tylko jednego kanału. Zapisanie artykułu w CMS
-          nie wysyła powiadomienia automatycznie.
+          Menu edytujesz w ustawieniach strony. Mapa witryny, indeks
+          wyszukiwania i RSS powstają przy publikacji. Przycisk „Sprawdź treści
+          i odnośniki” w CMS uruchamia kontrolę bez publikowania.
         </p>
-        <p>
-          Segmenty powinny mieć filtr tagu: mp_poradniki = 1 albo mp_sosnowiec =
-          1. Używaj neutralnego tytułu, krótkiego opisu i linku do
-          opublikowanego tekstu.
-        </p>
-        <a
-          class="button"
-          href="https://dashboard.onesignal.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Otwórz panel powiadomień ↗
-        </a>
-        <a class="text-link" href="/obserwuj/">
-          Sprawdź zapisy czytelników
-        </a>
       </section>
       <section class="info-box">
         <h2>Dodaj redaktora</h2>

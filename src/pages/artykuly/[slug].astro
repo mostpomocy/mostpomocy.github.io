@@ -1,4 +1,5 @@
 ---
+import OfflineSave from "../../components/OfflineSave.astro";
 import Base from "../../layouts/Base.astro";
 import {
   published,
@@ -147,7 +148,20 @@ const structured = {
       </section>
     )}
     <ContentTiles tiles={post.tiles} />
-    {places.length>0 && <section aria-label="Powiązane miejsca pomocy"><h2>Miejsca opisane w artykule</h2><div class="content-tiles">{places.map(place=><a class="editorial-link" href={placePath(place)}><strong>{place.name}</strong><span>Kontakt, kafelki i przygotowanie do wizyty ↗</span></a>)}</div></section>}
+    {places.length > 0 && (
+      <section aria-label="Powiązane miejsca pomocy">
+        <h2>Miejsca opisane w artykule</h2>
+        <div class="content-tiles">
+          {places.map((place) => (
+            <a class="editorial-link" href={placePath(place)}>
+              <strong>{place.name}</strong>
+              <span>Kontakt, kafelki i przygotowanie do wizyty ↗</span>
+            </a>
+          ))}
+        </div>
+      </section>
+    )}
+    <OfflineSave url={`/artykuly/${post.slug}/`} title={post.title} />
     <div class="reading-layout">
       <aside class="reading-aside" aria-label="Nawigacja po artykule">
         {post.toc && toc.length > 1 && (

@@ -1,1 +1,40 @@
-{"id":"/","name":"MostPomocy — Igor Pabiańczyk","short_name":"MostPomocy","lang":"pl","start_url":"/","scope":"/","display":"standalone","background_color":"#faf8f2","theme_color":"#174d3e","description":"Zrozumiale o wsparciu. Poradniki i pomoc w Sosnowcu.","icons":[{"src":"/icons/app-192.png","sizes":"192x192","type":"image/png","purpose":"any"},{"src":"/icons/app-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}],"shortcuts":[{"name":"Pomoc w Sosnowcu","url":"/sosnowiec/"},{"name":"Blog","url":"/blog/"}]}
+{
+  "id": "/",
+  "name": "MostPomocy — Igor Pabiańczyk",
+  "short_name": "MostPomocy",
+  "lang": "pl",
+  "start_url": "/aplikacja/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#faf8f2",
+  "theme_color": "#174d3e",
+  "description": "Zrozumiale o wsparciu. Poradniki i pomoc w Sosnowcu.",
+  "icons": [
+    {
+      "src": "/icons/app-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/app-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Pomoc w Sosnowcu",
+      "url": "/sosnowiec/"
+    },
+    {
+      "name": "Blog",
+      "url": "/blog/"
+    },
+    {
+      "name": "Zapisane offline",
+      "url": "/zapisane/"
+    }
+  ]
+}

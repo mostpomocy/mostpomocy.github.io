@@ -29,6 +29,13 @@ export function validate(root = process.cwd()) {
       seen.add((entry.section || "general") + ":" + entry.slug);
     }
   }
+  for (const file of all.downloads)
+    if (!fs.existsSync(root + "/public" + file.file))
+      throw new Error("Brak załącznika: " + file.title);
+  for (const album of all.galleries)
+    for (const image of album.images)
+      if (!fs.existsSync(root + "/public" + image.src))
+        throw new Error("Brak zdjęcia w galerii: " + album.title);
   for (const post of all.posts) {
     if (post.author_id && !all.authors.some((a) => a.id === post.author_id))
       throw new Error("Nieznany autor: " + post.title);

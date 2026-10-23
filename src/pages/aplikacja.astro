@@ -1,0 +1,70 @@
+---
+import Base from "../layouts/Base.astro";
+import { published } from "../lib/content";
+const recent = published().slice(0, 3);
+---
+
+<Base title="Aplikacja MostPomocy — pomoc pod ręką">
+  <main id="main" tabindex="-1" class="container app-home">
+    <div class="app-welcome">
+      <span class="eyebrow">MOSTPOMOCY · BEZ KONTA</span>
+      <h1>
+        Jeden mały krok.
+        <br />
+        <em>Bliżej pomocy.</em>
+      </h1>
+      <p class="lead">
+        Nie musisz znać nazwy instytucji ani umieć nazwać swojej sytuacji.
+      </p>
+    </div>
+    <nav class="app-choices" aria-label="Co chcesz zrobić?">
+      <a class="app-choice main-choice" href="/od-czego-zaczac/">
+        <span aria-hidden="true">01 ↗</span>
+        <h2>Potrzebuję pomocy</h2>
+        <p>
+          Wybierz to, co jest Ci teraz najbliższe. Zobacz możliwy pierwszy krok.
+        </p>
+      </a>
+      <a class="app-choice" href="/sosnowiec/">
+        <span aria-hidden="true">02 ↗</span>
+        <h2>Pomoc w Sosnowcu</h2>
+        <p>MOPS, działy, inne instytucje i lokalne artykuły.</p>
+      </a>
+      <a class="app-choice" href="/blog/">
+        <span aria-hidden="true">03 ↗</span>
+        <h2>Chcę poczytać</h2>
+        <p>Spokojnie i prostym językiem. Poradniki dla całej Polski.</p>
+      </a>
+    </nav>
+    <section class="app-tool-row" aria-label="Przydatne funkcje">
+      <a href="/szukaj/">Szukaj na stronie →</a>
+      <a href="/zapisane/">Moja teczka offline →</a>
+      <a href="/nowosci/">Nowe publikacje →</a>
+      <a href="/obserwuj/">Dodaj na telefon →</a>
+    </section>
+    <section class="app-recent">
+      <div class="section-top">
+        <h2>Warto przeczytać</h2>
+        <a href="/nowosci/">Wszystkie nowości →</a>
+      </div>
+      <div class="content-tiles">
+        {recent.map((p) => (
+          <a class="editorial-link" href={`/artykuly/${p.slug}/`}>
+            <span class="eyebrow">
+              {p.scope === "sosnowiec" ? "Sosnowiec" : "Dla każdego"}
+            </span>
+            <strong>{p.title}</strong>
+            <span>{p.excerpt}</span>
+          </a>
+        ))}
+      </div>
+    </section>
+    <nav class="app-more" aria-label="Więcej możliwości">
+      <a href="/wydarzenia/">Wydarzenia</a>
+      <a href="/galeria/">Galerie</a>
+      <a href="/do-pobrania/">Materiały do pobrania</a>
+      <a href="/narzedzia/">Chcę pomóc / narzędzia</a>
+      <a href="/">Strona główna</a>
+    </nav>
+  </main>
+</Base>

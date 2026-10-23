@@ -1,3 +1,4 @@
+import { visible } from "./schema.mjs";
 import { published, pages, rows, settings, siteURL, pagePath } from "./content";
 export const xml = (v: unknown) =>
   String(v ?? "").replace(
@@ -26,6 +27,26 @@ export function discoverable() {
     { path: "/dostepnosc/", updated: "" },
     { path: "/obserwuj/", updated: "" },
     { path: "/narzedzia/", updated: "" },
+    ...[
+      "aplikacja",
+      "szukaj",
+      "wydarzenia",
+      "galeria",
+      "do-pobrania",
+      "nowosci",
+    ].map((slug) => ({ path: `/${slug}/`, updated: "" })),
+    ...rows("events")
+      .filter((e) => visible(e) && !e.noindex)
+      .map((e) => ({
+        path: `/wydarzenia/${e.slug}/`,
+        updated: e.updated_at || e.published_at,
+      })),
+    ...rows("galleries")
+      .filter((e) => visible(e) && !e.noindex)
+      .map((e) => ({
+        path: `/galeria/${e.slug}/`,
+        updated: e.updated_at || e.published_at,
+      })),
     ...rows("places")
       .filter((p) => p.status === "published")
       .map((p) => ({

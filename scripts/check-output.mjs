@@ -124,3 +124,20 @@ assert.ok(fs.existsSync("dist/sw.js"));
 console.log(
   "Sprawdzono też SEO, obrazy udostępniania, kafelki i manifest PWA.",
 );
+
+for (const file of files)
+  assert.doesNotMatch(
+    fs.readFileSync(file, "utf8"),
+    /cdn\.onesignal\.com|OneSignalSDK\.page/,
+    "Publiczna strona nie może ładować dawnego dostawcy push",
+  );
+for (const page of [
+  "aplikacja",
+  "szukaj",
+  "nowosci",
+  "zapisane",
+  "wydarzenia",
+  "galeria",
+  "do-pobrania",
+])
+  assert.ok(fs.existsSync(`dist/${page}/index.html`));

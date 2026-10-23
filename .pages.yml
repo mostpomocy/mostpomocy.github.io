@@ -1,4 +1,17 @@
 media:
+  - name: files
+    label: Dokumenty
+    input: public/uploads/files
+    output: /uploads/files
+    extensions:
+      - pdf
+      - docx
+      - xlsx
+      - pptx
+      - txt
+      - csv
+      - ics
+    rename: random
   - name: images
     label: Zdjęcia
     input: public/uploads
@@ -12,10 +25,10 @@ media:
       - webp
     rename: random
 content:
-  - name: posts
-    label: Artykuły
+  - name: events
+    label: Wydarzenia
     type: collection
-    path: content/posts
+    path: content/events
     format: json
     filename:
       template: "{fields.id}.json"
@@ -30,7 +43,7 @@ content:
           editable: false
           generate: false
       - name: title
-        label: Tytuł
+        label: Nazwa wydarzenia
         type: string
         required: true
       - &a2
@@ -42,6 +55,237 @@ content:
         pattern: &a11
           regex: ^[a-z0-9]+(-[a-z0-9]+)*$
           message: Użyj małych liter, cyfr i myślników.
+      - name: excerpt
+        label: Krótki opis
+        type: text
+      - &a10
+        name: body
+        label: Treść
+        type: rich-text
+        required: true
+        options:
+          format: html
+          media: images
+          switcher: true
+      - name: starts_at
+        label: Początek
+        type: date
+        required: true
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - name: ends_at
+        label: Koniec (opcjonalnie)
+        type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - name: location
+        label: Miejsce lub informacja o wydarzeniu online
+        type: string
+      - name: organizer
+        label: Organizator
+        type: string
+      - name: scope
+        label: Zasięg
+        type: select
+        options:
+          values:
+            - name: general
+              label: Ogólnopolskie
+            - name: sosnowiec
+              label: Sosnowiec
+        default: sosnowiec
+      - name: registration_url
+        label: Oficjalny adres zapisów HTTPS (opcjonalnie)
+        type: string
+      - name: accessibility
+        label: Informacje o dostępności
+        type: text
+      - &a3
+        name: status
+        label: Status
+        type: select
+        default: draft
+        options:
+          values:
+            - name: draft
+              label: Szkic
+            - name: published
+              label: Opublikowany
+            - name: scheduled
+              label: Zaplanowany
+            - name: trashed
+              label: Kosz
+      - &a4
+        name: published_at
+        label: Termin publikacji
+        type: date
+        required: true
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - &a5
+        name: updated_at
+        label: Data aktualizacji
+        type: date
+        options:
+          time: true
+          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - &a6
+        name: seo_title
+        label: Tytuł dla Google
+        type: string
+      - &a7
+        name: seo_description
+        label: Opis w wynikach wyszukiwania
+        type: text
+      - &a8
+        name: canonical_url
+        label: Adres kanoniczny (opcjonalnie)
+        type: string
+      - &a9
+        name: noindex
+        label: Nie indeksuj tej treści
+        type: boolean
+        default: false
+    view:
+      primary: title
+  - name: galleries
+    label: Galerie zdjęć
+    type: collection
+    path: content/galleries
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Tytuł
+        type: string
+        required: true
+      - *a2
+      - name: excerpt
+        label: Opis
+        type: text
+      - name: images
+        label: Zdjęcia
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.alt}"
+        fields:
+          - name: src
+            label: Zdjęcie
+            type: image
+            required: true
+            options:
+              media: images
+          - name: alt
+            label: Opis alternatywny
+            type: string
+            required: true
+          - name: caption
+            label: Podpis
+            type: text
+          - name: credit
+            label: Autor / źródło i prawa do zdjęcia
+            type: string
+      - *a3
+      - *a4
+      - *a5
+      - *a6
+      - *a7
+      - *a8
+      - *a9
+    view:
+      primary: title
+  - name: downloads
+    label: Pliki do pobrania
+    type: collection
+    path: content/downloads
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Nazwa pliku
+        type: string
+        required: true
+      - name: description
+        label: Opis
+        type: text
+      - name: file
+        label: Plik
+        type: file
+        required: true
+        options:
+          media: files
+      - name: format
+        label: Format, np. PDF
+        type: string
+      - name: accessibility
+        label: Dostępność dokumentu lub alternatywa tekstowa
+        type: text
+      - *a3
+      - *a4
+      - *a5
+    view:
+      primary: title
+  - name: banners
+    label: Komunikaty i banery
+    type: collection
+    path: content/banners
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Tytuł
+        type: string
+        required: true
+      - name: description
+        label: Treść
+        type: text
+      - name: url
+        label: Odnośnik /adres/ lub HTTPS
+        type: string
+      - name: scope
+        label: Gdzie pokazać
+        type: select
+        default: all
+        options:
+          values:
+            - name: all
+              label: Cała strona
+            - name: sosnowiec
+              label: Tylko Sosnowiec
+      - *a3
+      - *a4
+      - *a5
+    view:
+      primary: title
+  - name: posts
+    label: Artykuły
+    type: collection
+    path: content/posts
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: title
+        label: Tytuł
+        type: string
+        required: true
+      - *a2
       - name: category_id
         label: Kategoria bloga ogólnego
         type: reference
@@ -82,15 +326,7 @@ content:
       - name: excerpt
         label: Wprowadzenie
         type: text
-      - &a3
-        name: body
-        label: Treść
-        type: rich-text
-        required: true
-        options:
-          format: html
-          media: images
-          switcher: true
+      - *a10
       - name: summary_points
         label: Najważniejsze w skrócie — po jednym punkcie
         type: string
@@ -160,36 +396,9 @@ content:
           value: "{fields.id}"
           label: "{fields.name}"
           multiple: false
-      - &a4
-        name: status
-        label: Status
-        type: select
-        default: draft
-        options:
-          values:
-            - name: draft
-              label: Szkic
-            - name: published
-              label: Opublikowany
-            - name: scheduled
-              label: Zaplanowany
-            - name: trashed
-              label: Kosz
-      - &a5
-        name: published_at
-        label: Termin publikacji
-        type: date
-        required: true
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-      - &a6
-        name: updated_at
-        label: Data aktualizacji
-        type: date
-        options:
-          time: true
-          format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
+      - *a3
+      - *a4
+      - *a5
       - name: featured
         label: Wyróżnij na głównej
         type: boolean
@@ -200,23 +409,10 @@ content:
       - name: sources
         label: Źródła — po jednym adresie HTTPS w wierszu
         type: text
-      - &a7
-        name: seo_title
-        label: Tytuł dla Google
-        type: string
-      - &a8
-        name: seo_description
-        label: Opis w wynikach wyszukiwania
-        type: text
-      - &a9
-        name: canonical_url
-        label: Adres kanoniczny (opcjonalnie)
-        type: string
-      - &a10
-        name: noindex
-        label: Nie indeksuj tej treści
-        type: boolean
-        default: false
+      - *a6
+      - *a7
+      - *a8
+      - *a9
     view:
       primary: title
       fields:
@@ -270,7 +466,7 @@ content:
       - name: excerpt
         label: Wprowadzenie
         type: text
-      - *a3
+      - *a10
       - name: related_category_id
         label: Powiązana kategoria (opcjonalnie)
         type: reference
@@ -280,9 +476,9 @@ content:
           value: "{fields.id}"
           label: "{fields.name}"
           multiple: false
+      - *a3
       - *a4
       - *a5
-      - *a6
       - name: show_in_nav
         label: Pokaż w menu głównym
         type: boolean
@@ -297,10 +493,10 @@ content:
         options:
           min: 0
           max: 100
+      - *a6
       - *a7
       - *a8
       - *a9
-      - *a10
     view:
       primary: title
       fields:
@@ -535,16 +731,19 @@ content:
         type: string
         description: Publiczny identyfikator klienta aplikacji internetowej. Żadnych
           kluczy prywatnych. Instrukcja w /admin/.
-      - name: onesignal_app_id
-        label: OneSignal — publiczny App ID (powiadomienia)
-        type: string
-        description: UUID aplikacji Web Push. Nie wklejaj REST API Key. Konfiguracja
-          Custom Code, domena https://mostpomocy.pl. Wysyłka w panelu OneSignal.
-      - name: newsletter_url
-        label: HTTPS do formularza zapisu newslettera
-        type: string
-        description: Wklej formularz dostawcy po założeniu i skonfigurowaniu konta, np.
-          Brevo. Bez tego strona oferuje RSS.
+      - name: navigation
+        label: Dodatkowe linki menu
+        type: object
+        list: true
+        fields:
+          - name: label
+            label: Nazwa
+            type: string
+            required: true
+          - name: url
+            label: Adres na stronie, np. /wydarzenia/
+            type: string
+            required: true
       - name: google_verification
         label: Google Search Console — kod weryfikacyjny
         type: string
@@ -567,6 +766,10 @@ content:
         label: Tekst stopki
         type: text
 actions:
+  - name: check-content
+    label: Sprawdź treści i odnośniki
+    workflow: check-content.yml
+    confirm: false
   - name: publish
     label: Zbuduj i opublikuj stronę
     workflow: pages.yml
