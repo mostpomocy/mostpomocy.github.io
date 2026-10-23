@@ -52,7 +52,7 @@ content:
         type: string
         required: true
         description: Małe litery bez polskich znaków, np. wolontariat
-        pattern: &a11
+        pattern: &a12
           regex: ^[a-z0-9]+(-[a-z0-9]+)*$
           message: Użyj małych liter, cyfr i myślników.
       - name: category_id
@@ -104,11 +104,30 @@ content:
           format: html
           media: images
           switcher: true
+      - &a4
+        name: faq
+        label: Pytania i odpowiedzi
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.question}"
+        description: Dodaj prawdziwe pytania czytelników i krótkie, rzeczowe odpowiedzi.
+          Będą widoczne na stronie; nie gwarantuje to specjalnego wyniku Google.
+        fields:
+          - name: question
+            label: Pytanie
+            type: string
+            required: true
+          - name: answer
+            label: Odpowiedź
+            type: text
+            required: true
       - name: summary_points
         label: Najważniejsze w skrócie — po jednym punkcie
         type: string
         list: true
-      - &a12
+      - &a13
         name: tiles
         label: Kafelki informacyjne
         type: object
@@ -173,7 +192,7 @@ content:
           value: "{fields.id}"
           label: "{fields.name}"
           multiple: false
-      - &a4
+      - &a5
         name: status
         label: Status
         type: select
@@ -188,7 +207,7 @@ content:
               label: Zaplanowany
             - name: trashed
               label: Kosz
-      - &a5
+      - &a6
         name: published_at
         label: Termin publikacji
         type: date
@@ -196,7 +215,7 @@ content:
         options:
           time: true
           format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
-      - &a6
+      - &a7
         name: updated_at
         label: Data aktualizacji
         type: date
@@ -213,19 +232,23 @@ content:
       - name: sources
         label: Źródła — po jednym adresie HTTPS w wierszu
         type: text
-      - &a7
+      - &a8
         name: seo_title
         label: Tytuł dla Google
         type: string
-      - &a8
+      - &a9
         name: seo_description
         label: Opis w wynikach wyszukiwania
         type: text
-      - &a9
-        name: canonical_url
-        label: Adres kanoniczny (opcjonalnie)
-        type: string
+        description: Krótko opisz zawartość i korzyść dla czytelnika. Puste pole
+          korzysta z wprowadzenia; Google może wybrać własny fragment.
       - &a10
+        name: canonical_url
+        label: Adres kanoniczny — automatyczny, zostaw puste
+        type: string
+        description: Wypełnij tylko przy świadomym wskazaniu oryginału przedruku. Dla
+          własnych tekstów adres wylicza się automatycznie.
+      - &a11
         name: noindex
         label: Nie indeksuj tej treści
         type: boolean
@@ -284,6 +307,7 @@ content:
         label: Wprowadzenie
         type: text
       - *a3
+      - *a4
       - name: related_category_id
         label: Powiązana kategoria (opcjonalnie)
         type: reference
@@ -293,9 +317,9 @@ content:
           value: "{fields.id}"
           label: "{fields.name}"
           multiple: false
-      - *a4
       - *a5
       - *a6
+      - *a7
       - name: show_in_nav
         label: Pokaż w menu głównym
         type: boolean
@@ -310,10 +334,10 @@ content:
         options:
           min: 0
           max: 100
-      - *a7
       - *a8
       - *a9
       - *a10
+      - *a11
     view:
       primary: title
       fields:
@@ -341,7 +365,7 @@ content:
         required: false
         description: Adres wizytówki. Dla nowej jednostki wpisz np.
           zespol-interdyscyplinarny.
-        pattern: *a11
+        pattern: *a12
       - name: section
         label: Zakładka
         type: select
@@ -364,7 +388,7 @@ content:
       - name: description
         label: Opis
         type: text
-      - *a12
+      - *a13
       - name: opening_hours
         label: Godziny i sposób umawiania wizyty
         type: text
@@ -563,13 +587,13 @@ content:
       - name: accessibility
         label: Informacje o dostępności
         type: text
-      - *a4
       - *a5
       - *a6
       - *a7
       - *a8
       - *a9
       - *a10
+      - *a11
     view:
       primary: title
       fields:
@@ -619,13 +643,13 @@ content:
           - name: credit
             label: Autor / źródło i prawa do zdjęcia
             type: string
-      - *a4
       - *a5
       - *a6
       - *a7
       - *a8
       - *a9
       - *a10
+      - *a11
     view:
       primary: title
       fields:
@@ -661,9 +685,9 @@ content:
       - name: accessibility
         label: Dostępność dokumentu lub alternatywa tekstowa
         type: text
-      - *a4
       - *a5
       - *a6
+      - *a7
     view:
       primary: title
       fields:
@@ -700,9 +724,9 @@ content:
               label: Cała strona
             - name: sosnowiec
               label: Tylko Sosnowiec
-      - *a4
       - *a5
       - *a6
+      - *a7
     view:
       primary: title
       fields:
@@ -715,6 +739,7 @@ content:
     path: content/settings/main.json
     format: json
     fields:
+      - *a4
       - name: id
         label: ID
         type: string

@@ -86,6 +86,11 @@ const base = {
 const status = z
   .enum(["draft", "published", "scheduled", "trashed"])
   .default("draft");
+const faq = z
+  .array(
+    z.object({ question: text.min(3).max(300), answer: text.min(3).max(2000) }),
+  )
+  .default([]);
 const seo = {
   seo_title: text.max(180).default(""),
   seo_description: text.max(400).default(""),
@@ -122,6 +127,7 @@ const schemas = {
     scope: z.enum(["general", "sosnowiec"]).default("general"),
     author: text.max(100).default("Igor Pabiańczyk"),
     author_id: text.default(""),
+    faq,
     summary_points: z.array(text.max(300)).default([]),
     tiles,
     cover_style: z.enum(["sage", "sand", "lilac", "rose"]).default("sage"),
@@ -136,6 +142,7 @@ const schemas = {
   }),
   pages: z.object({
     ...base,
+    faq,
     notice: text.max(600).default(""),
     related_category_id: text.default(""),
     section: z.enum(["general", "sosnowiec"]).default("general"),
@@ -188,6 +195,7 @@ const schemas = {
     status: z.enum(["draft", "published"]).default("draft"),
   }),
   settings: z.object({
+    faq,
     ...base,
     title: text.min(2).max(100),
     description: text.max(500).default(""),

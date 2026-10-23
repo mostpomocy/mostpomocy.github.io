@@ -1,4 +1,5 @@
 ---
+import Questions from "../components/Questions.astro";
 import Follow from "../components/Follow.astro";
 import Base from "../layouts/Base.astro";
 import { published, rows, settings, pages, pagePath } from "../lib/content";
@@ -61,7 +62,7 @@ const contacts = [
 const featured = all.find((p) => p.featured) || all[0];
 ---
 
-<Base description="Przystępne poradniki dla osób szukających wsparcia i ich bliskich oraz konkretne miejsca pomocy w Sosnowcu.">
+<Base description={config.description}>
   <main id="main" tabindex="-1" class="home-page">
     <div class="container">
       <div class="eyebrow intro-label">
@@ -285,9 +286,15 @@ const featured = all.find((p) => p.featured) || all[0];
       </section>
     </div>
     <Follow />
+    <div class="container"><Questions items={config.faq} /></div>
   </main>
 </Base>
 
 <script>
-if (location.pathname==='/' && (window.matchMedia('(display-mode: standalone)').matches || (navigator as any).standalone)) location.replace('/aplikacja/');
+  if (
+    location.pathname === "/" &&
+    (window.matchMedia("(display-mode: standalone)").matches ||
+      (navigator as any).standalone)
+  )
+    location.replace("/aplikacja/");
 </script>

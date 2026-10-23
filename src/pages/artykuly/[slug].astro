@@ -1,4 +1,5 @@
 ---
+import Questions from "../../components/Questions.astro";
 import OfflineSave from "../../components/OfflineSave.astro";
 import Base from "../../layouts/Base.astro";
 import {
@@ -225,5 +226,6 @@ const structured = {
         ))}
       </div>
     </section>
+    <Questions items={post.faq} />
   </main>
 </Base>

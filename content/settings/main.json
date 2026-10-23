@@ -1,7 +1,7 @@
 {
   "id": "main",
   "title": "MostPomocy",
-  "description": "Igor Pabiańczyk: zrozumiale o pracy socjalnej, rodzinie, zdrowiu i szukaniu wsparcia. Praktyczne poradniki dla całej Polski i miejsca pomocy w Sosnowcu.",
+  "description": "MostPomocy — Igor Pabiańczyk. Prosto o szukaniu wsparcia, pracy socjalnej i codziennych trudnościach. Poradniki dla całej Polski i pomoc w Sosnowcu.",
   "site_url": "https://mostpomocy.pl",
   "repository": "mostpomocy/mostpomocy.github.io",
   "branch": "main",
@@ -13,5 +13,19 @@
   "allow_ai_search": true,
   "footer_note": "O pracy socjalnej i wspieraniu ludzi. Z uważnością. Prostym językiem.",
   "ga_property_id": "531159356",
-  "google_client_id": "990514016021-rh2arfmpankrhselimeu2cmdkcat32hk.apps.googleusercontent.com"
+  "google_client_id": "990514016021-rh2arfmpankrhselimeu2cmdkcat32hk.apps.googleusercontent.com",
+  "faq": [
+    {
+      "question": "Czy MostPomocy jest tylko dla mieszkańców Sosnowca?",
+      "answer": "Nie. Poradniki dotyczą szukania wsparcia w całej Polsce. Część „Sosnowiec” zawiera lokalne artykuły i informacje o miejscach pomocy."
+    },
+    {
+      "question": "Czy trzeba mieć konto, żeby czytać poradniki?",
+      "answer": "Nie. Artykuły i informacje o miejscach pomocy są dostępne bezpłatnie, bez zakładania konta."
+    },
+    {
+      "question": "Kto tworzy MostPomocy?",
+      "answer": "Autorem serwisu jest Igor Pabiańczyk, student pracy socjalnej na Uniwersytecie Śląskim i wolontariusz. MostPomocy publikuje materiały informacyjne i edukacyjne; kontakt z instytucją pozwala ustalić pomoc w konkretnej sytuacji."
+    }
+  ]
 }

@@ -141,3 +141,21 @@ for (const page of [
   "do-pobrania",
 ])
   assert.ok(fs.existsSync(`dist/${page}/index.html`));
+
+const homepageSEO = fs.readFileSync("dist/index.html", "utf8");
+assert.match(homepageSEO, /rel="icon"[^>]*href="\/favicon.png"/);
+const iconPNG = fs.readFileSync("dist/favicon.png");
+assert.equal(iconPNG.readUInt32BE(16), 96);
+assert.equal(iconPNG.readUInt32BE(20), 96);
+for (const question of all.settings[0].faq) {
+  assert.ok(homepageSEO.includes(question.question));
+  assert.ok(homepageSEO.includes(question.answer));
+}
+const homepageData = [
+  ...homepageSEO.matchAll(
+    /<script[^>]*type="application\/ld\+json"[^>]*>([\s\S]*?)<\/script>/g,
+  ),
+].map((match) => JSON.parse(match[1]));
+const faqData = homepageData.find((data) => data["@type"] === "FAQPage");
+if (all.settings[0].faq.length)
+  assert.equal(faqData.mainEntity.length, all.settings[0].faq.length);
