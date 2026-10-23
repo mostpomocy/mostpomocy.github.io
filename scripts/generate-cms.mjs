@@ -66,7 +66,22 @@ const collection = (name, label, fields, view = {}) => ({
   format: "json",
   filename: { template: "{fields.id}.json", field: false },
   fields: [id, ...fields],
-  view: { primary: "name", ...view },
+  view: {
+    primary: "name",
+    fields: (
+      {
+        posts: ["title", "status", "scope", "published_at"],
+        pages: ["title", "section", "status"],
+        places: ["name", "section", "status"],
+        authors: ["name", "role"],
+        events: ["title", "starts_at", "scope", "status"],
+        galleries: ["title", "status", "published_at"],
+        downloads: ["title", "format", "status"],
+        banners: ["title", "scope", "status"],
+      }[name] || ["name", "slug"]
+    ).filter((key) => fields.some((field) => field.name === key)),
+    ...view,
+  },
 });
 const tileField = f("tiles", "Kafelki informacyjne", "object", {
   description:
@@ -454,5 +469,20 @@ const cms = {
     },
   ],
 };
+const order = [
+  "posts",
+  "pages",
+  "places",
+  "authors",
+  "categories",
+  "local_categories",
+  "tags",
+  "events",
+  "galleries",
+  "downloads",
+  "banners",
+  "settings",
+];
+cms.content.sort((a, b) => order.indexOf(a.name) - order.indexOf(b.name));
 fs.writeFileSync(".pages.yml", YAML.stringify(cms));
 console.log("Pages CMS configuration generated");
