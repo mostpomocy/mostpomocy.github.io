@@ -76,3 +76,52 @@ export function discoverable() {
   ];
 }
 export { published, pages, settings, siteURL, pagePath };
+
+// One publication feed includes newly published content, not utility/category pages.
+export function feedEntries() {
+  return [
+    ...published()
+      .filter((p) => !p.noindex)
+      .map((p) => ({
+        title: p.title,
+        description: p.excerpt,
+        url: siteURL(`/artykuly/${p.slug}/`),
+        date: p.published_at || p.updated_at,
+      })),
+    ...pages()
+      .filter((p) => !p.noindex)
+      .map((p) => ({
+        title: p.title,
+        description: p.excerpt,
+        url: siteURL(pagePath(p)),
+        date: p.published_at || p.updated_at,
+      })),
+    ...rows("events")
+      .filter((p) => visible(p) && !p.noindex)
+      .map((p) => ({
+        title: p.title,
+        description: p.excerpt,
+        url: siteURL(`/wydarzenia/${p.slug}/`),
+        date: p.published_at || p.updated_at,
+      })),
+    ...rows("galleries")
+      .filter((p) => visible(p) && !p.noindex)
+      .map((p) => ({
+        title: p.title,
+        description: p.excerpt,
+        url: siteURL(`/galeria/${p.slug}/`),
+        date: p.published_at || p.updated_at,
+      })),
+    ...rows("places")
+      .filter((p) => p.status === "published")
+      .map((p) => ({
+        title: p.name,
+        description: p.description,
+        url: siteURL(`/sosnowiec/instytucje/${p.slug || p.id}/`),
+        date: "",
+      })),
+  ].sort(
+    (a, b) =>
+      Date.parse(b.date || "1970-01-01") - Date.parse(a.date || "1970-01-01"),
+  );
+}

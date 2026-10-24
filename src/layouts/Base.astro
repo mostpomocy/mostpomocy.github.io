@@ -11,6 +11,7 @@ interface Props {
   canonical?: string;
   image?: string;
   kind?: string;
+  topicFeed?: string;
   structured?: any;
 }
 const {
@@ -20,6 +21,7 @@ const {
   canonical,
   image,
   kind = "website",
+  topicFeed,
   structured,
 } = Astro.props;
 const config = settings();
@@ -75,9 +77,17 @@ const data = [
     <link
       rel="alternate"
       type="application/rss+xml"
-      title="MostPomocy — nowe artykuły"
+      title="MostPomocy — nowe publikacje"
       href="/feed.xml"
     />
+    {topicFeed && (
+      <link
+        rel="alternate"
+        type="application/rss+xml"
+        title={(title || config.title) + " — aktualności"}
+        href={new URL(topicFeed, config.site_url).href}
+      />
+    )}
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={desc} />
     <meta property="og:url" content={url} />

@@ -159,3 +159,39 @@ const homepageData = [
 const faqData = homepageData.find((data) => data["@type"] === "FAQPage");
 if (all.settings[0].faq.length)
   assert.equal(faqData.mainEntity.length, all.settings[0].faq.length);
+
+// Every newly published CMS page is discoverable without editing a URL list.
+const publicationFeed = fs.readFileSync("dist/feed.xml", "utf8");
+for (const page of all.pages) {
+  const pathname = `/${page.section === "sosnowiec" ? "sosnowiec/" : ""}${page.slug}/`;
+  const url = "https://mostpomocy.pl" + pathname;
+  if (visible(page) && !page.noindex) {
+    assert.ok(
+      sitemapURLs.includes(url),
+      `Nowa podstrona nieobecna w mapie: ${url}`,
+    );
+    assert.ok(
+      publicationFeed.includes(`<link>${url}</link>`),
+      `Nowa podstrona nieobecna w RSS: ${url}`,
+    );
+    const topicFeed = fs.readFileSync("dist" + pathname + "feed.xml", "utf8");
+    for (const post of all.posts.filter(
+      (post) =>
+        visible(post) &&
+        !post.noindex &&
+        (post.related_page_ids.includes(page.id) ||
+          (page.related_category_id &&
+            post.category_id === page.related_category_id &&
+            (page.section !== "sosnowiec" || post.scope === "sosnowiec"))),
+    )) {
+      assert.ok(
+        topicFeed.includes(`/artykuly/${post.slug}/`),
+        `Brak artykułu w RSS działu: ${post.title}`,
+      );
+    }
+  } else
+    assert.ok(
+      !publicationFeed.includes(`<link>${url}</link>`),
+      `Nieopublikowana podstrona w RSS: ${url}`,
+    );
+}

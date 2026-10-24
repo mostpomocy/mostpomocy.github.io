@@ -50,6 +50,9 @@ export function validate(root = process.cwd()) {
       if (!fs.existsSync(root + "/public" + image.src))
         throw new Error("Brak zdjęcia w galerii: " + album.title);
   for (const post of all.posts) {
+    for (const id of post.related_page_ids)
+      if (!all.pages.some((page) => page.id === id))
+        throw new Error("Nieznana powiązana podstrona: " + post.title);
     if (post.author_id && !all.authors.some((a) => a.id === post.author_id))
       throw new Error("Nieznany autor: " + post.title);
     for (const id of post.related_place_ids)

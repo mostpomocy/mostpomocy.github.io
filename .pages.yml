@@ -127,6 +127,15 @@ content:
         label: Najważniejsze w skrócie — po jednym punkcie
         type: string
         list: true
+      - name: related_page_ids
+        label: Powiązane podstrony — pokaż tam ten artykuł
+        type: reference
+        options:
+          collection: pages
+          search: fields.title
+          value: "{fields.id}"
+          label: "{fields.title}"
+          multiple: true
       - &a13
         name: tiles
         label: Kafelki informacyjne
@@ -211,6 +220,9 @@ content:
         name: published_at
         label: Termin publikacji
         type: date
+        description: Aby pokazać treść od razu, wybierz bieżącą lub wcześniejszą datę i
+          godzinę. Przyszły termin wstrzymuje publikację także przy statusie
+          Opublikowany.
         required: true
         options:
           time: true
@@ -308,6 +320,10 @@ content:
         type: text
       - *a3
       - *a4
+      - name: show_updates
+        label: Pokaż dział aktualności i osobny RSS
+        type: boolean
+        default: false
       - name: related_category_id
         label: Powiązana kategoria (opcjonalnie)
         type: reference

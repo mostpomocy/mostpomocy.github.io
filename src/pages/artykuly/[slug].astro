@@ -15,7 +15,7 @@ import { ArticleCard } from "../../components/ui";
 import { ArticleActions } from "../../components/article-actions";
 import { visible } from "../../lib/schema.mjs";
 import ContentTiles from "../../components/ContentTiles.astro";
-import { postAuthor, placePath } from "../../lib/content";
+import { postAuthor, placePath, pages, pagePath } from "../../lib/content";
 export function getStaticPaths() {
   return (
     import.meta.env.DEV
@@ -57,6 +57,7 @@ const related = published()
 const sources = post.sources
   .split("\n")
   .filter((s: string) => /^https:\/\//.test(s));
+const hubs = pages().filter((page) => post.related_page_ids.includes(page.id));
 const canonical = post.canonical_url || siteURL("/artykuly/" + post.slug + "/");
 const structured = {
   "@context": "https://schema.org",
@@ -149,6 +150,13 @@ const structured = {
       </section>
     )}
     <ContentTiles tiles={post.tiles} />
+    {hubs.length > 0 && (
+      <nav class="breadcrumbs" aria-label="Powiązane działy">
+        {hubs.map((page) => (
+          <a href={pagePath(page)}>{page.menu_label || page.title} →</a>
+        ))}
+      </nav>
+    )}
     {places.length > 0 && (
       <section aria-label="Powiązane miejsca pomocy">
         <h2>Miejsca opisane w artykule</h2>
