@@ -1,14 +1,9 @@
 ---
+import PageNews from "../../components/PageNews.astro";
 import Questions from "../../components/Questions.astro";
 import Base from "../../layouts/Base.astro";
-import {
-  pages,
-  rows,
-  published,
-  prepareBody,
-  siteURL,
-} from "../../lib/content";
-import { ArticleCard } from "../../components/ui";
+import { pages, rows, prepareBody, siteURL } from "../../lib/content";
+
 import { visible } from "../../lib/schema.mjs";
 export function getStaticPaths() {
   return (
@@ -21,15 +16,27 @@ export function getStaticPaths() {
 }
 const { page } = Astro.props;
 const { body } = prepareBody(page.body);
-const related = page.related_category_id
-  ? published().filter((p) => p.category_id === page.related_category_id)
-  : [];
 ---
 
 <Base
+  topicFeed={
+    !page.noindex && visible(page)
+      ? "/sosnowiec/" + page.slug + "/feed.xml"
+      : undefined
+  }
   title={page.seo_title || page.title}
   description={page.seo_description || page.excerpt}
   noindex={page.noindex || !visible(page)}
+  structured={{
+    "@context": "https://schema.org",
+    "@type": page.show_updates ? "CollectionPage" : "WebPage",
+    name: page.title,
+    description: page.seo_description || page.excerpt,
+    url: siteURL("/sosnowiec/" + page.slug + "/"),
+    datePublished: page.published_at,
+    dateModified: page.updated_at,
+    inLanguage: "pl-PL",
+  }}
   canonical={page.canonical_url || siteURL("/sosnowiec/" + page.slug + "/")}
 >
   <main id="main" tabindex="-1" class="container inner-page custom-page">
@@ -50,17 +57,15 @@ const related = page.related_category_id
       </aside>
     )}
     {page.excerpt && <p class="lead narrow">{page.excerpt}</p>}
-    <article class="prose narrow" set:html={body} />
-    {related.length > 0 && (
-      <section class="related">
-        <h2>Artykuły w tym temacie</h2>
-        <div class="article-grid">
-          {related.map((p) => (
-            <ArticleCard post={p} categories={rows("categories")} />
-          ))}
-        </div>
-      </section>
+    {page.show_updates && (
+      <p>
+        <a class="button" href="#aktualnosci">
+          Aktualności i artykuły ↓
+        </a>
+      </p>
     )}
+    <article class="prose narrow" set:html={body} />
+    <PageNews page={page} />
     <Questions items={page.faq} />
   </main>
 </Base>

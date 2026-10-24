@@ -61,6 +61,7 @@ const seo = [
 ];
 const dates = [
   f("published_at", "Termin publikacji", "date", {
+    description: "Aby pokazać treść od razu, wybierz bieżącą lub wcześniejszą datę i godzinę. Przyszły termin wstrzymuje publikację także przy statusie Opublikowany.",
     required: true,
     options: { time: true, format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" },
   }),
@@ -72,9 +73,13 @@ const reference = (name, label, collection, multiple = false) =>
   f(name, label, "reference", {
     options: {
       collection,
-      search: "fields.name",
+      search: ["pages", "posts"].includes(collection)
+        ? "fields.title"
+        : "fields.name",
       value: "{fields.id}",
-      label: "{fields.name}",
+      label: ["pages", "posts"].includes(collection)
+        ? "{fields.title}"
+        : "{fields.name}",
       multiple,
     },
   });
@@ -268,6 +273,12 @@ const cms = {
           "string",
           { list: true },
         ),
+        reference(
+          "related_page_ids",
+          "Powiązane podstrony — pokaż tam ten artykuł",
+          "pages",
+          true,
+        ),
         tileField,
         f("cover_style", "Kolor kafelka artykułu", "select", {
           default: "sage",
@@ -332,6 +343,9 @@ const cms = {
         f("excerpt", "Wprowadzenie", "text"),
         body,
         faqField,
+        f("show_updates", "Pokaż dział aktualności i osobny RSS", "boolean", {
+          default: false,
+        }),
         reference(
           "related_category_id",
           "Powiązana kategoria (opcjonalnie)",
