@@ -3,6 +3,13 @@ import Base from "../layouts/Base.astro";
 import QRGenerator from "../components/QRGenerator";
 import { published, pages, rows, pagePath, placePath } from "../lib/content";
 const targets = [
+  ...rows("links")
+    .filter((l) => l.status === "published")
+    .map((l) => ({
+      path: "/l/" + l.slug + "/",
+      title: "Krótki link: " + l.name,
+      fixed: true,
+    })),
   { path: "/", title: "MostPomocy — strona główna" },
   { path: "/sosnowiec/", title: "Pomoc w Sosnowcu" },
   { path: "/blog/", title: "Blog — artykuły i poradniki" },
@@ -29,7 +36,9 @@ const reportUrl =
     <h1>Kod QR, który prowadzi do pomocy.</h1>
     <p class="lead narrow">
       Wybierz stronę, oznacz miejsce i kampanię, a potem pobierz kod na plakat
-      lub ulotkę. Każde oznaczenie pomoże odróżnić źródła wejść.
+      lub ulotkę. Każde oznaczenie pomoże odróżnić źródła wejść. Możesz też
+      wkleić zewnętrzny adres lub{" "}
+      <a href="/linki/">zarządzać krótkimi linkami</a>.
     </p>
     <QRGenerator targets={targets} reportUrl={reportUrl} client:load />
   </main>

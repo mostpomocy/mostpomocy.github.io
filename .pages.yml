@@ -451,6 +451,77 @@ content:
         - name
         - section
         - status
+  - name: links
+    label: Krótkie linki i kody QR
+    type: collection
+    path: content/links
+    format: json
+    filename:
+      template: "{fields.id}.json"
+      field: false
+    fields:
+      - *a1
+      - name: name
+        label: Nazwa linku
+        type: string
+        required: true
+      - name: slug
+        label: Krótka nazwa adresu
+        type: string
+        required: true
+        description: Np. mops — otrzymasz mostpomocy.pl/l/mops/. Po wydrukowaniu QR nie
+          zmieniaj tej nazwy; możesz zmieniać cel.
+        pattern:
+          regex: ^[a-z0-9]+(-[a-z0-9]+)*$
+          message: Małe litery, cyfry i myślniki, maksymalnie 48 znaków.
+      - name: target_url
+        label: Pełny adres docelowy HTTPS
+        type: string
+        required: true
+        description: Może prowadzić poza MostPomocy, np.
+          https://www.mopssosnowiec.pl/wolontariat.html. Adres jest publiczny —
+          bez haseł, tokenów i prywatnych dokumentów.
+      - name: source
+        label: Miejsce / źródło
+        type: string
+        required: true
+        default: mostpomocy
+        description: Małe litery, cyfry, podkreślenia; np. mops_sosnowiec. Bez danych osób.
+      - name: medium
+        label: Typ materiału
+        type: select
+        default: short_link
+        options:
+          values:
+            - name: short_link
+              label: Krótki link
+            - name: qr
+              label: Kod QR / druk
+      - name: campaign
+        label: Kampania
+        type: string
+        required: true
+        default: linki_2026
+        description: Np. wolontariat_2026. Małe litery, cyfry i podkreślenia.
+      - name: status
+        label: Status
+        type: select
+        default: draft
+        options:
+          values:
+            - name: draft
+              label: Szkic
+            - name: published
+              label: Opublikowany
+            - name: trashed
+              label: Kosz
+    view:
+      primary: name
+      fields:
+        - name
+        - slug
+        - status
+        - target_url
   - name: authors
     label: Autorzy — profile i podpisy
     type: collection

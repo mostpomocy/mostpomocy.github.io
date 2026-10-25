@@ -1,0 +1,147 @@
+---
+import Base from "../layouts/Base.astro";
+import QRGenerator from "../components/QRGenerator";
+import { rows, settings } from "../lib/content";
+import { shortPath, campaignReportURL } from "../lib/short-links.mjs";
+const active = rows("links").filter((l) => l.status === "published");
+const cms = `https://app.pagescms.org/${settings().repository}/${settings().branch}/collection/links`;
+const targets = active.map((l) => ({
+  path: shortPath(l),
+  title: l.name,
+  fixed: true,
+}));
+---
+
+<Base title="Krótkie linki i kody QR — panel" noindex>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <span class="eyebrow">MOSTPOMOCY · NARZĘDZIA REDAKCJI</span>
+    <h1>Twoje linki. Jeden krótki adres.</h1>
+    <p class="lead narrow">
+      Skracaj również adresy spoza MostPomocy. Zmieniaj stronę docelową w panelu
+      i zachowaj ten sam wydrukowany kod QR.
+    </p>
+    <nav class="admin-links" aria-label="Zarządzaj linkami">
+      <a class="button dark" href={cms + "/new"}>
+        + Utwórz krótki link
+      </a>
+      <a class="button" href={cms}>
+        Edytuj linki w Pages CMS
+      </a>
+      <a
+        class="button"
+        href={campaignReportURL}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Statystyki linków i QR ↗
+      </a>
+    </nav>
+    <p>
+      W panelu wpisz nazwę, krótki adres i cel HTTPS, a następnie wybierz
+      „Opublikowany” i zapisz. Po zakończeniu budowania na GitHub link pojawi
+      się tutaj. Adresy są publiczne; nie używaj prywatnych linków ani tokenów.
+    </p>
+    <div class="admin-task-grid">
+      {active.map((l) => (
+        <article class="editorial-link">
+          <strong>{l.name}</strong>
+          <span>
+            {l.status === "published" ? "Opublikowany" : "Nieaktywny"} ·{" "}
+            {l.medium}
+          </span>
+          {l.status === "published" && (
+            <a href={shortPath(l)}>mostpomocy.pl{shortPath(l)}</a>
+          )}
+          <span style="overflow-wrap:anywhere">Cel: {l.target_url}</span>
+          <a href={cms}>Edytuj w panelu →</a>
+        </article>
+      ))}
+    </div>
+    <h2>Pobierz kod do krótkiego linku</h2>
+    {active.length ? (
+      <QRGenerator
+        targets={targets}
+        reportUrl={campaignReportURL}
+        client:load
+      />
+    ) : (
+      <p>
+        Opublikuj pierwszy link w panelu.{" "}
+        <a href="/qr/">Generator QR do dowolnego adresu</a> jest dostępny już
+        teraz.
+      </p>
+    )}
+    <section class="follow-box">
+      <h2>Jak działają statystyki?</h2>
+      <p>
+        Otwarcie krótkiego adresu przechodzi przez MostPomocy. Przy pierwszej
+        wizycie czytelnik wybiera, czy zezwala na Google Analytics. Zapisana
+        decyzja jest respektowana przy kolejnych otwarciach. Przejście bez zgody
+        działa, ale nie zwiększa statystyk. Nie mierzymy dalszej aktywności na
+        zewnętrznej stronie.
+      </p>
+      <p>
+        Po zmianie celu poczekaj na zakończenie publikacji i sprawdź link przed
+        drukiem. Nie zmieniaj krótkiej nazwy wydrukowanego adresu. Dla osobnych
+        miejsc dystrybucji twórz osobne krótkie linki.
+      </p>
+    </section>
+  </main>
+</Base>
+<style is:global>
+  .qr-tool {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+  }
+  .qr-fields,
+  .qr-preview,
+  .qr-link,
+  .qr-guide {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 1.5rem;
+    min-width: 0;
+  }
+  .qr-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .qr-tool input,
+  .qr-tool select,
+  .qr-tool textarea {
+    font: inherit;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.8rem;
+    background: var(--paper);
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: 6px;
+  }
+  .qr-preview {
+    text-align: center;
+  }
+  .qr-preview img {
+    width: min(100%, 320px);
+    height: auto;
+    background: white;
+  }
+  .qr-link,
+  .qr-guide {
+    grid-column: 1/-1;
+  }
+  .qr-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  @media (max-width: 700px) {
+    .qr-tool {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,8 +1,10 @@
 import { useState } from "react";
 import { buildQRLink, qrSVG, qrLabel } from "../lib/qr.mjs";
+import { safeDestination } from "../lib/short-links.mjs";
 interface Target {
   path: string;
   title: string;
+  fixed?: boolean;
 }
 export default function QRGenerator({
   targets,
@@ -12,8 +14,12 @@ export default function QRGenerator({
   reportUrl: string;
 }) {
   const [target, setTarget] = useState(
-    targets.find((t) => t.path.includes("wolontariat-mops"))?.path || "/",
+    targets[0]?.fixed
+      ? targets[0].path
+      : targets.find((t) => t.path.includes("wolontariat-mops"))?.path || "/",
   );
+  const [external, setExternal] = useState("");
+  const fixed = targets.find((t) => t.path === target)?.fixed;
   const [source, setSource] = useState("mops_sosnowiec");
   const [campaign, setCampaign] = useState("mostpomocy_2026");
   const [code, setCode] = useState("plakat_mops_01");
@@ -22,15 +28,20 @@ export default function QRGenerator({
     svg = "",
     error = "";
   try {
-    link = buildQRLink(
-      { target, source, campaign, code },
-      targets.map((t) => t.path),
-    );
+    link =
+      target === "__external__"
+        ? safeDestination(external)
+        : fixed
+          ? new URL(target, "https://mostpomocy.pl").href
+          : buildQRLink(
+              { target, source, campaign, code },
+              targets.map((t) => t.path),
+            );
     svg = qrSVG(link);
   } catch (e) {
     error = (e as Error).message;
   }
-  const filename = "mostpomocy-" + (qrLabel(code) || "qr");
+  const filename = "mostpomocy-" + (fixed ? target.split("/").filter(Boolean).at(-1) : target === "__external__" ? "qr" : qrLabel(code) || "qr");
   function download(blob: Blob, suffix: string) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -87,55 +98,84 @@ export default function QRGenerator({
             setNotice("");
           }}
         >
+          <option value="__external__">
+            Inny adres HTTPS — bezpośredni QR
+          </option>
           {targets.map((t) => (
             <option key={t.path} value={t.path}>
               {t.title}
             </option>
           ))}
         </select>
-        <label htmlFor="qr-source">Miejsce lub źródło</label>
-        <input
-          id="qr-source"
-          maxLength={80}
-          value={source}
-          onChange={(e) => {
-            setSource(e.target.value);
-            setNotice("");
-          }}
-          aria-describedby="qr-source-help"
-        />
-        <small id="qr-source-help">
-          Np. mops_sosnowiec, biblioteka, szkola. Użyj nazwy miejsca, nie danych
-          osoby.
-        </small>
-        <label htmlFor="qr-campaign">Kampania</label>
-        <input
-          id="qr-campaign"
-          maxLength={80}
-          value={campaign}
-          onChange={(e) => {
-            setCampaign(e.target.value);
-            setNotice("");
-          }}
-        />
-        <small>
-          Np. wolontariat_jesien_2026. Ta sama nazwa łączy materiały jednej
-          akcji.
-        </small>
-        <label htmlFor="qr-code">Oznaczenie tego kodu</label>
-        <input
-          id="qr-code"
-          maxLength={80}
-          value={code}
-          onChange={(e) => {
-            setCode(e.target.value);
-            setNotice("");
-          }}
-        />
-        <small>
-          Np. plakat_wejscie_01 lub ulotka_02. Nadaj inne oznaczenie każdemu
-          miejscu dystrybucji.
-        </small>
+        {target === "__external__" && (
+          <>
+            <label htmlFor="qr-external">Pełny adres HTTPS</label>
+            <input
+              id="qr-external"
+              type="url"
+              value={external}
+              onChange={(e) => setExternal(e.target.value)}
+              placeholder="https://..."
+            />
+            <p>
+              Ten kod prowadzi bezpośrednio do zewnętrznej strony. Aby mierzyć
+              otwarcia, <a href="/linki/">utwórz krótki link w panelu</a>.
+            </p>
+          </>
+        )}
+        {fixed && (
+          <p>
+            Kod zachowa krótki adres. Cel i oznaczenia kampanii zmienisz w Pages
+            CMS; zmiany wymagają zakończenia publikacji strony.
+          </p>
+        )}
+        {!fixed && target !== "__external__" && (
+          <>
+            <label htmlFor="qr-source">Miejsce lub źródło</label>
+            <input
+              id="qr-source"
+              maxLength={80}
+              value={source}
+              onChange={(e) => {
+                setSource(e.target.value);
+                setNotice("");
+              }}
+              aria-describedby="qr-source-help"
+            />
+            <small id="qr-source-help">
+              Np. mops_sosnowiec, biblioteka, szkola. Użyj nazwy miejsca, nie
+              danych osoby.
+            </small>
+            <label htmlFor="qr-campaign">Kampania</label>
+            <input
+              id="qr-campaign"
+              maxLength={80}
+              value={campaign}
+              onChange={(e) => {
+                setCampaign(e.target.value);
+                setNotice("");
+              }}
+            />
+            <small>
+              Np. wolontariat_jesien_2026. Ta sama nazwa łączy materiały jednej
+              akcji.
+            </small>
+            <label htmlFor="qr-code">Oznaczenie tego kodu</label>
+            <input
+              id="qr-code"
+              maxLength={80}
+              value={code}
+              onChange={(e) => {
+                setCode(e.target.value);
+                setNotice("");
+              }}
+            />
+            <small>
+              Np. plakat_wejscie_01 lub ulotka_02. Nadaj inne oznaczenie każdemu
+              miejscu dystrybucji.
+            </small>
+          </>
+        )}
       </div>
       <div className="qr-preview">
         {error ? (
@@ -148,7 +188,11 @@ export default function QRGenerator({
               }
               width="320"
               height="320"
-              alt={"Kod QR: " + targets.find((t) => t.path === target)?.title}
+              alt={
+                "Kod QR: " +
+                (targets.find((t) => t.path === target)?.title ||
+                  "zewnętrzny adres")
+              }
             />
             <div className="qr-actions">
               <button className="button" onClick={png}>
@@ -196,10 +240,21 @@ export default function QRGenerator({
           Otwórz statystyki QR w Google Analytics ↗
         </a>
         <p>
+          <a
+            href="https://analytics.google.com/analytics/web/#/a389862968p531159356/realtime/overview"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Sprawdź odbiór danych na żywo ↗
+          </a>
+        </p>
+        <p>
           Statystyki dotyczą wejść na stronę, a nie samego skanowania aparatem.
           Odmowa zgody, blokowanie Analytics i przekazanie linku innej osobie
           wpływają na wyniki. Miasto jest przybliżone. Oznaczenia identyfikują
-          materiał, nie człowieka.
+          materiał, nie człowieka. Raporty szczegółowe nie aktualizują się
+          natychmiast — bieżący pomiar sprawdzisz w raporcie czasu
+          rzeczywistego.
         </p>
       </section>
     </div>

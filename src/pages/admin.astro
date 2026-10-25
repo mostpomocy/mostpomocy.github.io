@@ -43,6 +43,12 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
         </div>
       </div>
       <nav class="admin-links" aria-label="Szybkie działania">
+        <a class="button dark" href={cms + "/collection/links/new"}>
+          + Skróć link / kod QR
+        </a>
+        <a class="button" href="/linki/">
+          Moje krótkie linki
+        </a>
         <a class="button dark" href={cms + "/collection/posts/new"}>
           + Nowy artykuł
         </a>
@@ -54,6 +60,13 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
         </a>
       </nav>
       <section class="admin-task-grid" aria-label="Zarządzanie treścią">
+        <a class="editorial-link" href={cms + "/collection/links"}>
+          <strong>Krótkie linki i QR</strong>
+          <span>
+            Adresy do własnych i zewnętrznych stron, zmiana celu, kody do
+            pobrania i statystyki.
+          </span>
+        </a>
         <a class="editorial-link" href={cms + "/collection/posts"}>
           <strong>Artykuły i kafelki</strong>
           <span>
