@@ -36,6 +36,7 @@ export const reserved = [
   "autorzy",
   "obserwuj",
   "narzedzia",
+  "qr",
   "offline",
   "aplikacja",
   "szukaj",
