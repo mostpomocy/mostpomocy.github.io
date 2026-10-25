@@ -8,6 +8,7 @@ export type Campaign = {
 export function startAnalytics(measurementId: string) {
   if (
     !/^G-[A-Z0-9]+$/.test(measurementId) ||
+    !["mostpomocy.pl", "www.mostpomocy.pl"].includes(location.hostname) ||
     location.pathname.startsWith("/admin")
   )
     return false;
