@@ -18,6 +18,9 @@ export default function GoogleReports({
     [message, setMessage] = useState(""),
     [stats, setStats] = useState<string[]>([]),
     [top, setTop] = useState<Row[]>([]),
+    [campaigns, setCampaigns] = useState<Row[]>([]),
+    [campaignMessage, setCampaignMessage] = useState(""),
+    [busy, setBusy] = useState(false),
     [search, setSearch] = useState<any[]>([]);
   useEffect(() => {
     if (!client.endsWith(".apps.googleusercontent.com")) return;
@@ -45,6 +48,7 @@ export default function GoogleReports({
     return result;
   };
   async function load(token: string) {
+    setBusy(true);
     setMessage("Pobieram prywatne raporty z Google…");
     try {
       const base =
@@ -82,6 +86,39 @@ export default function GoogleReports({
         token,
       );
       setTop(pages.rows || []);
+      try {
+        const activity = await api(
+          base,
+          {
+            dateRanges: [{ startDate: "27daysAgo", endDate: "today" }],
+            dimensions: [
+              { name: "pagePath" },
+              { name: "deviceCategory" },
+              { name: "operatingSystem" },
+              { name: "browser" },
+              { name: "city" },
+            ],
+            metrics: [{ name: "eventCount" }],
+            dimensionFilter: {
+              filter: {
+                fieldName: "eventName",
+                stringFilter: { matchType: "EXACT", value: "campaign_open" },
+              },
+            },
+            orderBys: [{ metric: { metricName: "eventCount" }, desc: true }],
+            limit: 100,
+          },
+          token,
+        );
+        setCampaigns(activity.rows || []);
+        setCampaignMessage(
+          activity.rows?.length
+            ? "Zarejestrowane otwarcia po zgodzie na Analytics. Zdarzenie campaign_open; ostatnie 28 dni z dzisiaj."
+            : "Brak przetworzonych otwarć linków i QR w tym okresie. Nowe zdarzenia sprawdzisz najpierw w raporcie czasu rzeczywistego.",
+        );
+      } catch (e) {
+        setCampaignMessage("Raport linków: " + (e as Error).message);
+      }
       setMessage(
         "GA4: ostatnie 28 dni. Dane widzisz tylko w tej sesji przeglądarki.",
       );
@@ -124,6 +161,8 @@ export default function GoogleReports({
       }
     } catch (e) {
       setMessage("Nie pobrano danych: " + (e as Error).message);
+    } finally {
+      setBusy(false);
     }
   }
   function connect() {
@@ -149,10 +188,18 @@ export default function GoogleReports({
         response.access_token
           ? load(response.access_token)
           : setMessage(
-              "Google nie udzieliło dostępu. Możesz nadal otworzyć raporty w Google.",
+              "Google nie udzieliło dostępu: " +
+                (response.error_description ||
+                  response.error ||
+                  "brak tokenu") +
+                ". Możesz otworzyć raport bezpośrednio w Google.",
             ),
-      error_callback: () =>
-        setMessage("Logowanie przerwane. Żadne dane nie zostały pobrane."),
+      error_callback: (error: any) =>
+        setMessage(
+          "Logowanie nie zostało zakończone (" +
+            (error.type || "przerwane") +
+            "). Zezwól na okno logowania i sprawdź autoryzowane źródło https://mostpomocy.pl w Google Cloud.",
+        ),
     });
     oauth.requestAccessToken();
   }
@@ -196,7 +243,7 @@ export default function GoogleReports({
       <button
         className="button dark"
         onClick={connect}
-        disabled={!ready || !property}
+        disabled={!ready || !property || busy}
       >
         Zaloguj w Google i pobierz raporty
       </button>
@@ -207,6 +254,55 @@ export default function GoogleReports({
         </p>
       )}
       <p role="status">{message}</p>
+      <p>
+        <a
+          href="https://analytics.google.com/analytics/web/#/a389862968p531159356/realtime/overview"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Pomiar na żywo ↗
+        </a>{" "}
+        ·{" "}
+        <a
+          href="https://analytics.google.com/analytics/web/#/analysis/a389862968p531159356/edit/UXaAE-XkSHOqHHa0lUNxUA"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Raport linków i QR ↗
+        </a>
+      </p>
+      {campaignMessage && <p role="status">{campaignMessage}</p>}
+      {campaigns.length > 0 && (
+        <div className="report-table-wrap">
+          <h3>Otwarcia krótkich linków i QR</h3>
+          <table className="report-table">
+            <thead>
+              <tr>
+                {[
+                  "Strona / krótki adres",
+                  "Urządzenie",
+                  "System",
+                  "Przeglądarka",
+                  "Miasto (przybliżone)",
+                  "Otwarcia",
+                ].map((s) => (
+                  <th key={s}>{s}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {campaigns.map((r, i) => (
+                <tr key={i}>
+                  {r.dimensionValues?.map((v, j) => (
+                    <td key={j}>{v.value}</td>
+                  ))}
+                  <td>{r.metricValues?.[0]?.value}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
       {stats.length > 0 && (
         <div className="dashboard-stats">
           {["Aktywni użytkownicy", "Sesje", "Odsłony"].map((name, i) => (
@@ -241,7 +337,10 @@ export default function GoogleReports({
       {search.length > 0 && (
         <div className="report-table-wrap">
           <h3>Wyniki Google Search Console</h3>
-            <p>Dane za 28 dni, do trzech dni przed dzisiaj. Nowsze dane Google mogą być jeszcze niekompletne.</p>
+          <p>
+            Dane za 28 dni, do trzech dni przed dzisiaj. Nowsze dane Google mogą
+            być jeszcze niekompletne.
+          </p>
           <table className="report-table">
             <thead>
               <tr>

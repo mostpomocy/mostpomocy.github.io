@@ -61,7 +61,8 @@ const seo = [
 ];
 const dates = [
   f("published_at", "Termin publikacji", "date", {
-    description: "Aby pokazać treść od razu, wybierz bieżącą lub wcześniejszą datę i godzinę. Przyszły termin wstrzymuje publikację także przy statusie Opublikowany.",
+    description:
+      "Aby pokazać treść od razu, wybierz bieżącą lub wcześniejszą datę i godzinę. Przyszły termin wstrzymuje publikację także przy statusie Opublikowany.",
     required: true,
     options: { time: true, format: "yyyy-MM-dd'T'HH:mm:ss.SSSXXX" },
   }),
@@ -140,6 +141,60 @@ const cms = {
     },
   ],
   content: [
+    collection(
+      "links",
+      "Krótkie linki i kody QR",
+      [
+        f("name", "Nazwa linku", "string", { required: true }),
+        {
+          ...slug,
+          label: "Krótka nazwa adresu",
+          description:
+            "Np. mops — otrzymasz mostpomocy.pl/l/mops/. Po wydrukowaniu QR nie zmieniaj tej nazwy; możesz zmieniać cel.",
+          pattern: {
+            regex: "^[a-z0-9]+(-[a-z0-9]+)*$",
+            message: "Małe litery, cyfry i myślniki, maksymalnie 48 znaków.",
+          },
+        },
+        f("target_url", "Pełny adres docelowy HTTPS", "string", {
+          required: true,
+          description:
+            "Może prowadzić poza MostPomocy, np. https://www.mopssosnowiec.pl/wolontariat.html. Adres jest publiczny — bez haseł, tokenów i prywatnych dokumentów.",
+        }),
+        f("source", "Miejsce / źródło", "string", {
+          required: true,
+          default: "mostpomocy",
+          description:
+            "Małe litery, cyfry, podkreślenia; np. mops_sosnowiec. Bez danych osób.",
+        }),
+        f("medium", "Typ materiału", "select", {
+          default: "short_link",
+          options: {
+            values: [
+              { name: "short_link", label: "Krótki link" },
+              { name: "qr", label: "Kod QR / druk" },
+            ],
+          },
+        }),
+        f("campaign", "Kampania", "string", {
+          required: true,
+          default: "linki_2026",
+          description:
+            "Np. wolontariat_2026. Małe litery, cyfry i podkreślenia.",
+        }),
+        f("status", "Status", "select", {
+          default: "draft",
+          options: {
+            values: [
+              { name: "draft", label: "Szkic" },
+              { name: "published", label: "Opublikowany" },
+              { name: "trashed", label: "Kosz" },
+            ],
+          },
+        }),
+      ],
+      { primary: "name", fields: ["name", "slug", "status", "target_url"] },
+    ),
     collection(
       "events",
       "Wydarzenia",
@@ -510,6 +565,7 @@ const order = [
   "posts",
   "pages",
   "places",
+  "links",
   "authors",
   "categories",
   "local_categories",

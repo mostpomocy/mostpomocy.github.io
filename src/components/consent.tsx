@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { startAnalytics, trackLandingCampaign } from "../lib/analytics";
 export function Consent({ measurementId }: { measurementId: string }) {
   const [choice, setChoice] = useState<string | null>("pending");
   const [open, setOpen] = useState(false);
@@ -17,20 +18,9 @@ export function Consent({ measurementId }: { measurementId: string }) {
       location.pathname.startsWith("/admin")
     )
       return;
+    if (!startAnalytics(measurementId)) return;
+    trackLandingCampaign();
     const w = window as any;
-    w.dataLayer = w.dataLayer || [];
-    w.gtag = function () {
-      w.dataLayer.push(arguments);
-    };
-    w.gtag("js", new Date());
-    w.gtag("config", measurementId, {
-      allow_google_signals: false,
-      allow_ad_personalization_signals: false,
-    });
-    const script = document.createElement("script");
-    script.src = "https://www.googletagmanager.com/gtag/js?id=" + measurementId;
-    script.async = true;
-    document.head.appendChild(script);
     const trackClick = (event: MouseEvent) => {
       const target =
         event.target instanceof Element ? event.target.closest("a") : null;
@@ -44,7 +34,6 @@ export function Consent({ measurementId }: { measurementId: string }) {
     };
     document.addEventListener("click", trackClick);
     return () => {
-      script.remove();
       document.removeEventListener("click", trackClick);
     };
   }, [choice, measurementId]);

@@ -1,0 +1,60 @@
+---
+import Base from "../../layouts/Base.astro";
+import ShortLinkGate from "../../components/ShortLinkGate";
+import { rows, settings } from "../../lib/content";
+import { safeDestination } from "../../lib/short-links.mjs";
+export function getStaticPaths() {
+  return rows("links")
+    .filter((l) => l.status === "published")
+    .map((link) => ({ params: { slug: link.slug }, props: { link } }));
+}
+const { link } = Astro.props;
+const target = safeDestination(link.target_url);
+const domain = new URL(target).hostname;
+const context = {
+  code: link.slug,
+  source: link.source,
+  medium: link.medium,
+  campaign: link.campaign,
+};
+---
+
+<Base
+  title={link.name}
+  description={"Krótki link MostPomocy: " + link.name}
+  noindex
+  disableAnalytics
+>
+  <main id="main" tabindex="-1" class="container inner-page narrow">
+    <span class="eyebrow">KRÓTKI LINK MOSTPOMOCY</span>
+    <h1>{link.name}</h1>
+    <p class="lead">
+      Przechodzisz do: <strong>{domain}</strong>
+    </p>
+    <p>
+      Adres docelowy:{" "}
+      <a
+        href={target}
+        rel="noopener noreferrer nofollow"
+        style="overflow-wrap:anywhere"
+      >
+        {target}
+      </a>
+    </p>
+    <ShortLinkGate
+      target={target}
+      measurementId={settings().ga_measurement_id}
+      context={context}
+      client:load
+    />
+    <noscript>
+      <p>
+        JavaScript jest wyłączony.{" "}
+        <a href={target} rel="noopener noreferrer nofollow">
+          Otwórz stronę docelową
+        </a>
+        .
+      </p>
+    </noscript>
+  </main>
+</Base>

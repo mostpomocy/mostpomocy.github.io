@@ -1,6 +1,8 @@
 import { z } from "zod";
 import sanitize from "sanitize-html";
+import { safeDestination } from "./short-links.mjs";
 export const resources = [
+  "links",
   "posts",
   "categories",
   "local_categories",
@@ -37,6 +39,8 @@ export const reserved = [
   "obserwuj",
   "narzedzia",
   "qr",
+  "l",
+  "linki",
   "offline",
   "aplikacja",
   "szukaj",
@@ -110,6 +114,26 @@ const publication = {
   updated_at: text.optional(),
 };
 const schemas = {
+  links: z.object({
+    ...base,
+    name: text.min(3).max(160),
+    slug: slug.max(48),
+    target_url: text
+      .min(1)
+      .max(2000)
+      .refine((v) => {
+        try {
+          safeDestination(v);
+          return true;
+        } catch {
+          return false;
+        }
+      }, "Podaj HTTPS lub ścieżkę MostPomocy. Bez danych logowania i przekierowań do /l/."),
+    source: text.regex(/^[a-z0-9_-]{1,64}$/).default("mostpomocy"),
+    medium: z.enum(["qr", "short_link"]).default("short_link"),
+    campaign: text.regex(/^[a-z0-9_-]{1,64}$/).default("linki_2026"),
+    status: z.enum(["draft", "published", "trashed"]).default("draft"),
+  }),
   media: z.object({
     ...base,
     name: text.max(200),
