@@ -1,0 +1,117 @@
+---
+import Base from "../layouts/Base.astro";
+import QRGenerator from "../components/QRGenerator";
+import { published, pages, rows, pagePath, placePath } from "../lib/content";
+const targets = [
+  { path: "/", title: "MostPomocy — strona główna" },
+  { path: "/sosnowiec/", title: "Pomoc w Sosnowcu" },
+  { path: "/blog/", title: "Blog — artykuły i poradniki" },
+  ...pages()
+    .filter((p) => !p.noindex)
+    .map((p) => ({ path: pagePath(p), title: p.title })),
+  ...published()
+    .filter((p) => !p.noindex)
+    .map((p) => ({ path: "/artykuly/" + p.slug + "/", title: p.title })),
+  ...rows("places")
+    .filter((p) => p.status === "published")
+    .map((p) => ({ path: placePath(p), title: p.name })),
+];
+const reportUrl =
+  "https://analytics.google.com/analytics/web/#/analysis/a389862968p531159356/edit/UXaAE-XkSHOqHHa0lUNxUA";
+---
+
+<Base
+  title="Generator kodów QR i linków kampanii"
+  description="Utwórz kod QR do artykułu lub podstrony MostPomocy. Pobierz PNG lub SVG i rozróżniaj plakaty, ulotki oraz kampanie w Google Analytics."
+>
+  <main id="main" tabindex="-1" class="container inner-page">
+    <span class="eyebrow">NARZĘDZIA MOSTPOMOCY</span>
+    <h1>Kod QR, który prowadzi do pomocy.</h1>
+    <p class="lead narrow">
+      Wybierz stronę, oznacz miejsce i kampanię, a potem pobierz kod na plakat
+      lub ulotkę. Każde oznaczenie pomoże odróżnić źródła wejść.
+    </p>
+    <QRGenerator targets={targets} reportUrl={reportUrl} client:load />
+  </main>
+</Base>
+<style is:global>
+  .qr-tool {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem;
+    margin: 2rem 0;
+  }
+  .qr-fields,
+  .qr-preview,
+  .qr-link,
+  .qr-guide {
+    padding: 1.5rem;
+    border: 1px solid var(--line, #d6ddd2);
+    border-radius: 12px;
+    min-width: 0;
+  }
+  .qr-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .qr-tool label {
+    font-weight: 700;
+  }
+  .qr-tool input,
+  .qr-tool select,
+  .qr-tool textarea {
+    font: inherit;
+    padding: 0.8rem;
+    border: 1px solid #718078;
+    border-radius: 6px;
+    background: var(--paper, #fff);
+    color: inherit;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  .qr-tool small {
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .qr-preview {
+    text-align: center;
+  }
+  .qr-preview img {
+    width: min(100%, 320px);
+    height: auto;
+    background: white;
+  }
+  .qr-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.7rem;
+    flex-wrap: wrap;
+  }
+  .qr-link,
+  .qr-guide {
+    grid-column: 1/-1;
+  }
+  .qr-link textarea {
+    margin: 0.7rem 0;
+    overflow-wrap: anywhere;
+  }
+  .qr-tool button:disabled {
+    opacity: 0.5;
+  }
+  .qr-tool :focus-visible {
+    outline: 3px solid #d49c25;
+    outline-offset: 3px;
+  }
+  @media (max-width: 700px) {
+    .qr-tool {
+      grid-template-columns: 1fr;
+    }
+    .qr-fields,
+    .qr-preview,
+    .qr-link,
+    .qr-guide {
+      padding: 1rem;
+    }
+  }
+</style>

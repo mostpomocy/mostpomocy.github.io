@@ -28,6 +28,7 @@ export function discoverable() {
     { path: "/obserwuj/", updated: "" },
     { path: "/narzedzia/", updated: "" },
     ...[
+      "qr",
       "aplikacja",
       "szukaj",
       "wydarzenia",
