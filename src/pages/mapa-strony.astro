@@ -1,0 +1,28 @@
+---
+import Base from '../layouts/Base.astro';
+import { discoverable } from '../lib/discovery';
+import { rows, pagePath } from '../lib/content';
+const titles = new Map<string,string>([
+  ['/', 'Strona główna'], ['/blog/', 'Blog'], ['/mapa-strony/', 'Mapa strony'],
+  ...rows('posts').map(p => [`/artykuly/${p.slug}/`, p.title] as [string,string]),
+  ...rows('pages').map(p => [pagePath(p), p.title] as [string,string]),
+  ...rows('places').map(p => [`/sosnowiec/instytucje/${p.slug || p.id}/`, p.name] as [string,string]),
+]);
+const groups = [
+  ['Artykuły', (p: string) => p.startsWith('/artykuly/')],
+  ['Sosnowiec', (p: string) => p.startsWith('/sosnowiec/')],
+  ['Kategorie i tagi', (p: string) => /^\/(kategorie|tagi)\//.test(p)],
+] as const;
+const entries = discoverable();
+---
+<Base title="Mapa strony" description="Wszystkie publiczne podstrony, poradniki i miejsca pomocy MostPomocy w jednym miejscu.">
+  <main id="main" tabindex="-1" class="container inner-page">
+    <h1>Mapa strony</h1>
+    <p class="lead">{entries.length} adresów. Lista aktualizuje się automatycznie przy publikacji.</p>
+    {[...groups, ['Pozostałe strony', (p: string) => !groups.some(([,match]) => match(p))] as const].map(([title,match]) => <section class="related">
+      <h2>{title}</h2>
+      <ul>{entries.filter(e => match(e.path)).map(e => <li><a href={e.path}>{titles.get(e.path) || e.path.split('/').filter(Boolean).join(' / ').replaceAll('-', ' ')}</a></li>)}</ul>
+    </section>)}
+    <p><a href="/sitemap.xml">Mapa XML dla wyszukiwarek</a></p>
+  </main>
+</Base>

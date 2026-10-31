@@ -246,14 +246,14 @@ content:
         type: text
       - &a8
         name: seo_title
-        label: Tytuł dla Google
+        label: Tytuł dla Google (opcjonalny)
         type: string
+        description: Zostaw puste, aby użyć tytułu wpisu. Pisz naturalnie, np. Darmowa pomoc prawna w Sosnowcu – jak się zapisać? Nie dodawaj listy słów kluczowych.
       - &a9
         name: seo_description
-        label: Opis w wynikach wyszukiwania
+        label: Opis dla Google (opcjonalny)
         type: text
-        description: Krótko opisz zawartość i korzyść dla czytelnika. Puste pole
-          korzysta z wprowadzenia; Google może wybrać własny fragment.
+        description: Puste pole automatycznie korzysta z wprowadzenia lub początku treści. Własny opis powinien krótko wyjaśniać, co czytelnik znajdzie na stronie. Google może wybrać inny fragment.
       - &a10
         name: canonical_url
         label: Adres kanoniczny — automatyczny, zostaw puste

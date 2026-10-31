@@ -49,6 +49,7 @@ export const reserved = [
   "do-pobrania",
   "zapisane",
   "nowosci",
+  "mapa-strony",
 ];
 const slug = z
   .string()

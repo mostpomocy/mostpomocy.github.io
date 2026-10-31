@@ -17,6 +17,7 @@ export function discoverable() {
   return [
     { path: "/", updated: "" },
     { path: "/blog/", updated: "" },
+    { path: "/mapa-strony/", updated: "" },
     { path: "/sosnowiec/", updated: "" },
     { path: "/sosnowiec/blog/", updated: "" },
     ...rows("local_categories").map((c) => ({
