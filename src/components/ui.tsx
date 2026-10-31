@@ -96,6 +96,7 @@ export function Footer({ note }: { note?: string }) {
           <a href="/galeria/">Galerie</a>
           <a href="/do-pobrania/">Pliki do pobrania</a>
           <a href="/feed.xml">Kanał RSS</a>
+          <a href="/mapa-strony/">Mapa strony</a>
           <a href="/obserwuj/">Aplikacja i RSS</a>
           <a href="/narzedzia/">Przydatne narzędzia</a>
           <a href="/admin">Panel redakcyjny ↗</a>

@@ -51,6 +51,17 @@ const sitemapURLs = Array.from(
   map.matchAll(/<loc>([^<]+)<\/loc>/g),
   (m) => m[1],
 );
+// Fail a deployment if an indexable canonical route was omitted from discovery.
+if (all.settings[0].allow_indexing) for (const file of files) {
+  const html = fs.readFileSync(file, 'utf8');
+  if (/content="noindex/.test(html)) continue;
+  const canonical = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1];
+  const route = new URL('/' + path.relative('dist', file).replace(/index\.html$/, ''), all.settings[0].site_url).href;
+  if (canonical === route) assert.ok(sitemapURLs.includes(canonical), `Brak publicznej strony w mapie: ${route}`);
+}
+assert.match(map, /xmlns:image="http:\/\/www.google.com\/schemas\/sitemap-image\/1.1"/);
+assert.ok(fs.existsSync('dist/mapa-strony/index.html'));
+assert.match(fs.readFileSync('dist/admin/index.html', 'utf8'), /Asystent SEO/);
 assert.equal(
   sitemapURLs.length,
   new Set(sitemapURLs).size,
