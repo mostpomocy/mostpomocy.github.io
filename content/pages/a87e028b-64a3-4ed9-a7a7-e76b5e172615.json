@@ -1,0 +1,19 @@
+{
+  "id": "a87e028b-64a3-4ed9-a7a7-e76b5e172615",
+  "title": "Sprawy studenckie WNS UŚ",
+  "slug": "studenci-wns",
+  "section": "general",
+  "excerpt": "Autorska przestrzeń Igora Pabiańczyka poświęcona sprawom studenckim Wydziału Nauk Społecznych Uniwersytetu Śląskiego w Katowicach.",
+  "notice": "To autorska sekcja MostPomocy, a nie oficjalny serwis Uniwersytetu Śląskiego ani samorządu studenckiego.",
+  "body": "<h2>O mnie</h2><p>Nazywam się Igor Pabiańczyk i tworzę MostPomocy. Tę część strony poświęcam sprawom studenckim Wydziału Nauk Społecznych Uniwersytetu Śląskiego w Katowicach.</p><h2>Miejsce na sprawy studentów</h2><p>Będę tutaj publikować własne aktualności, relacje i informacje dotyczące inicjatyw studenckich. Informacje o mojej roli i zakresie działań uzupełnię po ich potwierdzeniu.</p>",
+  "tiles": [
+    { "title": "Blog studencki", "text": "Aktualności i relacje w jednym miejscu.", "url": "/studenci-wns/#aktualnosci" },
+    { "title": "Obserwuj aktualności", "text": "Osobny kanał RSS tej sekcji.", "url": "/studenci-wns/feed.xml" }
+  ],
+  "show_updates": true,
+  "show_in_nav": true,
+  "menu_label": "Studenci WNS",
+  "nav_order": 70,
+  "status": "published",
+  "published_at": "2026-10-30T23:00:00.000Z"
+}

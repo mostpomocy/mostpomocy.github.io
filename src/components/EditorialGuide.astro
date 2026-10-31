@@ -1,0 +1,21 @@
+---
+const { cms } = Astro.props;
+---
+<section class="related" aria-labelledby="editorial-guide">
+  <h2 id="editorial-guide">Podstrona krok po kroku</h2>
+  <ol class="prose">
+    <li><strong>Wybierz jedno zadanie czytelnika.</strong> Np. „Gdzie znaleźć darmową pomoc prawną w Sosnowcu?”. Tytuł ma odpowiadać na potrzebę, nie być listą słów kluczowych.</li>
+    <li><strong>Dodaj podstronę w CMS.</strong> Wpisz tytuł, krótki adres, wprowadzenie i treść. Wybierz sekcję ogólną lub Sosnowiec.</li>
+    <li><strong>Ułóż treść.</strong> Zacznij od krótkiej odpowiedzi, następnie opisz dla kogo jest pomoc, jak się zapisać, co przygotować i gdzie sprawdzić aktualne informacje. Podaj źródła i datę weryfikacji. Nie zgaduj warunków pomocy.</li>
+    <li><strong>Dodaj kafelki.</strong> Każdy ma tytuł, opis i opcjonalny link. Ustaw kolejność w polu „Kafelki informacyjne”.</li>
+    <li><strong>Dodaj zdjęcie i jego opis.</strong> Wybierz zdjęcie związane z treścią, do którego masz prawa. Opis alternatywny mówi, co widać, a nie powtarza frazy SEO. Dla dużych podglądów przygotuj obraz co najmniej 1200 px szerokości.</li>
+    <li><strong>SEO bez powtarzania pracy.</strong> Pusty tytuł SEO korzysta z tytułu strony, a opis z wprowadzenia. Adres kanoniczny, mapa witryny i metadane powstają automatycznie przy publikacji. Do robots.txt nie dopisujemy każdej strony.</li>
+    <li><strong>Sprawdź i opublikuj.</strong> Uruchom kontrolę treści w CMS, sprawdź podgląd, ustaw datę oraz status. Google sam wybiera pozycję, opis i zdjęcie wyniku; publikacja nie gwarantuje indeksacji.</li>
+  </ol>
+  <details class="prose">
+    <summary>Osobny blog studencki: jak dodać wpis?</summary>
+    <p>Dodaj artykuł, wybierz kategorię i w polu „Powiązane podstrony” wskaż „Sprawy studenckie WNS UŚ”. Po publikacji wpis pojawi się w aktualnościach tej sekcji i jej RSS. Profil i kafelki edytujesz w kolekcji Podstrony. Artykuł pozostaje również dostępny w blogu ogólnym.</p>
+  </details>
+  <p><a class="button" href={cms + "/collection/pages/new"}>Utwórz podstronę</a> <a class="button" href={cms + "/collection/pages"}>Edytuj podstrony i kafelki</a> <a class="button" href="/studenci-wns/">Sekcja studencka</a></p>
+  <p><a href="https://developers.google.com/search/docs/appearance/google-images">Zasady Google dotyczące zdjęć w wynikach wyszukiwania</a></p>
+</section>

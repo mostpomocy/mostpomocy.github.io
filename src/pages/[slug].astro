@@ -1,5 +1,6 @@
 ---
 import PageNews from "../components/PageNews.astro";
+import ContentTiles from "../components/ContentTiles.astro";
 import Questions from "../components/Questions.astro";
 import Base from "../layouts/Base.astro";
 import { pages, rows, prepareBody, siteURL } from "../lib/content";
@@ -23,6 +24,7 @@ const { body } = prepareBody(page.body);
     !page.noindex && visible(page) ? "/" + page.slug + "/feed.xml" : undefined
   }
   title={page.seo_title || page.title}
+  image={page.image || undefined}
   description={page.seo_description || page.excerpt}
   noindex={page.noindex || !visible(page)}
   structured={{
@@ -34,6 +36,7 @@ const { body } = prepareBody(page.body);
     datePublished: page.published_at,
     dateModified: page.updated_at,
     inLanguage: "pl-PL",
+    ...(page.image ? { image: siteURL(page.image) } : {}),
   }}
   canonical={page.canonical_url || siteURL("/" + page.slug + "/")}
 >
@@ -60,6 +63,8 @@ const { body } = prepareBody(page.body);
       </p>
     )}
     <article class="prose narrow" set:html={body} />
+    {page.image && <img class="article-image" src={page.image} alt={page.image_alt} />}
+    <ContentTiles tiles={page.tiles} />
     <PageNews page={page} />
     <Questions items={page.faq} />
   </main>

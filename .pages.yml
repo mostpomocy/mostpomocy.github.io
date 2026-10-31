@@ -324,6 +324,17 @@ content:
         label: Pokaż dział aktualności i osobny RSS
         type: boolean
         default: false
+      - *a13
+      - name: image
+        label: Zdjęcie główne podstrony
+        type: image
+        description: Własne lub legalnie udostępnione zdjęcie związane z tematem. Najlepiej co najmniej 1200 pikseli szerokości; nie sam napis lub logo.
+        options:
+          media: images
+      - name: image_alt
+        label: Co przedstawia zdjęcie?
+        type: string
+        description: Opisz faktyczną zawartość zdjęcia. Nie wpisuj listy słów kluczowych.
       - name: related_category_id
         label: Powiązana kategoria (opcjonalnie)
         type: reference

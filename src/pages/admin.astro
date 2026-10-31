@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import Editor from "../components/LocalEditor";
 import GoogleReports from "../components/GoogleReports";
+import EditorialGuide from "../components/EditorialGuide.astro";
 import { rows, published, settings } from "../lib/content";
 const config = settings();
 const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
@@ -120,6 +121,7 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
           <span>Ustawienia GA4, raportów, opisu strony, obrazka i menu.</span>
         </a>
       </section>
+      <EditorialGuide cms={cms} />
       <GoogleReports
         client:load
         clientId={config.google_client_id}
