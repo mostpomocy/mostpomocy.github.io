@@ -168,6 +168,9 @@ const schemas = {
   }),
   pages: z.object({
     ...base,
+    tiles,
+    image: url.default(""),
+    image_alt: text.max(300).default(""),
     faq,
     notice: text.max(600).default(""),
     show_updates: z.boolean().default(false),
@@ -392,6 +395,16 @@ export function clean(resource, input) {
   )
     throw new Error("Ten adres jest zarezerwowany przez serwis");
   if (["posts", "pages"].includes(resource)) {
+    // Derive defaults only after sanitizing the article; explicit SEO wins.
+    if (!data.seo_title.trim()) data.seo_title = data.title;
+    if (!data.seo_description.trim()) {
+      const plain = sanitize(data.excerpt || data.body, {
+        allowedTags: [], allowedAttributes: {},
+      }).replace(/\s+/g, " ").trim();
+      data.seo_description = plain.length > 160
+        ? plain.slice(0, 157).replace(/\s+\S*$/, "") + "..."
+        : plain;
+    }
     if (["published", "scheduled"].includes(data.status) && !data.body.trim())
       throw new Error("Opublikowany tekst nie może być pusty");
     if (
