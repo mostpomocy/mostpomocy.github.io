@@ -218,18 +218,16 @@ content:
               label: Kosz
       - &a6
         name: published_at
-        label: Termin publikacji
+        label: Termin publikacji (UTC)
         type: date
-        description: Aby pokazać treść od razu, wybierz bieżącą lub wcześniejszą datę i
-          godzinę. Przyszły termin wstrzymuje publikację także przy statusie
-          Opublikowany.
+        description: Ten kreator zapisuje godzinę jako UTC. Dla godziny polskiej odejmij 1 godzinę zimą lub 2 latem (np. 17:35 w listopadzie wpisz jako 16:35). Przyszły termin wstrzymuje publikację także przy statusie Opublikowany.
         required: true
         options:
           time: true
           format: yyyy-MM-dd'T'HH:mm:ss.SSSXXX
       - &a7
         name: updated_at
-        label: Data aktualizacji
+        label: Data aktualizacji (UTC)
         type: date
         options:
           time: true
