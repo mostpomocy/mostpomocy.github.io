@@ -7,13 +7,22 @@
   "notice": "To autorska sekcja MostPomocy, a nie oficjalny serwis Uniwersytetu Śląskiego ani samorządu studenckiego.",
   "body": "<h2>O mnie</h2><p>Nazywam się Igor Pabiańczyk i tworzę MostPomocy. Tę część strony poświęcam sprawom studenckim Wydziału Nauk Społecznych Uniwersytetu Śląskiego w Katowicach.</p><h2>Miejsce na sprawy studentów</h2><p>Będę tutaj publikować własne aktualności, relacje i informacje dotyczące inicjatyw studenckich. Informacje o mojej roli i zakresie działań uzupełnię po ich potwierdzeniu.</p>",
   "tiles": [
-    { "title": "Blog studencki", "text": "Aktualności i relacje w jednym miejscu.", "url": "/studenci-wns/#aktualnosci" },
-    { "title": "Obserwuj aktualności", "text": "Osobny kanał RSS tej sekcji.", "url": "/studenci-wns/feed.xml" }
+    {
+      "title": "Blog studencki",
+      "text": "Aktualności i relacje w jednym miejscu.",
+      "url": "/studenci-wns/#aktualnosci"
+    },
+    {
+      "title": "Obserwuj aktualności",
+      "text": "Osobny kanał RSS tej sekcji.",
+      "url": "/studenci-wns/feed.xml"
+    }
   ],
   "show_updates": true,
   "show_in_nav": true,
   "menu_label": "Studenci WNS",
   "nav_order": 70,
   "status": "published",
-  "published_at": "2026-10-30T23:00:00.000Z"
+  "published_at": "2026-10-30T23:00:00.000Z",
+  "related_category_id": "6d4f1536-3d7b-4694-9338-d11ba847c18c"
 }
