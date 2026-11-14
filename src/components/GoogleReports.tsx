@@ -16,6 +16,8 @@ export default function GoogleReports({
     [property, setProperty] = useState(propertyId),
     [ready, setReady] = useState(false),
     [message, setMessage] = useState(""),
+    [gaMessage, setGaMessage] = useState(""),
+    [searchMessage, setSearchMessage] = useState(""),
     [stats, setStats] = useState<string[]>([]),
     [top, setTop] = useState<Row[]>([]),
     [campaigns, setCampaigns] = useState<Row[]>([]),
@@ -23,7 +25,6 @@ export default function GoogleReports({
     [busy, setBusy] = useState(false),
     [search, setSearch] = useState<any[]>([]);
   useEffect(() => {
-    if (!client.endsWith(".apps.googleusercontent.com")) return;
     const script = document.createElement("script");
     script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
@@ -32,7 +33,7 @@ export default function GoogleReports({
       setMessage("Nie udało się wczytać logowania Google. Sprawdź połączenie.");
     document.head.appendChild(script);
     return () => script.remove();
-  }, [client]);
+  }, []);
   const api = async (url: string, body: any, token: string) => {
     const response = await fetch(url, {
       method: "POST",
@@ -42,14 +43,13 @@ export default function GoogleReports({
       },
       body: JSON.stringify(body),
     });
-    const result = await response.json();
+    const result = await response.json().catch(() => null);
     if (!response.ok)
-      throw Error(result.error?.message || "Błąd pobierania raportu");
+      throw Error(result?.error?.message || `Błąd HTTP ${response.status}`);
+    if (!result) throw Error("Google zwróciło niepoprawną odpowiedź.");
     return result;
   };
-  async function load(token: string) {
-    setBusy(true);
-    setMessage("Pobieram prywatne raporty z Google…");
+  async function loadAnalytics(token: string) {
     try {
       const base =
         "https://analyticsdata.googleapis.com/v1beta/properties/" +
@@ -119,56 +119,62 @@ export default function GoogleReports({
       } catch (e) {
         setCampaignMessage("Raport linków: " + (e as Error).message);
       }
-      setMessage(
-        "GA4: ostatnie 28 dni. Dane widzisz tylko w tej sesji przeglądarki.",
+      setGaMessage(
+        report.rows?.length
+          ? "GA4: ostatnie 28 dni."
+          : "GA4 nie zwróciło odsłon za ostatnie 28 dni. Sprawdź test pomiaru na żywo.",
       );
-      try {
-        const end = new Date(Date.now() - 3 * 86400000)
-            .toISOString()
-            .slice(0, 10),
-          start = new Date(Date.now() - 30 * 86400000)
-            .toISOString()
-            .slice(0, 10);
-        let results: any = null;
-        for (const resource of [
-          siteUrl + "/",
-          "sc-domain:" + new URL(siteUrl).hostname,
-        ]) {
-          try {
-            results = await api(
-              "https://www.googleapis.com/webmasters/v3/sites/" +
-                encodeURIComponent(resource) +
-                "/searchAnalytics/query",
-              {
-                startDate: start,
-                endDate: end,
-                dimensions: ["page"],
-                rowLimit: 10,
-              },
-              token,
-            );
-            break;
-          } catch {}
-        }
-        if (!results) throw Error("Brak dostępu do Search Console");
-        setSearch(results.rows || []);
-      } catch {
-        setMessage(
-          "Raport GA4 pobrany. Search Console: sprawdź dostęp do usługi typu prefiks URL " +
-            siteUrl +
-            "/ lub do usługi domenowej. Otwórz bezpośredni raport Google, aby sprawdzić uprawnienia.",
-        );
-      }
     } catch (e) {
-      setMessage("Nie pobrano danych: " + (e as Error).message);
-    } finally {
-      setBusy(false);
+      setGaMessage("GA4: " + (e as Error).message);
+    }
+  }
+  async function loadSearch(token: string) {
+    try {
+      const end = new Date(Date.now() - 3 * 86400000)
+        .toISOString()
+        .slice(0, 10);
+      const start = new Date(Date.now() - 30 * 86400000)
+        .toISOString()
+        .slice(0, 10);
+      const origin = new URL(siteUrl);
+      const errors: string[] = [];
+      for (const resource of [
+        origin.origin + "/",
+        "sc-domain:" + origin.hostname,
+      ]) {
+        try {
+          const results = await api(
+            "https://www.googleapis.com/webmasters/v3/sites/" +
+              encodeURIComponent(resource) +
+              "/searchAnalytics/query",
+            {
+              startDate: start,
+              endDate: end,
+              dimensions: ["page"],
+              rowLimit: 10,
+            },
+            token,
+          );
+          setSearch(results.rows || []);
+          setSearchMessage(
+            results.rows?.length
+              ? "Search Console: pobrano dane."
+              : "Search Console: brak wyników w wybranym okresie.",
+          );
+          return;
+        } catch (e) {
+          errors.push((e as Error).message);
+        }
+      }
+      throw Error([...new Set(errors)].join(" / "));
+    } catch (e) {
+      setSearchMessage("Search Console: " + (e as Error).message);
     }
   }
   function connect() {
     if (
       !/^\d+$/.test(property) ||
-      !client.endsWith(".apps.googleusercontent.com")
+      !client.trim().endsWith(".apps.googleusercontent.com")
     ) {
       setMessage(
         "Wpisz poprawny numer usługi oraz publiczny OAuth Client ID aplikacji internetowej.",
@@ -180,28 +186,64 @@ export default function GoogleReports({
       setMessage("Poczekaj na wczytanie Google lub sprawdź blokadę skryptów.");
       return;
     }
-    const oauth = g.accounts.oauth2.initTokenClient({
-      client_id: client,
-      scope:
-        "https://www.googleapis.com/auth/analytics.readonly https://www.googleapis.com/auth/webmasters.readonly",
-      callback: (response: any) =>
-        response.access_token
-          ? load(response.access_token)
-          : setMessage(
+    setBusy(true);
+    setMessage("Otwieram logowanie Google…");
+    setGaMessage("");
+    setSearchMessage("");
+    setCampaignMessage("");
+    setStats([]);
+    setTop([]);
+    setCampaigns([]);
+    setSearch([]);
+    const analyticsScope = "https://www.googleapis.com/auth/analytics.readonly";
+    const searchScope = "https://www.googleapis.com/auth/webmasters.readonly";
+    const fail = (text: string) => {
+      setMessage(text);
+      setBusy(false);
+    };
+    try {
+      const oauth = g.accounts.oauth2.initTokenClient({
+        client_id: client.trim(),
+        scope: analyticsScope + " " + searchScope,
+        callback: async (response: any) => {
+          if (!response.access_token) {
+            fail(
               "Google nie udzieliło dostępu: " +
                 (response.error_description ||
                   response.error ||
                   "brak tokenu") +
-                ". Możesz otworzyć raport bezpośrednio w Google.",
-            ),
-      error_callback: (error: any) =>
-        setMessage(
-          "Logowanie nie zostało zakończone (" +
-            (error.type || "przerwane") +
-            "). Zezwól na okno logowania i sprawdź autoryzowane źródło https://mostpomocy.pl w Google Cloud.",
-        ),
-    });
-    oauth.requestAccessToken();
+                ".",
+            );
+            return;
+          }
+          setMessage("Pobieram prywatne raporty z Google…");
+          const jobs: Promise<void>[] = [];
+          if (g.accounts.oauth2.hasGrantedAllScopes(response, analyticsScope))
+            jobs.push(loadAnalytics(response.access_token));
+          else setGaMessage("GA4: nie udzielono zgody na odczyt raportów.");
+          if (g.accounts.oauth2.hasGrantedAllScopes(response, searchScope))
+            jobs.push(loadSearch(response.access_token));
+          else
+            setSearchMessage(
+              "Search Console: nie udzielono zgody na odczyt raportów.",
+            );
+          await Promise.allSettled(jobs);
+          setBusy(false);
+          setMessage("");
+        },
+        error_callback: (error: any) =>
+          fail(
+            error.type === "popup_closed"
+              ? "Okno logowania zostało zamknięte. Możesz spróbować ponownie."
+              : "Nie udało się otworzyć logowania. Zezwól na wyskakujące okna i sprawdź autoryzowane źródło " +
+                  location.origin +
+                  " w Google Cloud.",
+          ),
+      });
+      oauth.requestAccessToken();
+    } catch {
+      fail("Nie udało się rozpocząć logowania Google. Sprawdź Client ID.");
+    }
   }
   return (
     <section className="follow-box" aria-labelledby="google-reports-heading">
@@ -225,10 +267,10 @@ export default function GoogleReports({
           <input
             value={client}
             onChange={(e) => {
-              setReady(false);
               setClient(e.target.value);
             }}
             autoComplete="off"
+            disabled={busy}
           />
         </label>
         <label>
@@ -237,39 +279,52 @@ export default function GoogleReports({
             value={property}
             onChange={(e) => setProperty(e.target.value)}
             inputMode="numeric"
+            disabled={busy}
           />
         </label>
       </details>
       <button
         className="button dark"
         onClick={connect}
-        disabled={!ready || !property || busy}
+        disabled={!ready || busy}
       >
         Zaloguj w Google i pobierz raporty
       </button>
       {!client && (
         <p>
-          Połączenie API czeka na publiczny Client ID. Obecne śledzenie GA4
-          działa niezależnie od tego raportu, po zgodzie czytelnika.
+          Połączenie API czeka na publiczny Client ID. Zgoda na pomiar odsłon
+          jest ustawiana osobno na stronie.
         </p>
       )}
       <p role="status">{message}</p>
+      <p role="status">{gaMessage}</p>
+      <p role="status">{searchMessage}</p>
       <p>
-        <a
-          href="https://analytics.google.com/analytics/web/#/a389862968p531159356/realtime/overview"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Pomiar na żywo ↗
-        </a>{" "}
-        ·{" "}
-        <a
-          href="https://analytics.google.com/analytics/web/#/analysis/a389862968p531159356/edit/UXaAE-XkSHOqHHa0lUNxUA"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Raport linków i QR ↗
+        <a href="/" target="_blank" rel="noopener noreferrer">
+          Otwórz stronę do testu pomiaru ↗
         </a>
+        {" · "}
+        <a
+          href={
+            /^\d+$/.test(property)
+              ? "https://analytics.google.com/analytics/web/#/p" +
+                property +
+                "/realtime/overview"
+              : "https://analytics.google.com/"
+          }
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Pomiar na żywo w GA4 ↗
+        </a>
+      </p>
+      <p>
+        Na otwartej stronie wybierz „Zgadzam się” w ustawieniach prywatności.
+        Następnie sprawdź, czy w pomiarze na żywo pojawiła się odsłona. Jeśli
+        przeglądarka blokuje tag Google, powtórz test bez blokady.
+      </p>
+      <p>
+        <a href="/linki/">Zarządzaj krótkimi linkami i raportami QR →</a>
       </p>
       {campaignMessage && <p role="status">{campaignMessage}</p>}
       {campaigns.length > 0 && (

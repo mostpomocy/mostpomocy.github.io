@@ -25,7 +25,7 @@ Planowane teksty pojawiają się po pierwszej udanej kompilacji po terminie. Wor
 
 ## Google i narzędzia AI
 
-GA4 zachowuje identyfikator `G-YD2QTX4YNR` znaleziony w poprzedniej stronie. Skrypt uruchamia się dopiero po zgodzie czytelnika. Raporty otwierasz we własnym Google Analytics; projekt nie udaje pobranych statystyk i nie publikuje kluczy prywatnych. Odwołanie zgody zatrzymuje dalsze ładowanie; danych zebranych wcześniej nie usuwa z Google.
+GA4 zachowuje identyfikator `G-YD2QTX4YNR` znaleziony w poprzedniej stronie. Skrypt uruchamia się dopiero po zgodzie czytelnika. Raporty otworzysz bezpośrednio w Google Analytics lub przez logowanie w panelu /admin/. Dostęp do raportów (OAuth i numer usługi GA4) jest niezależny od zbierania odsłon (identyfikator pomiaru G-…). Do sprawdzenia zbierania otwórz stronę publiczną, zaakceptuj pomiar i zobacz raport czasu rzeczywistego w odpowiadającej usłudze GA4. Przy błędzie w panelu sprawdź w Google Cloud włączone API, autoryzowane źródło https://mostpomocy.pl oraz dostęp konta do właściwych usług GA4 i Search Console. Odwołanie zgody zatrzymuje dalsze ładowanie; danych zebranych wcześniej nie usuwa z Google.
 
 W Ustawieniach wpisz token Google Search Console/Bing; w Search Console prześlij `https://mostpomocy.pl/sitemap.xml`. Weryfikacja kont i domeny wymaga dostępu właściciela. Strona ma canonical, opisy, Open Graph, dane BlogPosting/WebSite, RSS oraz statyczne HTML dostępne robotom. `llms.txt` to opcjonalny, eksperymentalny spis materiałów, nie gwarancja cytowania przez AI. Google nie wymaga specjalnego pliku AI. Przełącznik spisu nie blokuje crawlerów ani nie usuwa treści z już zbudowanych indeksów.
 
