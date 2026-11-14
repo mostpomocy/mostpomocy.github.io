@@ -1,12 +1,17 @@
 "use client";
 import { useEffect, useState } from "react";
-import { startAnalytics, trackLandingCampaign } from "../lib/analytics";
+import {
+  startAnalytics,
+  stopAnalytics,
+  trackLandingCampaign,
+} from "../lib/analytics";
 export function Consent({ measurementId }: { measurementId: string }) {
   const [choice, setChoice] = useState<string | null>("pending");
   const [open, setOpen] = useState(false);
   useEffect(() => {
     try {
-      setChoice(localStorage.getItem("mp-analytics-consent"));
+      const saved = localStorage.getItem("mp-analytics-consent");
+      setChoice(saved === "yes" || saved === "no" ? saved : null);
     } catch {
       setChoice(null);
     }
@@ -45,14 +50,7 @@ export function Consent({ measurementId }: { measurementId: string }) {
     setChoice(value);
     setOpen(false);
     if (revoke) {
-      document.cookie.split(";").forEach((c) => {
-        const name = c.split("=")[0].trim();
-        if (name.startsWith("_ga")) {
-          document.cookie = name + "=;Max-Age=0;path=/";
-          document.cookie =
-            name + "=;Max-Age=0;path=/;domain=" + location.hostname;
-        }
-      });
+      stopAnalytics(measurementId);
       location.reload();
     }
   }
@@ -65,7 +63,7 @@ export function Consent({ measurementId }: { measurementId: string }) {
           <p>
             Za Twoją zgodą Google Analytics zmierzy odwiedziny. Możesz korzystać
             ze strony bez analityki.{" "}
-            <a href="/polityka-prywatnosci">Więcej informacji</a>
+            <a href="/polityka-prywatnosci/">Więcej informacji</a>
           </p>
           <button onClick={() => choose("no")}>Bez analityki</button>
           <button onClick={() => choose("yes")}>Zgadzam się</button>

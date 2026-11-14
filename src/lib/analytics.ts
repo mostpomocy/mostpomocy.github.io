@@ -13,6 +13,7 @@ export function startAnalytics(measurementId: string) {
   )
     return false;
   const w = window as any;
+  w["ga-disable-" + measurementId] = false;
   if (w.mpAnalyticsId === measurementId) return true;
   w.dataLayer = w.dataLayer || [];
   w.gtag = function () {
@@ -31,6 +32,20 @@ export function startAnalytics(measurementId: string) {
   w.mpAnalyticsId = measurementId;
   return true;
 }
+export function stopAnalytics(measurementId: string) {
+  const w = window as any;
+  w["ga-disable-" + measurementId] = true;
+  for (const cookie of document.cookie.split(";")) {
+    const name = cookie.split("=")[0].trim();
+    if (name !== "_ga" && !name.startsWith("_ga_")) continue;
+    const expired = name + "=;Max-Age=0;path=/";
+    document.cookie = expired;
+    document.cookie = expired + ";domain=" + location.hostname;
+    if (location.hostname === "www.mostpomocy.pl")
+      document.cookie = expired + ";domain=mostpomocy.pl";
+  }
+}
+
 export function trackCampaign(context: Campaign, done?: () => void) {
   const w = window as any;
   if (!w.gtag) {

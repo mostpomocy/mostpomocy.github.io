@@ -22,7 +22,7 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
     </body>
   </html>
 ) : (
-  <Base title="Panel redakcyjny" noindex={true}>
+  <Base title="Panel redakcyjny" noindex disableAnalytics>
     <main id="main" tabindex="-1" class="container inner-page">
       <span class="eyebrow">MOSTPOMOCY · CENTRUM REDAKCJI</span>
       <h1>Co dziś publikujesz?</h1>
@@ -45,6 +45,16 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
         </div>
       </div>
       <nav class="admin-links" aria-label="Szybkie działania">
+        <a class="button dark" href={cms}>
+          Otwórz edytor Pages CMS ↗
+        </a>
+        <a class="button" href="#google-reports-heading">Raporty Google</a>
+        <a
+          class="button"
+          href={`https://github.com/${config.repository}/actions/workflows/pages.yml`}
+        >
+          Stan publikacji ↗
+        </a>
         <a class="button dark" href={cms + "/collection/links/new"}>
           + Skróć link / kod QR
         </a>
@@ -155,12 +165,6 @@ const cms = `https://app.pagescms.org/${config.repository}/${config.branch}`;
           rel="noopener noreferrer"
         >
           Otwórz Search Console ↗
-        </a>
-        <a
-          class="button"
-          href={"https://github.com/" + config.repository + "/actions"}
-        >
-          Stan publikacji ↗
         </a>
       </nav>
       <section class="info-box">

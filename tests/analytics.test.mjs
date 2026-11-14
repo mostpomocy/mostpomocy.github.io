@@ -22,6 +22,7 @@ function environment(
     window,
     location: { hostname, pathname, search },
     document: {
+      cookie: "",
       createElement: () => ({}),
       head: { appendChild: (s) => scripts.push(s) },
     },
@@ -63,4 +64,12 @@ test("jedno otwarcie QR wysyła jedno zdarzenie z publicznymi etykietami", () =>
   assert.equal(events[0][2].link_medium, "qr");
   assert.equal(events[0][2].link_campaign, "jesien");
   assert.equal(events[0][2].target_url, undefined);
+});
+
+test("wycofanie zgody od razu wyłącza wysyłanie do GA4", () => {
+  const env = environment();
+  const id = "G-TEST123";
+  env.api.startAnalytics(id);
+  env.api.stopAnalytics(id);
+  assert.equal(env.window["ga-disable-" + id], true);
 });
