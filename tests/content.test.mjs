@@ -51,6 +51,22 @@ test("treść usuwa skrypty, obsługę zdarzeń i niebezpieczne adresy", () => {
   assert.doesNotMatch(p.body, /script|onclick|onerror/);
   assert.match(p.body, /alt="Opis"/);
 });
+test("galeria artykułu akceptuje zdjęcia i odrzuca puste lub nadmiarowe wpisy", () => {
+  assert.deepEqual(clean("posts", post).images, []);
+  const images = [
+    { src: "/uploads/zdjecie.jpg", alt: "Opis", caption: "Podpis" },
+  ];
+  assert.deepEqual(clean("posts", { ...post, images }).images, images);
+  assert.throws(() =>
+    clean("posts", { ...post, images: [{ src: "", alt: "", caption: "" }] }),
+  );
+  assert.throws(() =>
+    clean("posts", {
+      ...post,
+      images: Array.from({ length: 21 }, () => images[0]),
+    }),
+  );
+});
 test("podstrona nie może zająć adresu bloga lub panelu", () => {
   for (const slug of ["admin", "blog", "sosnowiec", "dostepnosc"])
     assert.throws(() => clean("pages", { ...post, slug }));
