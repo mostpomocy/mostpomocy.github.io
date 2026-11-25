@@ -163,6 +163,16 @@ const schemas = {
     toc: z.boolean().default(true),
     image: url.default(""),
     image_alt: text.max(300).default(""),
+    images: z
+      .array(
+        z.object({
+          src: url.refine((value) => Boolean(value), "Wybierz zdjęcie"),
+          alt: text.max(300).default(""),
+          caption: text.max(300).default(""),
+        }),
+      )
+      .max(20)
+      .default([]),
     sources: text.max(15000).default(""),
     ...seo,
     ...publication,

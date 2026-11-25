@@ -189,6 +189,22 @@ const structured = {
       </aside>
       <article class="prose">
         <div set:html={body} />
+        {post.images.length > 0 && (
+          <section
+            class="article-gallery"
+            aria-label="Galeria zdjęć z artykułu"
+          >
+            <h2>Galeria zdjęć</h2>
+            <div class="gallery-grid">
+              {post.images.map((image: any) => (
+                <figure>
+                  <img src={image.src} alt={image.alt} loading="lazy" />
+                  {image.caption && <figcaption>{image.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          </section>
+        )}
         {sources.length > 0 && (
           <section class="sources">
             <h2>Źródła i dalsza lektura</h2>

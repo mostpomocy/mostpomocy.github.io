@@ -17,6 +17,8 @@ import {
   BooleanInput,
   ReferenceInput,
   ReferenceArrayInput,
+  ArrayInput,
+  SimpleFormIterator,
   SelectArrayInput,
   ReferenceField,
   EditButton,
@@ -479,6 +481,49 @@ function MediaPicker() {
     </Box>
   );
 }
+function GalleryMediaPicker() {
+  const { data = [] } = useGetList("media", {
+    pagination: { page: 1, perPage: 30 },
+    sort: { field: "updated_at", order: "DESC" },
+  });
+  const { getValues, setValue } = useFormContext();
+  return (
+    <Box sx={{ mb: 2 }}>
+      <Typography variant="body2">
+        Wybierz zdjęcia z biblioteki, aby dodać je do kolażu artykułu.
+      </Typography>
+      <Stack direction="row" sx={{ gap: 1, flexWrap: "wrap", mt: 1 }}>
+        {data.map((media: any) => (
+          <Button
+            key={media.id}
+            title={media.name}
+            onClick={() => {
+              const images = getValues("images") || [];
+              setValue(
+                "images",
+                [
+                  ...images,
+                  { src: media.url, alt: media.alt || "", caption: "" },
+                ],
+                { shouldDirty: true },
+              );
+            }}
+          >
+            <img
+              src={media.url}
+              alt={media.alt || media.name}
+              style={{ width: 80, height: 55, objectFit: "cover" }}
+            />
+            <span style={{ marginLeft: 8 }}>Dodaj</span>
+          </Button>
+        ))}
+      </Stack>
+      <Button href="#/media" target="_blank">
+        Otwórz bibliotekę mediów ↗
+      </Button>
+    </Box>
+  );
+}
 function LocalCategoryInput() {
   return (
     <ReferenceInput source="local_category_id" reference="local_categories">
@@ -570,6 +615,19 @@ function PostFields() {
         label="Opis alternatywny zdjęcia"
         fullWidth
       />
+      <GalleryMediaPicker />
+      <ArrayInput source="images" label="Galeria zdjęć artykułu">
+        <SimpleFormIterator>
+          <TextInput
+            source="src"
+            label="Adres zdjęcia"
+            helperText="Adres HTTPS albo zdjęcie z biblioteki /uploads/…"
+            fullWidth
+          />
+          <TextInput source="alt" label="Opis alternatywny" fullWidth />
+          <TextInput source="caption" label="Podpis zdjęcia" fullWidth />
+        </SimpleFormIterator>
+      </ArrayInput>
       <BooleanInput source="toc" label="Pokaż spis treści" />
       <BooleanInput
         source="noindex"
@@ -622,6 +680,7 @@ function PostCreate() {
           published_at: null,
           image: "",
           image_alt: "",
+          images: [],
           excerpt: "",
           body: "",
           seo_title: "",

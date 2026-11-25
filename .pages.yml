@@ -188,6 +188,26 @@ content:
       - name: image_alt
         label: Opis alternatywny zdjęcia
         type: string
+      - name: images
+        label: Galeria zdjęć w artykule
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: "{fields.caption}"
+        fields:
+          - name: src
+            label: Zdjęcie
+            type: image
+            required: true
+            options:
+              media: images
+          - name: alt
+            label: Opis alternatywny
+            type: string
+          - name: caption
+            label: Podpis
+            type: string
       - name: author
         label: Autor
         type: string
